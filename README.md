@@ -1,11 +1,6 @@
 RelevamientosArt
 ===============
 
-[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/Wolox/Relevamientos-ART?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[![Error Tracking](https://d26gfdfi90p7cf.cloudfront.net/rollbar-badge.144534.o.png)](https://rollbar.com)
-
-`[![Codestats](http://codestats-url/organizations/your-organization/projects/Relevamientos-ART/badge)](http://codestats-url/organizations/your-organization/projects/Relevamientos-ART/badge)`
-
 
 
 ## Running local server
@@ -23,7 +18,7 @@ You can skip the hook by adding `--no-verify` to your `git push`.
 
 ### 1- Installing Ruby
 
-- Clone the repository by running `git clone git@github.com:Wolox/Relevamientos-ART.git`
+- Clone the repository by running `git clone https://github.com/ignaciocapuccio/Relevamientos-ART.git`
 - Go to the project root by running `cd Relevamientos-ART`
 - Download and install [Rbenv](https://github.com/rbenv/rbenv#basic-github-checkout).
 - Download and install [Ruby-Build](https://github.com/rbenv/ruby-build#installing-as-an-rbenv-plugin-recommended).
@@ -53,7 +48,7 @@ You can skip the hook by adding `--no-verify` to your `git push`.
 
 
 
-Your app is ready. Happy coding!
+The app is ready!
 
 ### Database Setup
 
@@ -70,7 +65,7 @@ Log out from postgres and run:
   bundle exec rake db:create db:migrate
 ```
 
-Your server is ready to run. You can do this by executing `rails server` and going to [http://localhost:3000](http://localhost:3000). Happy coding!
+Your server is ready to run. You can do this by executing `rails server` and going to [http://localhost:3000](http://localhost:3000).
 
 ## Running with Docker
 
@@ -80,7 +75,7 @@ Read more [here](docs/docker.md)
 
 #### Heroku
 
-If you want to deploy your app using [Heroku](https://www.heroku.com) you need to do the following:
+If you we want to deploy the app using [Heroku](https://www.heroku.com) you need to do the following:
 
 - Add the Heroku Git URL to your remotes
 - Push to heroku
@@ -90,7 +85,19 @@ If you want to deploy your app using [Heroku](https://www.heroku.com) you need t
 	git push heroku-prod your-branch:master
 ```
 
+##### Rbenv
+
+If you have an error while executing `install_bundler` capistrano task then modify the `~/.bash_profile` as indicated [here](https://github.com/rbenv/rbenv#basic-github-checkout).
+
+and run `rbenv global` with the version in [.ruby-version](.ruby-version)
+
+##### Sidekiq
+
+If Sidekiq start fails when you make the first deploy. You can comment the sidekiq lines in [deploy.rb](config/deploy.rb) and [Capfile](Capfile) during the first deploy.
+
 ## Rollbar Configuration
+
+[![Error Tracking](https://d26gfdfi90p7cf.cloudfront.net/rollbar-badge.144534.o.png)](https://rollbar.com)
 
 `Rollbar` is used for exception errors report. To complete this configuration setup the following environment variables in your server
 - `ROLLBAR_ACCESS_TOKEN`
@@ -98,10 +105,6 @@ If you want to deploy your app using [Heroku](https://www.heroku.com) you need t
 with the credentials located in the rollbar application.
 
 If you have several servers with the same environment name you may want to difference them in Rollbar. For this set the `ROLLBAR_ENVIRONMENT` environment variable with your environment name.
-
-## Code Climate
-
-Add your code climate token to [.travis.yml](.travis.yml#L7) or [docker-compose.yml](docker-compose.yml)
 
 ## Staging Environment
 
@@ -178,6 +181,14 @@ You can find more documentation in the [docs](docs) folder. The documentation av
 - [Run locally with Docker](docs/docker.md)
 - [Deploy with Elastic Beanstalk](docs/deploy.rb)
 
+## Generating API documentation
+
+You can generate API documentation running:
+
+```bash
+bundle exec rake dictum:document
+```
+
 ## Contributing
 
 1. Fork it
@@ -188,9 +199,3 @@ You can find more documentation in the [docs](docs) folder. The documentation av
 6. Run rubocop lint (`bundle exec rubocop app spec -R`)
 7. Push your branch (`git push origin my-new-feature`)
 8. Create a new Pull Request
-
-## About
-
-This project is maintained by [Esteban Guido Pintos](https://github.com/epintos) and it is written by [Wolox](http://www.wolox.com.ar).
-
-![Wolox](https://raw.githubusercontent.com/Wolox/press-kit/master/logos/logo_banner.png)
