@@ -3,6 +3,17 @@ RelevamientosArt
 
 
 
+## Ruby on Rails Learning
+Recomended sites to start discovering Ruby and the Ruby on Rails framework!
+- [Try Ruby online](http://tryruby.org/levels/1/challenges/0)
+- [First Ruby on Rails interactive course](http://railsforzombies.org/)
+
+Useful links to start learning how to program in Ruby language, and particulary on Ruby on Rails framework
+- https://betterexplained.com/articles/starting-ruby-on-rails-what-i-wish-i-knew/
+- https://betterexplained.com/articles/intermediate-rails-understanding-models-views-and-controllers/
+- https://hackhands.com/beginners-guide-ruby/
+- http://librosweb.es/libro/introduccion_rails/
+
 ## Running local server
 
 ### Git pre push hook
