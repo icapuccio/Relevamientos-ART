@@ -7,10 +7,7 @@ AllCops:
   Exclude:
     - spec/support/spec_helper.rb
     - spec/rails_helper.rb
-    - db/**/*
-    - docs/**/*
-    - config/**/*
-    - bin/**/*
+    - app/helpers/devise_helper.rb
 
 Documentation:
   Enabled: false
@@ -23,3 +20,6 @@ HasAndBelongsToMany:
 
 Style/FrozenStringLiteralComment:
   Enabled: false
+
+Metrics/BlockLength:
+  ExcludedMethods: ['describe', 'context']

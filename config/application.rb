@@ -21,6 +21,13 @@ module RelevamientosArt
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
 
+    # Sets the default time zone to Buenos Aires
+    config.time_zone = "America/Argentina/Buenos_Aires"
+
+    config.generators do |g|
+      g.test_framework :rspec
+    end
+
     if Rails.application.secrets.email_recipients_interceptors.present?
       Mail.register_interceptor RecipientInterceptor.new(
         Rails.application.secrets.email_recipients_interceptors,
