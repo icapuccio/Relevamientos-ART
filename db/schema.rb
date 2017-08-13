@@ -34,13 +34,13 @@ ActiveRecord::Schema.define(version: 20170812194849) do
 
   create_table "visits", force: :cascade do |t|
     t.integer  "user_id"
-    t.string   "status",     default: "pending", null: false
-    t.integer  "priority",   default: 0,         null: false
-    t.datetime "created_at",                     null: false
-    t.datetime "updated_at",                     null: false
+    t.integer  "institution_id",                     null: false
+    t.string   "status",         default: "pending", null: false
+    t.integer  "priority",       default: 0,         null: false
+    t.datetime "created_at",                         null: false
+    t.datetime "updated_at",                         null: false
     t.index ["status"], name: "index_visits_on_status", using: :btree
     t.index ["user_id"], name: "index_visits_on_user_id", using: :btree
   end
 
-  add_foreign_key "visits", "users"
 end
