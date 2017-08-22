@@ -4,7 +4,7 @@ describe VisitsController, type: :controller do
   describe 'GET #index' do
     let(:user_1) { create(:user) }
     let(:user_2) { create(:user) }
-    context 'when none filter is sent' do
+    context 'when no filters are sent' do
       let!(:visit) { create(:visit, user: user_1, status: 'completed') }
       let!(:another_visit) { create(:visit, user: user_2, status: 'assigned') }
       before do
@@ -14,7 +14,7 @@ describe VisitsController, type: :controller do
       it 'responds with ok' do
         expect(response).to have_http_status(:ok)
       end
-      it 'result has 2 records' do
+      it 'returns 2 records' do
         expect(response_body.size).to eq(2)
       end
     end
@@ -28,7 +28,7 @@ describe VisitsController, type: :controller do
       it 'responds with ok' do
         expect(response).to have_http_status(:ok)
       end
-      it 'result has 1 record' do
+      it 'returns 1 record' do
         expect(response_body.size).to eq(1)
       end
     end
@@ -48,7 +48,7 @@ describe VisitsController, type: :controller do
         expect(response).to have_http_status(:ok)
       end
 
-      it 'result has 1 record' do
+      it 'returns 1 record' do
         expect(response_body.size).to eq(1)
       end
     end
