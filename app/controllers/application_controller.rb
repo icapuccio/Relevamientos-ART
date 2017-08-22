@@ -1,4 +1,7 @@
 class ApplicationController < ActionController::Base
+  rescue_from ActionController::ParameterMissing, with: :render_incorrect_parameter
+  rescue_from ActionController::UnpermittedParameters, with: :render_incorrect_parameter
+  rescue_from ActiveRecord::RecordNotFound, with: :render_nothing_not_found
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :null_session
@@ -42,4 +45,12 @@ class ApplicationController < ActionController::Base
   end
 
   def index; end
+
+  def render_nothing_not_found
+    head :not_found
+  end
+
+  def render_incorrect_parameter(error)
+    render json: { error: error.message }, status: :bad_request
+  end
 end

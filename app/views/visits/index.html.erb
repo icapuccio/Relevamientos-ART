@@ -1,0 +1,30 @@
+
+<h1>Visits</h1>
+
+<table>
+  <thead>
+  <tr>
+    <th colspan="3"></th>
+  </tr>
+  </thead>
+
+  <tbody>
+  <td>id</td>
+  <td>status</td>
+  <td>priority</td>
+  <td>user_id</td>
+  <td>action</td>
+  <% @visits.each do |visit| %>
+      <tr>
+        <td><%= visit.id %></td>
+        <td><%= visit.status %></td>
+        <td><%= visit.priority %></td>
+        <td><%= visit.user_id %></td>
+        <td><%= link_to 'Show', visits_path %></td>
+      </tr>
+  <% end %>
+  </tbody>
+</table>
+
+<br>
+
