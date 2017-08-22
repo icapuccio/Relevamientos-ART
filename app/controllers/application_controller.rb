@@ -1,8 +1,11 @@
 class ApplicationController < ActionController::Base
+  rescue_from ActionController::ParameterMissing, with: :render_incorrect_parameter
+  rescue_from ActionController::UnpermittedParameters, with: :render_incorrect_parameter
+  rescue_from ActiveRecord::RecordNotFound, with: :render_nothing_not_found
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :null_session
-  before_action :authenticate_user!
+  # before_action :authenticate_user!
 
   # i18n configuration. See: http://guides.rubyonrails.org/i18n.html
   before_action :set_locale
@@ -42,4 +45,12 @@ class ApplicationController < ActionController::Base
   end
 
   def index; end
+
+  def render_nothing_not_found
+    head :not_found
+  end
+
+  def render_incorrect_parameter(error)
+    render json: { error: error.message }, status: :bad_request
+  end
 end
