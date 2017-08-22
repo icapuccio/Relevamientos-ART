@@ -13,3 +13,5 @@ another_user = User.create!(email: 'don_carlos@example.com', password: '12345678
 # Visits
 pending_visit = Visit.create!(status: :pending, priority: 1)
 assigned_visit = Visit.create!(user: user, status: :assigned, priority: 9 )
+completed_visit = Visit.create!(user: user, status: :completed, priority: 4 )
+completed_visit_another_user = Visit.create!(user: another_user, status: :completed, priority: 4 )
