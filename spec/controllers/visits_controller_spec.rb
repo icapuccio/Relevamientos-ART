@@ -1,12 +1,12 @@
 require 'rails_helper'
 
 describe VisitsController, type: :controller do
+  let(:user_1) { create(:user) }
+  let(:user_2) { create(:user) }
+  let!(:visit) { create(:visit, user: user_1, status: 'completed') }
+  let!(:another_visit) { create(:visit, user: user_2, status: 'assigned') }
   describe 'GET #index' do
-    let(:user_1) { create(:user) }
-    let(:user_2) { create(:user) }
     context 'when none filter is sent' do
-      let!(:visit) { create(:visit, user: user_1, status: 'completed') }
-      let!(:another_visit) { create(:visit, user: user_2, status: 'assigned') }
       before do
         request.headers['Accept'] = 'application/json'
         get :index
@@ -19,8 +19,6 @@ describe VisitsController, type: :controller do
       end
     end
     context 'when user_id filter is sent' do
-      let!(:visit) { create(:visit, user: user_1, status: 'completed') }
-      let!(:another_visit) { create(:visit, user: user_2, status: 'assigned') }
       before do
         request.headers['Accept'] = 'application/json'
         get :index, params: { user_id: user_1.id }
@@ -34,8 +32,6 @@ describe VisitsController, type: :controller do
     end
 
     context 'when user_id and status filter are sent' do
-      let!(:visit2) { create(:visit, user: user_1, status: 'completed') }
-      let!(:visit) { create(:visit, user: user_1, status: 'assigned') }
       let!(:another_visit) { create(:visit, user: user_2, status: 'assigned') }
       let!(:pending_visit) { create(:visit, status: 'pending') }
 
@@ -54,8 +50,6 @@ describe VisitsController, type: :controller do
     end
 
     context 'when invalid status value filter is sent' do
-      let!(:visit2) { create(:visit, user: user_1, status: 'completed') }
-      let!(:visit) { create(:visit, user: user_1, status: 'assigned') }
       let!(:another_visit) { create(:visit, user: user_2, status: 'assigned') }
       let!(:pending_visit) { create(:visit, status: 'pending') }
 
@@ -66,6 +60,29 @@ describe VisitsController, type: :controller do
 
       it 'responds with bad_request' do
         expect(response).to have_http_status(:bad_request)
+      end
+    end
+  end
+  describe 'GET #show' do
+    context 'when id not exists' do
+      before do
+        request.headers['Accept'] = 'application/json'
+        get :show, params: { id: visit.id * 1000 }
+      end
+      it 'responds with not found status' do
+        expect(response).to have_http_status(:not_found)
+      end
+    end
+    context 'when id exists' do
+      before do
+        request.headers['Accept'] = 'application/json'
+        get :show, params: { id: visit.id }
+      end
+      it 'responds with ok' do
+        expect(response).to have_http_status(:ok)
+      end
+      it 'result has the visit we want' do
+        expect(response_body['id']).to eq(visit.id)
       end
     end
   end
