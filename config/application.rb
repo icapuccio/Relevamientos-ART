@@ -24,6 +24,9 @@ module RelevamientosArt
     # Sets the default time zone to Buenos Aires
     config.time_zone = "America/Argentina/Buenos_Aires"
 
+    # Sets the default locale to Spanish
+    config.i18n.default_locale = :es
+
     config.generators do |g|
       g.test_framework :rspec
     end
