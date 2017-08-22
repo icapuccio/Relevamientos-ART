@@ -38,6 +38,9 @@ gem 'devise-async'
 # devise-i18n support
 gem 'devise-i18n'
 
+# devise views
+gem 'devise-bootstrap-views'
+
 gem 'responders'
 
 gem 'active_model_serializers'
