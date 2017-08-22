@@ -10,6 +10,33 @@ class VisitsController < ApplicationController
     end
   end
 
+  def show
+    @visit = Visit.find(params[:id])
+    respond_to do |format|
+      if @visit.nil?
+        show_not_found_format(format)
+      else
+        show_format_ok(format)
+      end
+    end
+  end
+
+  def show_not_found_format(format)
+    format.json do
+      render json: @visit, status: :not_found
+    end
+    format.html { redirect_to @visits, notice: 'Visit not found' }
+    format.xml { redirect_to @visits, notice: 'Visit not found' }
+  end
+
+  def show_format_ok(format)
+    format.json do
+      render json: @visit, status: :ok
+    end
+    format.html
+    format.xml
+  end
+
   # status param is optional
   # user_id param is optional
   def valid_params?

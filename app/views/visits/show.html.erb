@@ -1,4 +1,7 @@
 <p id="notice"><%= notice %></p>
 
-<%= link_to 'Edit', edit_visit_path(@visit) %> |
+
+<%=  @visit.status %>
+<%=  @visit.id %>
+<%= link_to 'Edit', visits_path %> |
 <%= link_to 'Back', visits_path %>
