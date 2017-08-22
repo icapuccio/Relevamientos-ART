@@ -83,7 +83,7 @@ describe VisitsController, type: :controller do
       it 'responds with ok' do
         expect(response).to have_http_status(:ok)
       end
-      it 'result has the visit we want' do
+      it 'returns the visit than we want' do
         expect(response_body['id']).to eq(visit.id)
       end
     end

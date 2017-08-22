@@ -26,7 +26,6 @@ class VisitsController < ApplicationController
       render json: @visit, status: :not_found
     end
     format.html { redirect_to @visits, notice: 'Visit not found' }
-    format.xml { redirect_to @visits, notice: 'Visit not found' }
   end
 
   def show_format_ok(format)
@@ -34,12 +33,11 @@ class VisitsController < ApplicationController
       render json: @visit, status: :ok
     end
     format.html
-    format.xml
   end
 
   # status param is optional
   # user_id param is optional
   def valid_params?
-    (params[:status].present? ? Visit.statuses.include?(params[:status]) : true)
+    params[:status].present? ? Visit.statuses.include?(params[:status]) : true
   end
 end
