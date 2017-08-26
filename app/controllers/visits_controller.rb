@@ -11,24 +11,24 @@ class VisitsController < ApplicationController
   end
 
   def show
-    @visit = Visit.find(params[:id])
+    visit
     respond_to do |format|
-      if @visit.nil?
-        show_not_found_format(format)
-      else
-        show_format_ok(format)
-      end
+      @visit.nil? ? return_not_found(format) : return_ok(format)
     end
   end
 
-  def show_not_found_format(format)
+  def visit
+    @visit ||= Visit.find(params[:id])
+  end
+
+  def return_not_found(format)
     format.json do
       render json: @visit, status: :not_found
     end
     format.html { redirect_to @visits, notice: 'Visit not found' }
   end
 
-  def show_format_ok(format)
+  def return_ok(format)
     format.json do
       render json: @visit, status: :ok
     end

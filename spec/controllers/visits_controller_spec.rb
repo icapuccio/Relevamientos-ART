@@ -5,9 +5,9 @@ describe VisitsController, type: :controller do
   let(:user_2) { create(:user) }
   let!(:visit) { create(:visit, user: user_1, status: 'completed') }
   let!(:another_visit) { create(:visit, user: user_2, status: 'assigned') }
+  let!(:pending_visit) { create(:visit, status: 'pending') }
+
   describe 'GET #index' do
-    let(:user_1) { create(:user) }
-    let(:user_2) { create(:user) }
     context 'when no filters are sent' do
       before do
         request.headers['Accept'] = 'application/json'
@@ -16,8 +16,8 @@ describe VisitsController, type: :controller do
       it 'responds with ok' do
         expect(response).to have_http_status(:ok)
       end
-      it 'returns 2 records' do
-        expect(response_body.size).to eq(2)
+      it 'returns all the visits' do
+        expect(response_body.size).to eq(3)
       end
     end
     context 'when user_id filter is sent' do
@@ -34,9 +34,6 @@ describe VisitsController, type: :controller do
     end
 
     context 'when user_id and status filter are sent' do
-      let!(:another_visit) { create(:visit, user: user_2, status: 'assigned') }
-      let!(:pending_visit) { create(:visit, status: 'pending') }
-
       before do
         request.headers['Accept'] = 'application/json'
         get :index, params: { user_id: user_1.id, status: 'completed' }
@@ -51,10 +48,37 @@ describe VisitsController, type: :controller do
       end
     end
 
-    context 'when invalid status value filter is sent' do
-      let!(:another_visit) { create(:visit, user: user_2, status: 'assigned') }
-      let!(:pending_visit) { create(:visit, status: 'pending') }
+    context 'When the user_id does not exist' do
+      before do
+        request.headers['Accept'] = 'application/json'
+        get :index, params: { user_id: 111 }
+      end
 
+      it 'responds with ok' do
+        expect(response).to have_http_status(:ok)
+      end
+
+      it 'returns an empty list' do
+        expect(response_body.size).to eq(0)
+      end
+    end
+
+    context 'When the user_id comes nil' do
+      before do
+        request.headers['Accept'] = 'application/json'
+        get :index, params: { user_id: nil }
+      end
+
+      it 'responds with ok' do
+        expect(response).to have_http_status(:ok)
+      end
+
+      it 'returns all the visits' do
+        expect(response_body.size).to eq(3)
+      end
+    end
+
+    context 'when invalid status value filter is sent' do
       before do
         request.headers['Accept'] = 'application/json'
         get :index, params: { user_id: user_1.id, status: 'invalid_status' }
@@ -66,7 +90,7 @@ describe VisitsController, type: :controller do
     end
   end
   describe 'GET #show' do
-    context 'when id not exists' do
+    context 'When the visit id does not exist' do
       before do
         request.headers['Accept'] = 'application/json'
         get :show, params: { id: visit.id * 1000 }
@@ -75,7 +99,7 @@ describe VisitsController, type: :controller do
         expect(response).to have_http_status(:not_found)
       end
     end
-    context 'when id exists' do
+    context 'when the visit id exists' do
       before do
         request.headers['Accept'] = 'application/json'
         get :show, params: { id: visit.id }
@@ -83,8 +107,9 @@ describe VisitsController, type: :controller do
       it 'responds with ok' do
         expect(response).to have_http_status(:ok)
       end
-      it 'returns the visit than we want' do
-        expect(response_body['id']).to eq(visit.id)
+      it 'returns the correct visit' do
+        expect(response_body.to_json).to eq VisitSerializer
+          .new(visit, root: false).to_json
       end
     end
   end
