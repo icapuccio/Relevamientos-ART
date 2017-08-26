@@ -13,6 +13,7 @@
   <td>status</td>
   <td>priority</td>
   <td>user_id</td>
+  <td>institution_id</td>
   <td>action</td>
   <% @visits.each do |visit| %>
       <tr>
@@ -20,6 +21,7 @@
         <td><%= visit.status %></td>
         <td><%= visit.priority %></td>
         <td><%= visit.user_id %></td>
+        <td><%= visit.institution_id %></td>
         <td><%= link_to 'Show', visits_path %></td>
       </tr>
   <% end %>
