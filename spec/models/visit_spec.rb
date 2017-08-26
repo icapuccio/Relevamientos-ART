@@ -3,6 +3,7 @@ require 'rails_helper'
 describe Visit, type: :model do
   it { should validate_presence_of(:status) }
   it { should validate_presence_of(:priority) }
+  it { should validate_presence_of(:institution) }
   context 'when the visit is in status pending' do
     let!(:visit) { create(:visit, status: 'pending') }
     it 'must have the user in nil' do
