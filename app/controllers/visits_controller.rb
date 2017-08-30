@@ -11,9 +11,8 @@ class VisitsController < ApplicationController
   end
 
   def show
-    visit
     respond_to do |format|
-      @visit.nil? ? return_not_found(format) : return_ok(format)
+      visit.nil? ? return_not_found(format) : return_ok(format)
     end
   end
 
@@ -23,7 +22,7 @@ class VisitsController < ApplicationController
 
   def return_not_found(format)
     format.json do
-      render json: @visit, status: :not_found
+      render json: visit, status: :not_found
     end
     format.html { redirect_to @visits, notice: 'Visit not found' }
   end

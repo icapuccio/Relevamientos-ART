@@ -3,14 +3,20 @@ require 'rails_helper'
 describe VisitsController, type: :controller do
   let(:user_1) { create(:user) }
   let(:user_2) { create(:user) }
-  let!(:visit) { create(:visit, user: user_1, status: 'completed') }
-  let!(:another_visit) { create(:visit, user: user_2, status: 'assigned') }
+  let!(:visit) do
+    create(:visit, user: user_1, to_visit_on: Time.zone.today, status: 'completed')
+  end
+  let!(:another_visit) do
+    create(:visit, user: user_2, to_visit_on: Time.zone.today, status: 'assigned')
+  end
   let!(:pending_visit) { create(:visit, status: 'pending') }
+  before do
+    request.headers['Accept'] = 'application/json'
+  end
 
   describe 'GET #index' do
     context 'when no filters are sent' do
       before do
-        request.headers['Accept'] = 'application/json'
         get :index
       end
       it 'responds with ok' do
@@ -22,7 +28,6 @@ describe VisitsController, type: :controller do
     end
     context 'when user_id filter is sent' do
       before do
-        request.headers['Accept'] = 'application/json'
         get :index, params: { user_id: user_1.id }
       end
       it 'responds with ok' do
@@ -35,7 +40,6 @@ describe VisitsController, type: :controller do
 
     context 'when user_id and status filter are sent' do
       before do
-        request.headers['Accept'] = 'application/json'
         get :index, params: { user_id: user_1.id, status: 'completed' }
       end
 
@@ -50,7 +54,6 @@ describe VisitsController, type: :controller do
 
     context 'When the user_id does not exist' do
       before do
-        request.headers['Accept'] = 'application/json'
         get :index, params: { user_id: 111 }
       end
 
@@ -65,7 +68,6 @@ describe VisitsController, type: :controller do
 
     context 'When the user_id comes nil' do
       before do
-        request.headers['Accept'] = 'application/json'
         get :index, params: { user_id: nil }
       end
 
@@ -80,7 +82,6 @@ describe VisitsController, type: :controller do
 
     context 'when invalid status value filter is sent' do
       before do
-        request.headers['Accept'] = 'application/json'
         get :index, params: { user_id: user_1.id, status: 'invalid_status' }
       end
 
@@ -92,7 +93,6 @@ describe VisitsController, type: :controller do
   describe 'GET #show' do
     context 'When the visit id does not exist' do
       before do
-        request.headers['Accept'] = 'application/json'
         get :show, params: { id: visit.id * 1000 }
       end
       it 'responds with not found status' do
@@ -101,7 +101,6 @@ describe VisitsController, type: :controller do
     end
     context 'when the visit id exists' do
       before do
-        request.headers['Accept'] = 'application/json'
         get :show, params: { id: visit.id }
       end
       it 'responds with ok' do
