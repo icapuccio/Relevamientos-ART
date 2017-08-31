@@ -2,8 +2,8 @@ require 'rails_helper'
 
 describe VisitsController, type: :controller do
   describe 'GET #index' do
-    let(:user_1) { create(:user) }
-    let(:user_2) { create(:user) }
+    let(:user_1) { create(:user, :preventor) }
+    let(:user_2) { create(:user, :preventor) }
     context 'when no filters are sent' do
       let!(:visit) { create(:visit, user: user_1, status: 'completed') }
       let!(:another_visit) { create(:visit, user: user_2, status: 'assigned') }

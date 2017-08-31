@@ -5,6 +5,6 @@ FactoryGirl.define do
   end
 
   trait :with_user do
-    user
+    association :user, factory: [:user, :preventor]
   end
 end

@@ -36,7 +36,7 @@ ActiveAdmin.register User do
   form do |f|
     f.inputs 'User Details', allow_destroy: true do
       f.semantic_errors(*f.object.errors.keys)
-      f.input :email
+      f.input :email, input_html: { readonly: true }
       f.input :name
       f.input :last_name
       f.input :role, as: :select, collection: User.roles.keys, include_blank: false
