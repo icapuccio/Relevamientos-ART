@@ -1,5 +1,5 @@
 class Institution < ApplicationRecord
-  belongs_to :visit
-  validates :name, :address, :city, :province, :number, :surface, :workers_count,
-            :institutions_count, presence: true
+  has_many :visits
+  validates :name, :address, :city, :province, :number, :surface, :workers_count, :cuit, :activity,
+            :institutions_count, :contract, :postal_code, :phone_number, presence: true
 end

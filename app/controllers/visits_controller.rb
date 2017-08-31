@@ -1,7 +1,7 @@
 class VisitsController < ApplicationController
   def index
     return render json: { error: 'Invalid params' }, status: :bad_request unless valid_params?
-    @visits = Visit.filter(params.slice(:status, :user_id))
+    @visits = Visit.includes(:institution).filter(params.slice(:status, :user_id))
     respond_to do |format|
       format.json do
         render json: @visits, status: :ok
@@ -17,7 +17,7 @@ class VisitsController < ApplicationController
   end
 
   def visit
-    @visit ||= Visit.find(params[:id])
+    @visit ||= Visit.includes(:institution).find(params[:id])
   end
 
   def return_not_found(format)

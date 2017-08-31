@@ -11,5 +11,7 @@ FactoryGirl.define do
     workers_count { Faker::Number.number(4) }
     institutions_count { Faker::Number.number(4) }
     phone_number { Faker::PhoneNumber.phone_number }
+    contract { Faker::StarWars.planet }
+    postal_code { Faker::Number.number(4) }
   end
 end

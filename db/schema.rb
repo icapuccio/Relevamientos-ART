@@ -11,21 +11,24 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema.define(version: 20170830193601) do
+
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "institutions", force: :cascade do |t|
     t.string   "name",                           null: false
-    t.string   "cuit"
+    t.string   "cuit",                           null: false
     t.string   "address",                        null: false
     t.string   "city",                           null: false
     t.string   "province",                       null: false
     t.integer  "number",                         null: false
-    t.string   "activity"
+    t.string   "activity",                       null: false
+    t.string   "contract",                       null: false
+    t.string   "postal_code",                    null: false
     t.integer  "surface",            default: 1, null: false
     t.integer  "workers_count",      default: 1, null: false
     t.integer  "institutions_count", default: 1, null: false
-    t.integer  "phone_number"
+    t.integer  "phone_number",                   null: false
     t.datetime "created_at",                     null: false
     t.datetime "updated_at",                     null: false
   end
@@ -49,12 +52,12 @@ ActiveRecord::Schema.define(version: 20170830193601) do
 
   create_table "visits", force: :cascade do |t|
     t.integer  "user_id"
-    t.integer  "status",      default: 0, null: false
-    t.integer  "priority",    default: 0, null: false
-    t.datetime "created_at",              null: false
-    t.datetime "updated_at",              null: false
-    t.date     "to_visit_on"
+    t.integer  "status",         default: 0, null: false
+    t.integer  "priority",       default: 0, null: false
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
     t.integer  "institution_id"
+    t.date     "to_visit_on"
     t.index ["institution_id"], name: "index_visits_on_institution_id", using: :btree
     t.index ["status"], name: "index_visits_on_status", using: :btree
     t.index ["user_id"], name: "index_visits_on_user_id", using: :btree

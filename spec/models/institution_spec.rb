@@ -8,5 +8,9 @@ describe Institution, type: :model do
   it { should validate_presence_of(:number) }
   it { should validate_presence_of(:surface) }
   it { should validate_presence_of(:workers_count) }
-  it { should validate_presence_of(:institutions_count) }
+  it { should validate_presence_of(:cuit) }
+  it { should validate_presence_of(:activity) }
+  it { should validate_presence_of(:phone_number) }
+  it { should validate_presence_of(:contract) }
+  it { should validate_presence_of(:postal_code) }
 end
