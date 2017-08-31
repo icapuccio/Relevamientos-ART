@@ -15,5 +15,6 @@ FactoryGirl.define do
     postal_code { Faker::Number.number(4) }
     longitude { Faker::Address.longitude }
     latitude { Faker::Address.latitude }
+    zone
   end
 end
