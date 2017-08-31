@@ -13,5 +13,7 @@ FactoryGirl.define do
     phone_number { Faker::PhoneNumber.phone_number }
     contract { Faker::StarWars.planet }
     postal_code { Faker::Number.number(4) }
+    longitude { Faker::Address.longitude }
+    latitude { Faker::Address.latitude }
   end
 end
