@@ -12,7 +12,7 @@
     <header class='navbar navbar-default navbar-static-top'>
       <nav class='container' role='navigation'>
         <div class='navbar-header'>
-          <a href='/' class='navbar-brand'>Relevamientos - ART</a>
+          <a class='navbar-brand' href='/'>Relevamientos - ART</a>
           <button type='button' class='navbar-toggle collapsed' data-toggle='collapse' data-target='.navbar-collapse'>
             <span class='sr-only'>Toggle navigation</span>
             <span class='icon-bar'></span>
@@ -23,7 +23,7 @@
 
         <ul class='nav navbar-nav navbar-center collapse navbar-collapse'>
           <li><a href='#'>Inicio</a></li>
-          <li><a href='#'>Gestión de Usuarios</a></li>
+          <li><%= link_to 'Gestión de Usuarios', new_admin_user_session_path %></li>
           <li><a href='#'>Tareas</a></li>
           <li><a href='#'>Visitas</a></li>
           <li><a href='#'>Consultas</a></li>
@@ -32,10 +32,10 @@
         <% if user_signed_in? %>
             <ul class='nav navbar-nav navbar-right collapse navbar-collapse'>
               <li class='dropdown'>
-                <a href='/me' data-target='#' class='dropdown-toggle' data-toggle='dropdown'><strong><%= current_user.email %></strong><span class='caret'></span></a>
+                <a href='/me' data-target='#' class='dropdown-toggle' data-toggle='dropdown'><strong><%= raw(current_user.email + "&nbsp;&nbsp") %></strong><i class="glyphicon glyphicon-user"></i><span class='caret'></span></a>
                 <ul class='dropdown-menu' role='menu'>
                   <li><%= link_to edit_user_registration_path do %>
-                        <%= raw("Mi Perfil" + "&nbsp;&nbsp") %><i class="glyphicon glyphicon-user"></i>
+                        <%= raw("Mi Perfil" + "&nbsp;&nbsp") %><i class="glyphicon glyphicon-cog"></i>
                     <% end %>
                   </li>
                   <li><%= link_to destroy_user_session_path, method: :delete do %>
@@ -47,7 +47,11 @@
             </ul>
         <% else %>
             <ul class='nav navbar-nav navbar-right collapse navbar-collapse'>
-              <li><a href='/login' data-target='#' class='dropdown-toggle' data-toggle='dropdown'>Iniciar Sesión</a></li>
+              <!--<li><a href='/users/login' data-target='#' class='dropdown-toggle' data-toggle='dropdown'>Iniciar Sesión</a></li>-->
+              <li><%= link_to new_user_session_path do %>
+                    <%= raw("Iniciar Sesión" + "&nbsp;&nbsp") %><i class="glyphicon glyphicon-log-in"></i>
+                <% end %>
+              </li>
             </ul>
         <% end %>
       </nav>

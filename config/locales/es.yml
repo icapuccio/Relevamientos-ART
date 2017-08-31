@@ -1,0 +1,172 @@
+# Files in the config/locales directory are used for internationalization
+# and are automatically loaded by Rails. If you want to use locales other
+# than English, add the necessary files in this directory.
+#
+# To use the locales, use `I18n.t`:
+#
+#     I18n.t 'hello'
+#
+# In views, this is aliased to just `t`:
+#
+#     <%= t('hello') %>
+#
+# To use a different locale, set it with `I18n.locale`:
+#
+#     I18n.locale = :es
+#
+# This would use the information in config/locales/es.yml.
+#
+# To learn more, please read the Rails Internationalization guide
+# available at http://guides.rubyonrails.org/i18n.html.
+
+es:
+  date:
+    abbr_day_names:
+    - dom
+    - lun
+    - mar
+    - mié
+    - jue
+    - vie
+    - sáb
+    abbr_month_names:
+    -
+    - ene
+    - feb
+    - mar
+    - abr
+    - may
+    - jun
+    - jul
+    - ago
+    - sep
+    - oct
+    - nov
+    - dic
+    day_names:
+    - domingo
+    - lunes
+    - martes
+    - miércoles
+    - jueves
+    - viernes
+    - sábado
+    formats:
+      default: "%d/%m/%Y"
+      long: "%A, %d de %B de %Y"
+      short: "%d de %b"
+    month_names:
+    -
+    - Enero
+    - Febrero
+    - Marzo
+    - Abril
+    - Mayo
+    - Junio
+    - Julio
+    - Agosto
+    - Septiembre
+    - Octubre
+    - Noviembre
+    - Diciembre
+    order:
+    - :day
+    - :month
+    - :year
+
+  time:
+    am: am
+    formats:
+      default: "%a, %d de %b de %Y a las %H:%M:%S %Z"
+      long: "%B %d, %Y %H:%M"
+      short: "%d de %b a las %H:%M hrs"
+    pm: pm
+
+  activerecord:
+    errors:
+      messages:
+        record_invalid: "La validación falló: %{errors}"
+        restrict_dependent_destroy:
+          has_one: No se puede eliminar el registro porque existe un %{record} dependiente
+          has_many: No se puede eliminar el registro porque existen %{record} dependientes
+      models:
+        user:
+          attributes:
+            email:
+              taken: 'ya existe para otro usuario'
+            password_confirmation:
+              confirmation: 'las contraseñas ingresadas deben coincidir'
+            reset_password_token:
+              invalid: 'ya se ha usado este link, por favor solicite uno nuevo'
+            password:
+              too_short:
+                other: 'es demasiado corta (%{count} caracteres mínimo)'
+  errors:
+    messages:
+      not_saved: 'La contraseña no se ha actualizado'
+      accepted: debe ser aceptado
+      blank: no puede estar en blanco
+      present: debe estar en blanco
+      confirmation: no coincide
+      empty: no puede estar vacío
+      equal_to: debe ser igual a %{count}
+      even: debe ser par
+      exclusion: está reservado
+      greater_than: debe ser mayor que %{count}
+      greater_than_or_equal_to: debe ser mayor que o igual a %{count}
+      inclusion: no está incluido en la lista
+      invalid: no es válido
+      less_than: debe ser menor que %{count}
+      less_than_or_equal_to: debe ser menor que o igual a %{count}
+      model_invalid: "La validación falló: %{errors}"
+      not_a_number: no es un número
+      not_an_integer: debe ser un entero
+      odd: debe ser impar
+      required: debe existir
+      taken: ya está en uso
+      too_long:
+        one: "es demasiado largo (1 carácter máximo)"
+        other: "es demasiado largo (%{count} caracteres máximo)"
+      too_short:
+        one: 'es demasiado corto (1 carácter mínimo)'
+        other: 'es demasiado corto (%{count} caracteres mínimo)'
+      wrong_length:
+        one: "no tiene la longitud correcta (1 carácter exactos)"
+        other: "no tiene la longitud correcta (%{count} caracteres exactos)"
+      other_than: debe ser distinto de %{count}
+      carrierwave_integrity_error: "No es una imagen."
+      carrierwave_download_error: "No se pudo descargar la imagen."
+      extension_white_list_error: "Formato inválido: %{extension}. Formatos válidos: %{allowed_types}"
+      extension_black_list_error: "Formato inválido: %{extension}. Formatos prohibidos: %{prohibited_types}"
+    template:
+      body: 'Se encontraron problemas con los siguientes campos:'
+      header:
+        one: No se pudo guardar este/a %{model} porque se encontró 1 error
+        other: No se pudo guardar este/a %{model} porque se encontraron %{count} errores
+        carrierwave_processing_error: "Cannot resize image."
+  password:
+    minimum_characters: 'caracteres mínimo'
+    change_password: 'Cambia tu contraseña'
+    change_my_password: 'Cambiar mi contraseña'
+    confirm_new_password: 'Confirma la nueva contraseña'
+    new_password: 'Nueva contraseña'
+    successfully_updated_password: 'Tu contraseña ha sido actualizada correctamente'
+  mail:
+    hello: 'Hola '
+    welcome: 'Bienvenido '
+    confirmation:
+      first_line: '¡Te uniste a la aplicación Relevamientos-ART!'
+      second_line: 'A continuación se encuentra tu código de verificación: '
+    password_change:
+      first_line: 'Te estamos contactando porque tu contraseña ha sido cambiada.'
+      second_line: 'Si no has cambiado la contraseña, por favor asegúrate de cambiarla por una nueva.'
+    reset_password:
+      first_line: 'Te estamos contactando porque has pedido un cambio de contraseña.'
+      second_line: 'Si no has pedido esto, por favor ignora este mail.'
+      third_line: 'Tu contraseña no cambiará hasta que accedas al link y crees una nueva.'
+    change_my_password: 'cambiar contraseña'
+    contact:
+      first_line: '¡Hola!'
+      second_line: '%{name} con el email: %{email} ha enviado el siguiente comentario:'
+      third_line: '%{comment}'
+    subject_contact:  'Nuevo Contacto'

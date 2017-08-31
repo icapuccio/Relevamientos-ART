@@ -30,21 +30,20 @@ class ApplicationController < ActionController::Base
     { root: false }
   end
 
-  alias devise_current_user current_user
-  def current_user
-    if user_id_header.blank?
-      devise_current_user
-    else
-      @current_user ||= User.find(user_id_header)
-    end
-  end
-
-  def user_id_header
-    return nil unless headers['user_id'].present?
-    @user_id_header = headers['user_id']
-  end
-
-  def index; end
+  # TODO: Revisar si esto va a ser necesario usar o no
+  # alias devise_current_user current_user
+  # def current_user
+  #   if user_id_header.blank?
+  #     devise_current_user
+  #   else
+  #     @current_user ||= User.find(user_id_header)
+  #   end
+  # end
+  #
+  # def user_id_header
+  #   return nil unless headers['user_id'].present?
+  #   @user_id_header = headers['user_id']
+  # end
 
   def render_nothing_not_found
     head :not_found
