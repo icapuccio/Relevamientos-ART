@@ -101,6 +101,12 @@ es:
             password:
               too_short:
                 other: 'es demasiado corta (%{count} caracteres mínimo)'
+          visits_assigned: 'no se puede eliminar un usuario con visitas asignadas'
+        zone:
+          users_related: 'no se puede eliminar una zona con usuarios relacionados'
+          institutions_related: 'no se puede eliminar una zona con instituciones relacionadas'
+        institution:
+          visits_related: 'no se puede eliminar una institucion con visitas asignadas'
   errors:
     messages:
       not_saved: 'La contraseña no se ha actualizado'

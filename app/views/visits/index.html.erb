@@ -13,18 +13,23 @@
   <td>status</td>
   <td>priority</td>
   <td>user_id</td>
+  <td>institution_id</td>
+  <td>institution_name</td>
   <td>action</td>
+  <td>to_visit_on</td>
   <% @visits.each do |visit| %>
       <tr>
         <td><%= visit.id %></td>
         <td><%= visit.status %></td>
         <td><%= visit.priority %></td>
         <td><%= visit.user_id %></td>
-        <td><%= link_to 'Show', visits_path %></td>
+        <td><%= visit.to_visit_on %></td>
+        <td><%= visit.institution_id %></td>
+        <td><%= visit.institution.name %></td>
+        <td><%= link_to 'Show', visit %></td>
       </tr>
   <% end %>
   </tbody>
 </table>
-
 <br>
 

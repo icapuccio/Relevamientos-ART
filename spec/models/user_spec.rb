@@ -56,7 +56,7 @@ describe User, type: :model do
       end
 
       context 'with visits assigned' do
-        let!(:assigned_visit) { create(:visit, user: user) }
+        let!(:assigned_visit) { create(:visit, :with_user, user: user) }
 
         it 'does not delete the user' do
           expect { subject }.to_not change { User.count }
@@ -110,9 +110,12 @@ describe User, type: :model do
       end
     end
 
-    # TODO: agregar zona
     context 'when creating a preventor user with all required data' do
-      subject { create(:user, role: 'preventor', latitude: -58.867, longitude: 67.586) }
+      let(:zone) { create(:zone) }
+
+      subject do
+        create(:user, role: 'preventor', latitude: -58.867, longitude: 67.586, zone: zone)
+      end
 
       it 'does not fail' do
         expect { subject }.to_not raise_error

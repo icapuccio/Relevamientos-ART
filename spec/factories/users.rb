@@ -12,6 +12,6 @@ FactoryGirl.define do
     role { 'preventor' }
     latitude { Faker::Address.latitude }
     longitude { Faker::Address.longitude }
-    # TODO: Agregar seteo de zona
+    zone
   end
 end

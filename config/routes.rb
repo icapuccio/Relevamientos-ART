@@ -6,7 +6,7 @@ Rails.application.routes.draw do
 
   root to: 'application#index'
 
-  resources :visits, only: [:index]
+  resources :visits, only: [:index, :show]
 
   require 'sidekiq/web'
   mount Sidekiq::Web, at: 'sidekiq'
