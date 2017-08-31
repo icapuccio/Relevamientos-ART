@@ -3,6 +3,6 @@ FactoryGirl.define do
     email { Faker::Internet.email }
     password { Faker::Internet.password }
     password_confirmation { password }
-    association :zone, factory: :zone
+    zone
   end
 end
