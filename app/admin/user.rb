@@ -1,5 +1,5 @@
 ActiveAdmin.register User do
-  permit_params :email, :name, :last_name, :role, :latitude, :longitude # , :zone_id
+  permit_params :email, :name, :last_name, :role, :latitude, :longitude, :zone_id
 
   controller do
     def destroy
@@ -10,6 +10,11 @@ ActiveAdmin.register User do
         end
       end
     end
+
+    # In order to avoid N+1 Query problem
+    def scoped_collection
+      User.includes(:zone)
+    end
   end
 
   index do
@@ -19,6 +24,7 @@ ActiveAdmin.register User do
     column :name
     column :last_name
     column :role
+    column :zone
     actions
   end
 
@@ -30,6 +36,7 @@ ActiveAdmin.register User do
       row :role
       row :latitude
       row :longitude
+      row :zone
     end
   end
 
@@ -42,8 +49,7 @@ ActiveAdmin.register User do
       f.input :role, as: :select, collection: User.roles.keys, include_blank: false
       f.input :latitude, as: :number, hint: '-34.44909'
       f.input :longitude, as: :number, hint: '-58.53176'
-      # TODO: implement this
-      # f.input :zone_id, as: :select, collection: Zone.all(&:name), include_blank: true
+      f.input :zone_id, as: :select, collection: Zone.all(&:name), include_blank: true
     end
     f.actions
   end

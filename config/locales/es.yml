@@ -83,6 +83,19 @@ es:
     pm: pm
 
   activerecord:
+    models:
+      institution:
+        one: Institución
+        other: Instituciones
+      zone:
+        one: Zona
+        other: Zonas
+      admin_user:
+        one: Administrador
+        other: Administradores
+      comment:
+        one: Comentario
+        other: Comentarios
     errors:
       messages:
         record_invalid: "La validación falló: %{errors}"

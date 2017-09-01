@@ -10,8 +10,8 @@
 AdminUser.create!(email: 'admin@example.com', password: 'password', password_confirmation: 'password')
 
 # Zones
-west_zone = Zone.create!(name:'West')
-north_zone = Zone.create!(name:'North')
+west_zone = Zone.create!(name: 'Oeste')
+north_zone = Zone.create!(name: 'Norte')
 
 # Users
 admin_user = User.create!(email: 'juan_perez@example.com', password: '12345678', password_confirmation: '12345678',
