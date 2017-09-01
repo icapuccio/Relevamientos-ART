@@ -4,31 +4,40 @@ describe Visit, type: :model do
   it { should validate_presence_of(:status) }
   it { should validate_presence_of(:priority) }
   it { should validate_presence_of(:institution) }
-  context 'when the visit is in status pending' do
-    context 'and a user has been assigned' do
+
+  context 'when the visit is pending' do
+    context 'with a user related' do
       subject { create(:visit, :with_user, status: 'pending') }
-      it 'must raise a RecordInvalid error' do
+
+      it 'returns an error' do
         expect { subject }.to raise_error(ActiveRecord::RecordInvalid)
       end
     end
-    context 'and have to_visit_on with value' do
-      subject { create(:visit, :with_to_visit_on, status: 'pending') }
-      it 'must raise a RecordInvalid error' do
+
+    context 'with a to visit on date assigned' do
+      subject { create(:visit, status: 'pending', to_visit_on: Faker::Date.forward) }
+
+      it 'returns an error' do
         expect { subject }.to raise_error(ActiveRecord::RecordInvalid)
       end
     end
   end
 
-  context 'when the visit is not in status pending' do
-    context 'and have to_visit_on without value' do
-      subject { create(:visit, :with_user, status: 'assigned') }
-      it 'must raise a RecordInvalid error' do
+  context 'when the visit is not pending' do
+    context 'without to_visit_on date' do
+      let(:user) { create(:user, :preventor) }
+
+      subject { create(:visit, user: user, status: 'assigned') }
+
+      it 'returns an error' do
         expect { subject }.to raise_error(ActiveRecord::RecordInvalid)
       end
     end
-    context 'and a user has not been assigned' do
-      subject { create(:visit, :with_to_visit_on, status: 'completed') }
-      it 'must raise a RecordInvalid error' do
+
+    context 'without a user related' do
+      subject { create(:visit, status: 'assigned', to_visit_on: Faker::Date.forward) }
+
+      it 'returns an error' do
         expect { subject }.to raise_error(ActiveRecord::RecordInvalid)
       end
     end

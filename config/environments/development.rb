@@ -63,5 +63,7 @@ Rails.application.configure do
     Bullet.console = true
     Bullet.rails_logger = true
     Bullet.add_footer = true
+    # To avoid unused eager loagind alert when resolving N+1 Query problem
+    Bullet.unused_eager_loading_enable = false
   end
 end

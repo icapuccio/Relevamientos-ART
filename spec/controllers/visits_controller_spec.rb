@@ -1,8 +1,8 @@
 require 'rails_helper'
 
 describe VisitsController, type: :controller do
-  let(:user_1) { create(:user) }
-  let(:user_2) { create(:user) }
+  let(:user_1) { create(:user, :preventor) }
+  let(:user_2) { create(:user, :preventor) }
   let!(:visit) do
     create(:visit, user: user_1, to_visit_on: Time.zone.today, status: 'completed')
   end
@@ -10,6 +10,7 @@ describe VisitsController, type: :controller do
     create(:visit, user: user_2, to_visit_on: Time.zone.today, status: 'assigned')
   end
   let!(:pending_visit) { create(:visit, status: 'pending') }
+
   before do
     request.headers['Accept'] = 'application/json'
   end

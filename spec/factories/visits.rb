@@ -1,13 +1,12 @@
 FactoryGirl.define do
   factory :visit do
     priority { Faker::Number.number(2) }
-    status { Visit.statuses.values.sample }
+    status { 'pending' }
     institution
   end
   trait :with_user do
-    user
-  end
-  trait :with_to_visit_on do
+    status { %w(assigned completed in_process).sample }
+    association :user, factory: [:user, :preventor]
     to_visit_on { Faker::Date.forward }
   end
 end
