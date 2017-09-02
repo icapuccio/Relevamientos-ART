@@ -29,7 +29,7 @@ class VisitsController < ApplicationController
 
   def return_ok(format)
     format.json do
-      render json: @visit, status: :ok
+      render json: visit, status: :ok
     end
     format.html
   end
