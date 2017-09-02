@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170831211237) do
+ActiveRecord::Schema.define(version: 20170902213604) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -68,6 +68,16 @@ ActiveRecord::Schema.define(version: 20170831211237) do
     t.index ["zone_id"], name: "index_institutions_on_zone_id", using: :btree
   end
 
+  create_table "tasks", force: :cascade do |t|
+    t.integer  "task_type",    default: 0, null: false
+    t.string   "status",                   null: false
+    t.datetime "completed_at"
+    t.integer  "visit_id",                 null: false
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
+    t.index ["visit_id"], name: "index_tasks_on_visit_id", using: :btree
+  end
+
   create_table "users", force: :cascade do |t|
     t.string   "email",                  default: "", null: false
     t.string   "encrypted_password",     default: "", null: false
@@ -112,6 +122,7 @@ ActiveRecord::Schema.define(version: 20170831211237) do
   end
 
   add_foreign_key "institutions", "zones"
+  add_foreign_key "tasks", "visits"
   add_foreign_key "users", "zones"
   add_foreign_key "visits", "institutions"
   add_foreign_key "visits", "users"

@@ -3,6 +3,7 @@ class Visit < ApplicationRecord
 
   belongs_to :user
   belongs_to :institution
+  has_many :tasks
 
   validates :status, :priority, :institution, presence: true
   validate :validate_values

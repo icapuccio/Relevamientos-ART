@@ -38,3 +38,11 @@ pending_visit = Visit.create!(institution: institution, status: :pending, priori
 assigned_visit = Visit.create!(institution: institution, user: preventor_user, status: :assigned, priority: 9, to_visit_on: Date.today)
 completed_visit = Visit.create!(institution: institution, user: preventor_user, status: :completed, priority: 4, to_visit_on: Date.yesterday)
 completed_visit_another_user = Visit.create!(institution: another_institution, user: another_preventor_user, status: :completed, priority: 4, to_visit_on: Date.yesterday)
+
+# Tasks
+Task.create!(task_type: :rgrl, status: :pending, visit: pending_visit )
+Task.create!(task_type: :rgrl, status: :pending, visit: assigned_visit )
+Task.create!(task_type: :cap, status: :completed, completed_at:Date.yesterday,  visit: completed_visit )
+Task.create!(task_type: :rgrl, status: :completed, completed_at:Date.yesterday, visit: completed_visit )
+Task.create!(task_type: :rgrl, status: :completed, completed_at:Date.yesterday, visit: completed_visit_another_user )
+Task.create!(task_type: :cap, status: :completed, completed_at:Date.yesterday, visit: completed_visit_another_user )
