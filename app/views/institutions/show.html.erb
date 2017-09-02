@@ -1,0 +1,18 @@
+<p id="notice"><%= notice %></p>
+<h1>Institucion: <%=  @institution.name  %> </h1>
+
+<%=  @institution.name               %>
+<%=  @institution.cuit               %>
+<%=  @institution.address            %>
+<%=  @institution.city               %>
+<%=  @institution.province           %>
+<%=  @institution.number             %>
+<%=  @institution.activity           %>
+<%=  @institution.contract           %>
+<%=  @institution.postal_code        %>
+<%=  @institution.surface            %>
+<%=  @institution.workers_count      %>
+<%=  @institution.institutions_count %>
+<%=  @institution.phone_number       %>
+<%=  @institution.zone.name          %>|
+<%= link_to "back", request.referer.present? ? request.referer : default_path %>
