@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170902213604) do
+ActiveRecord::Schema.define(version: 20170903002534) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -110,6 +110,8 @@ ActiveRecord::Schema.define(version: 20170902213604) do
     t.datetime "updated_at",                 null: false
     t.integer  "institution_id"
     t.date     "to_visit_on"
+    t.datetime "completed_at"
+    t.string   "observations"
     t.index ["institution_id"], name: "index_visits_on_institution_id", using: :btree
     t.index ["status"], name: "index_visits_on_status", using: :btree
     t.index ["user_id"], name: "index_visits_on_user_id", using: :btree

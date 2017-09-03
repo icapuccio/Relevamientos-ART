@@ -21,6 +21,14 @@ describe Visit, type: :model do
         expect { subject }.to raise_error(ActiveRecord::RecordInvalid)
       end
     end
+
+    context 'with the completed_at date assigned' do
+      subject { create(:visit, status: 'pending', completed_at: Faker::Date.backward) }
+
+      it 'returns an error' do
+        expect { subject }.to raise_error(ActiveRecord::RecordInvalid)
+      end
+    end
   end
 
   context 'when the visit is not pending' do
@@ -42,6 +50,18 @@ describe Visit, type: :model do
       end
     end
   end
+
+  context 'when the visit is completed' do
+    context 'without completed_at date' do
+      let(:user) { create(:user, :preventor) }
+      subject { create(:visit, user: user, status: 'completed') }
+
+      it 'returns an error' do
+        expect { subject }.to raise_error(ActiveRecord::RecordInvalid)
+      end
+    end
+  end
+
   context '#destroy' do
     let!(:visit) { create(:visit) }
     let!(:task) { create(:task, visit: visit) }

@@ -16,11 +16,15 @@ class Visit < ApplicationRecord
   private
 
   def validate_values
-    return if valid_values?
+    return if valid_pending_values? && valid_completed_values?
     errors.add('invalid_visit', 'Invalid user or visit_date for the status')
   end
 
-  def valid_values?
+  def valid_pending_values?
     status_pending? ? user.blank? && to_visit_on.blank? : user.present? && to_visit_on.present?
+  end
+
+  def valid_completed_values?
+    status_completed? ? completed_at.present? : completed_at.blank?
   end
 end

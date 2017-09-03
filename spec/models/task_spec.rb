@@ -19,7 +19,7 @@ RSpec.describe Task, type: :model do
   context 'when the task is completed' do
     let(:user) { create(:user, :preventor) }
     let!(:visit) do
-      create(:visit, user: user, to_visit_on: Faker::Date.forward, status: 'completed')
+      create(:visit, :completed, user: user)
     end
 
     context 'without completed_at date' do
