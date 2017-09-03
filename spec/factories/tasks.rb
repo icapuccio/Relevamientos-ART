@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :task do
-    task_type { %w(cap rar rgrl).sample }
+    task_type { Task.task_types.values.sample }
     status { 'pending' }
     visit
   end

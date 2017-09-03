@@ -5,7 +5,7 @@ FactoryGirl.define do
     password_confirmation { password }
     name { Faker::Name.first_name }
     last_name { Faker::Name.last_name }
-    role { task_types.values.sample }
+    role { %w(backoffice admin).sample }
   end
 
   trait :preventor do
