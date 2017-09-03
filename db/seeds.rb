@@ -35,6 +35,10 @@ another_institution = Institution.create!(name: 'SHELL', address:"NEUQUEN",city:
 
 # Visits
 pending_visit = Visit.create!(institution: institution, status: :pending, priority: 1)
-assigned_visit = Visit.create!(institution: institution, user: preventor_user, status: :assigned, priority: 9, to_visit_on: Date.today)
-completed_visit = Visit.create!(institution: institution, user: preventor_user, status: :completed, priority: 4, to_visit_on: Date.yesterday)
-completed_visit_another_user = Visit.create!(institution: another_institution, user: another_preventor_user, status: :completed, priority: 4, to_visit_on: Date.yesterday)
+assigned_visit = Visit.create!(institution: institution, user: preventor_user, status: :assigned, priority: 9,
+                               to_visit_on: Date.today)
+completed_visit = Visit.create!(institution: institution, user: preventor_user, status: :completed, priority: 4,
+                                to_visit_on: Date.yesterday, completed_at: Date.yesterday)
+completed_visit_another_user = Visit.create!(institution: another_institution, user: another_preventor_user,
+                                             status: :completed, priority: 4, to_visit_on: Date.yesterday,
+                                             completed_at: Date.yesterday, observations: 'Se observa humedad en el area de trabajo')

@@ -4,7 +4,7 @@ describe VisitsController, type: :controller do
   let(:user_1) { create(:user, :preventor) }
   let(:user_2) { create(:user, :preventor) }
   let!(:visit) do
-    create(:visit, user: user_1, to_visit_on: Time.zone.today, status: 'completed')
+    create(:visit, :completed, user: user_1)
   end
   let!(:another_visit) do
     create(:visit, user: user_2, to_visit_on: Time.zone.today, status: 'assigned')

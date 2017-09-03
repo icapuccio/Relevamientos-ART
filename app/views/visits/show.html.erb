@@ -6,5 +6,7 @@
 <%=  @visit.status %>
 <%=  @visit.id %>
 <%=  @visit.to_visit_on %>
+<%=  @visit.completed_at %>
+<%=  @visit.observations %>
 <%= link_to @visit.institution.name, institution_path(@visit.institution_id) %>
 <%= link_to "Visits", visits_path %>
