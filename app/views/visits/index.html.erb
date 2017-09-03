@@ -29,6 +29,8 @@
         <td><%= link_to visit.institution.name, institution_path(visit.institution_id) %></td>
         <td><%= visit.to_visit_on.try(:strftime, "%d/%m/%Y") %></td>
         <td><%= link_to 'Show', visit %></td>
+        <td><%= link_to 'assign', assignment_visit_path(:id => visit.id, :user_id => 3), method: :post %></td>
+        <td><%= link_to 'revert assign', revert_assignment_visit_path(:id => visit.id), method: :post %></td>
       </tr>
   <% end %>
   </tbody>

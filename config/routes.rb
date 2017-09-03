@@ -6,7 +6,10 @@ Rails.application.routes.draw do
 
   root to: 'application#index'
 
-  resources :visits, only: [:index, :show]
+  resources :visits, only: [:index, :show] do
+    post :assignment, on: :member
+    post :revert_assignment, on: :member
+  end
   resources :institutions, only: [:show]
 
   require 'sidekiq/web'

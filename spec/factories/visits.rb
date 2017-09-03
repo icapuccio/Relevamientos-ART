@@ -8,6 +8,7 @@ FactoryGirl.define do
     status { %w(assigned in_process).sample }
     association :user, factory: [:user, :preventor]
     to_visit_on { Faker::Date.forward }
+    institution { create(:institution, zone: user.zone) }
   end
   trait :completed do
     status { 'completed' }
