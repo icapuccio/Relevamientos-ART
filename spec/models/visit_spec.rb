@@ -42,4 +42,17 @@ describe Visit, type: :model do
       end
     end
   end
+  context '#destroy' do
+    let!(:visit) { create(:visit) }
+    let!(:task) { create(:task, visit: visit) }
+    let!(:task2) { create(:task, visit: visit) }
+    subject { visit.destroy }
+
+    it 'deletes all their tasks' do
+      expect { subject }.to change { Task.count }.by(-2)
+    end
+    it 'deletes the visit' do
+      expect { subject }.to change { Visit.count }.by(-1)
+    end
+  end
 end
