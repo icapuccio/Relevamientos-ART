@@ -1,9 +1,10 @@
+
+<h1>Visita a <%=  @visit.institution.name %> </h1>
 <p id="notice"><%= notice %></p>
 
 
 <%=  @visit.status %>
 <%=  @visit.id %>
 <%=  @visit.to_visit_on %>
-<%=  @visit.institution.name %>
-<%= link_to 'Edit', visits_path %> |
-<%= link_to 'Back', visits_path %>
+<%= link_to @visit.institution.name, institution_path(@visit.institution_id) %>
+<%= link_to "Visits", visits_path %>
