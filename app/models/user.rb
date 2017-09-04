@@ -21,6 +21,10 @@ class User < ApplicationRecord
 
   enum role: [:backoffice, :admin, :preventor], _prefix: true
 
+  def full_name
+    name + ' ' + last_name
+  end
+
   private
 
   # TODO: Eliminar el hardcodeo de password cuando se implemente el envio de mail

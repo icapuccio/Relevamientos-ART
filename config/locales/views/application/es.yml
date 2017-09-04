@@ -9,7 +9,7 @@ es:
   application:
     index:
       messages:
-        welcome: Bienvenido al Bootstrap de Rails
+        welcome: Bienvenido a Relevamientos Digitales
     messages:
       alerts:
         user_not_authorized: No está autorizado para realizar esta acción

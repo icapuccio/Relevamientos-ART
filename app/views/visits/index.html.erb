@@ -1,37 +1,127 @@
+<!-- page content -->
+<div class="right_col" role="main">
+  <div class="">
+    <div class="page-title">
+      <div class="title_left">
+        <h3><%= t('activerecord.models.visit.index', default: 'Visits') %></h3>
+      </div>
 
-<h1>Visits</h1>
+      <div class="title_right">
+        <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
+          <div class="input-group">
+            <input type="text" class="form-control" placeholder="Buscar...">
+            <span class="input-group-btn">
+              <button class="btn btn-default" type="button">Ir</button>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
 
-<table>
-  <thead>
-  <tr>
-    <th colspan="3"></th>
-  </tr>
-  </thead>
+    <div class="clearfix"></div>
 
-  <tbody>
-  <td>id</td>
-  <td>status</td>
-  <td>completed_at</td>
-  <td>priority</td>
-  <td>user_id</td>
-  <td>institution_id</td>
-  <td>institution_name</td>
-  <td>to_visit_on</td>
-  <td>action</td>
-  <% @visits.each do |visit| %>
-      <tr>
-        <td><%= visit.id %></td>
-        <td><%= visit.status %></td>
-        <td><%= visit.completed_at %></td>
-        <td><%= visit.priority %></td>
-        <td><%= visit.user_id %> </td>
-        <td><%= visit.institution_id %></td>
-        <td><%= link_to visit.institution.name, institution_path(visit.institution_id) %></td>
-        <td><%= visit.to_visit_on.try(:strftime, "%d/%m/%Y") %></td>
-        <td><%= link_to 'Show', visit %></td>
-      </tr>
-  <% end %>
-  </tbody>
-</table>
-<br>
+    <div class="col-md-12 col-sm-12 col-xs-12">
+      <div class="x_panel">
+        <div class="x_title">
+          <h2><%= t('activerecord.models.visit.other', default: 'Visits') %> <small>Solo lectura</small></h2>
+          <ul class="nav navbar-right panel_toolbox">
+            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+            </li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+              <!--<ul class="dropdown-menu" role="menu">
+                <li><a href="#">Settings 1</a>
+                </li>
+                <li><a href="#">Settings 2</a>
+                </li>
+              </ul>-->
+            </li>
+            <li><a class="close-link"><i class="fa fa-close"></i></a>
+            </li>
+          </ul>
+          <div class="clearfix"></div>
+        </div>
 
+        <div class="x_content">
+
+          <!--<p>Add class <code>bulk_action</code> to table for bulk actions options on row select</p>-->
+
+          <div class="table-responsive">
+            <table class="table table-striped jambo_table bulk_action">
+              <thead>
+              <tr class="headings">
+                <th>
+                  <input type="checkbox" id="check-all" class="flat">
+                </th>
+                <th class="column-title">Visita </th>
+                <th class="column-title">Establecimiento </th>
+                <th class="column-title">Prioridad </th>
+                <th class="column-title">Estado </th>
+                <th class="column-title">Preventor </th>
+                <th class="column-title">Tareas </th>
+                <th class="column-title">Fecha de inspección </th>
+                <th class="column-title">Fecha de finalización </th>
+                <!--<th class="column-title no-link last"><span class="nobr">Action</span>-->
+                <!--</th>-->
+                <th class="bulk-actions" colspan="7">
+                  <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
+                </th>
+              </tr>
+              </thead>
+
+              <tbody>
+<!--              <tr class="even pointer">
+                <td class="a-center ">
+                  <input type="checkbox" class="flat" name="table_records">
+                </td>
+                <td class=" ">121000040</td>
+                <td class=" ">May 23, 2014 11:47:56 PM </td>
+                <td class=" ">121000210 <i class="success fa fa-long-arrow-up"></i></td>
+                <td class=" ">John Blank L</td>
+                <td class=" ">Paid</td>
+                <td class="a-right a-right ">$7.45</td>
+                <td class=" last"><a href="#">View</a>
+                </td>
+              </tr>
+              <tr class="odd pointer">
+                <td class="a-center ">
+                  <input type="checkbox" class="flat" name="table_records">
+                </td>
+                <td class=" ">121000039</td>
+                <td class=" ">May 23, 2014 11:30:12 PM</td>
+                <td class=" ">121000208 <i class="success fa fa-long-arrow-up"></i>
+                </td>
+                <td class=" ">John Blank L</td>
+                <td class=" ">Paid</td>
+                <td class="a-right a-right ">$741.20</td>
+                <td class=" last"><a href="#">View</a>
+                </td>
+              </tr>-->
+              <% @visits.each do |visit| %>
+                  <!-- TODO: intercalar odd pointer / even pointer -->
+                  <tr class="odd pointer">
+                    <td class="a-center ">
+                      <input type="checkbox" class="flat" name="table_records">
+                    </td>
+                    <td><%= visit.id %></td>
+                    <!-- TODO: Agregar navegación a Establecimiento -->
+                    <td><%= visit.institution.name %></td>
+                    <td><%= visit.priority %></td>
+                    <td><%= Visit.human_attribute_name("status.#{visit.status}") %></td>
+                    <!-- TODO: Agregar navegación a Usuario -->
+                    <td><%= visit.user.full_name if visit.user.present? %> </td>
+                    <td> Descripción de Tareas </td>
+                    <td><%= l(visit.to_visit_on, format: :short_date) if visit.to_visit_on.present? %></td>
+                    <td><%= l(visit.completed_at, format: :short_date) if visit.finished? %></td>
+                    <!--<td class=" last"><a href="#">Ver</a>-->
+                  </tr>
+              <% end %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- /page content -->

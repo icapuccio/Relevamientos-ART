@@ -1,10 +1,13 @@
 Rails.application.routes.draw do
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
-  devise_for :users, controllers: { :sessions => 'sessions' },
+  devise_for :users, controllers: { sessions: 'sessions' },
                                path_names: { sign_in: 'login', sign_out: 'logout' }
+  devise_scope :user do
+    get '/login' => 'devise/sessions#new', as: 'login'
+  end
 
-  root to: 'application#index'
+  root 'home#index'
 
   resources :visits, only: [:index, :show]
   resources :institutions, only: [:show]

@@ -107,6 +107,7 @@ es:
       already_signed_out: Sesión finalizada.
       new:
         sign_in: Iniciar sesión
+        remember_me: Recordar usuario
       signed_in: Sesión iniciada.
       signed_out: Sesión finalizada.
     shared:
