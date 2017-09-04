@@ -13,6 +13,18 @@ class Visit < ApplicationRecord
   scope :status, ->(status) { where status: status }
   scope :user_id, ->(user) { where user_id: user }
 
+  def scheduled?
+    to_visit_on.present?
+  end
+
+  def assigned?
+    user.present?
+  end
+
+  def finished?
+    status_completed?
+  end
+
   private
 
   def validate_values

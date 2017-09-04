@@ -1,5 +1,5 @@
 <p id="notice"><%= notice %></p>
-<h1>Institucion: <%=  @institution.name  %> </h1>
+<h1>Establecimiento: <%=  @institution.name  %> </h1>
 
 <%=  @institution.name               %>
 <%=  @institution.cuit               %>
@@ -15,4 +15,4 @@
 <%=  @institution.institutions_count %>
 <%=  @institution.phone_number       %>
 <%=  @institution.zone.name          %>|
-<%= link_to "back", request.referer.present? ? request.referer : default_path %>
+<%= link_to "Atrás", request.referer.present? ? request.referer : default_path %>

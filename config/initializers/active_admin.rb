@@ -16,7 +16,7 @@ ActiveAdmin.setup do |config|
   #
   # Note: Aim for an image that's 21px high so it fits in the header.
   #
-  #config.site_title_image = "logo-40px.png"
+  # config.site_title_image = "logo-40px.png"
 
   # == Default Namespace
   #
@@ -103,7 +103,7 @@ ActiveAdmin.setup do |config|
   # Redirect users to the root path of the app
   ActiveAdmin::Devise::SessionsController.class_eval do
     def after_sign_out_path_for(resource_or_scope)
-      "/"
+      '/'
     end
   end
 
