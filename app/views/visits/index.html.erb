@@ -109,9 +109,9 @@
                     <td><%= visit.priority %></td>
                     <td><%= Visit.human_attribute_name("status.#{visit.status}") %></td>
                     <!-- TODO: Agregar navegación a Usuario -->
-                    <td><%= visit.user.full_name if visit.assigned? %> </td>
+                    <td><%= visit.user.full_name if visit.user.present? %> </td>
                     <td> Descripción de Tareas </td>
-                    <td><%= l(visit.to_visit_on, format: :short_date) if visit.scheduled? %></td>
+                    <td><%= l(visit.to_visit_on, format: :short_date) if visit.to_visit_on.present? %></td>
                     <td><%= l(visit.completed_at, format: :short_date) if visit.finished? %></td>
                     <!--<td class=" last"><a href="#">Ver</a>-->
                   </tr>
