@@ -25,6 +25,9 @@ class Visit < ApplicationRecord
     self.status = 'pending'
     self.user = nil
     self.to_visit_on = nil
+
+  def finished?
+    status_completed?
   end
 
   private

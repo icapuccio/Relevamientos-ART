@@ -30,6 +30,9 @@ gem 'autoprefixer-rails'
 
 gem 'bootstrap-sass'
 
+# Gentelella Admin template
+gem 'gentelella-rails'
+
 gem 'carrierwave'
 
 # Authentication
@@ -50,9 +53,6 @@ gem 'foreman'
 # Active Admin
 gem 'activeadmin', git: 'https://github.com/activeadmin/activeadmin'
 gem 'inherited_resources', git: 'https://github.com/activeadmin/inherited_resources'
-
-# Enables Slim templates
-gem 'slim-rails'
 
 # Sidekiq
 gem 'sidekiq'

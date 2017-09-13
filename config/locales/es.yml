@@ -53,6 +53,7 @@ es:
     - sábado
     formats:
       default: "%d/%m/%Y"
+      short_date: "%d/%m/%Y"
       long: "%A, %d de %B de %Y"
       short: "%d de %b"
     month_names:
@@ -77,6 +78,7 @@ es:
   time:
     am: am
     formats:
+      short_date: "%d/%m/%Y"
       default: "%a, %d de %b de %Y a las %H:%M:%S %Z"
       long: "%B %d, %Y %H:%M"
       short: "%d de %b a las %H:%M hrs"
@@ -85,8 +87,8 @@ es:
   activerecord:
     models:
       institution:
-        one: Institución
-        other: Instituciones
+        one: Establecimiento
+        other: Establecimientos
       zone:
         one: Zona
         other: Zonas
@@ -96,6 +98,17 @@ es:
       comment:
         one: Comentario
         other: Comentarios
+      visit:
+        one: Visita
+        other: Visitas
+        index: Seguimiento de Visitas
+        assigments: Asignación de Visitas
+    attributes:
+      visit/status:
+        pending: Pendiente
+        assigned: Asignada
+        in_process: En Progreso
+        completed: Finalizada
     errors:
       messages:
         record_invalid: "La validación falló: %{errors}"
@@ -117,9 +130,9 @@ es:
           visits_assigned: 'no se puede eliminar un usuario con visitas asignadas'
         zone:
           users_related: 'no se puede eliminar una zona con usuarios relacionados'
-          institutions_related: 'no se puede eliminar una zona con instituciones relacionadas'
+          institutions_related: 'no se puede eliminar una zona con establecimientos relacionados'
         institution:
-          visits_related: 'no se puede eliminar una institucion con visitas asignadas'
+          visits_related: 'no se puede eliminar un establecimiento con visitas asignadas'
   errors:
     messages:
       not_saved: 'La contraseña no se ha actualizado'
