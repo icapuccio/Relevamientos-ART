@@ -19,7 +19,6 @@
     </div>
 
     <div class="clearfix"></div>
-
     <div class="col-md-12 col-sm-12 col-xs-12">
       <div class="x_panel">
         <div class="x_title">
@@ -61,6 +60,8 @@
                 <th class="column-title">Tareas </th>
                 <th class="column-title">Fecha de inspección </th>
                 <th class="column-title">Fecha de finalización </th>
+                <th class="column-title">Asignar </th>
+                <th class="column-title">Desasignar</th>
                 <!--<th class="column-title no-link last"><span class="nobr">Action</span>-->
                 <!--</th>-->
                 <th class="bulk-actions" colspan="7">
@@ -113,6 +114,10 @@
                     <td> Descripción de Tareas </td>
                     <td><%= l(visit.to_visit_on, format: :short_date) if visit.to_visit_on.present? %></td>
                     <td><%= l(visit.completed_at, format: :short_date) if visit.finished? %></td>
+
+                    <td><%= link_to 'assign', visit_assignment_path(:user_id => 3, :visit_id => visit.id), method: :post %></td>
+                    <td><%= link_to 'remove', visit_remotion_path(:visit_id => visit.id), method: :put %></td>
+
                     <!--<td class=" last"><a href="#">Ver</a>-->
                   </tr>
               <% end %>
