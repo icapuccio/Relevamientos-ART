@@ -1,5 +1,5 @@
 ActiveAdmin.register User do
-  permit_params :email, :name, :last_name, :role, :latitude, :longitude, :zone_id
+  permit_params :email, :name, :last_name, :role, :address, :latitude, :longitude, :zone_id
 
   controller do
     def destroy
@@ -34,6 +34,7 @@ ActiveAdmin.register User do
       row :name
       row :last_name
       row :role
+      row :address
       row :latitude
       row :longitude
       row :zone
@@ -47,8 +48,9 @@ ActiveAdmin.register User do
       f.input :name
       f.input :last_name
       f.input :role, as: :select, collection: User.roles.keys, include_blank: false
-      f.input :latitude, as: :number, hint: '-34.44909'
-      f.input :longitude, as: :number, hint: '-58.53176'
+      f.input :address
+      f.input :latitude, as: :number, input_html: { readonly: true }
+      f.input :longitude, as: :number, input_html: { readonly: true }
       f.input :zone_id, as: :select, collection: Zone.all(&:name), include_blank: true
     end
     f.actions

@@ -13,8 +13,13 @@ class User < ApplicationRecord
   validates :name, :last_name, :role, presence: true
   validate :complete_preventor_data
 
+  # Geocoder
+  geocoded_by :address
+
   # Hooks
+  before_validation :geocode, if: :address_changed?
   before_validation :generate_password, on: :create
+  after_validation :coordinates_changed?
   after_create :create_admin_user, if: :role_admin?
   before_destroy :check_user_with_visits
   before_destroy :delete_admin_user, if: :role_admin?
@@ -60,5 +65,10 @@ class User < ApplicationRecord
 
   def complete_preventor_data?
     latitude && longitude && zone
+  end
+
+  def coordinates_changed?
+    return unless address_changed? && !latitude_changed? && !longitude_changed?
+    errors.add(:address, 'no es una dirección válida')
   end
 end

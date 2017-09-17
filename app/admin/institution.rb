@@ -1,6 +1,6 @@
 ActiveAdmin.register Institution do
-  permit_params :name, :address, :city, :province, :number, :surface, :workers_count, :cuit,
-                :activity, :institutions_count, :contract, :postal_code, :phone_number,
+  permit_params :name, :address, :street, :city, :province, :number, :surface, :workers_count,
+                :cuit, :activity, :institutions_count, :contract, :postal_code, :phone_number,
                 :longitude, :latitude, :zone_id
 
   controller do
@@ -34,20 +34,18 @@ ActiveAdmin.register Institution do
     attributes_table do
       row :name
       row :cuit
-      row :address
-      row :city
-      row :province
-      row :zone
-      row :number
       row :surface
       row :workers_count
       row :activity
       row :institutions_count
       row :contract
-      row :postal_code
       row :phone_number
-      row :longitude
+      row :address
+      row :province
+      row :postal_code
+      row :zone
       row :latitude
+      row :longitude
     end
   end
 
@@ -56,20 +54,21 @@ ActiveAdmin.register Institution do
       f.semantic_errors(*f.object.errors.keys)
       f.input :name
       f.input :cuit
-      f.input :address
+      f.input :street
+      f.input :number
       f.input :city
       f.input :province
       f.input :zone_id, as: :select, collection: Zone.all(&:name), include_blank: false
-      f.input :number
+      f.input :postal_code
+      f.input :address, input_html: { readonly: true }
+      f.input :latitude, as: :number, input_html: { readonly: true }
+      f.input :longitude, as: :number, input_html: { readonly: true }
       f.input :surface
       f.input :workers_count
       f.input :activity
       f.input :institutions_count
       f.input :contract
-      f.input :postal_code
       f.input :phone_number
-      f.input :latitude, as: :number, hint: '-34.44909'
-      f.input :longitude, as: :number, hint: '-58.53176'
     end
     f.actions
   end

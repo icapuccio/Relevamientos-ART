@@ -2,7 +2,7 @@ FactoryGirl.define do
   factory :institution do
     name { Faker::GameOfThrones.house }
     cuit { Faker::GameOfThrones.character }
-    address { Faker::Address.street_address }
+    street { Faker::Address.street_address }
     city { Faker::GameOfThrones.city }
     province { Faker::Address.city }
     number { Faker::Number.number(4) }
