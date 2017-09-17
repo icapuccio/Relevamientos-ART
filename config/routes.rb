@@ -10,8 +10,8 @@ Rails.application.routes.draw do
   root 'home#index'
 
   resources :visits, only: [:index, :show] do
-    post :assignment, on: :member
-    post :revert_assignment, on: :member
+    post :assignment, to: 'visits#assign'
+    put :remotion, to: 'visits#remove_assignment'
   end
   resources :institutions, only: [:show]
 

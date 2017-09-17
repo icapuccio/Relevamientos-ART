@@ -14,51 +14,66 @@ class VisitsController < ApplicationController
     visit.nil? ? show_return_not_found : show_return_ok
   end
 
-  def assignment
-    return if assignment_validations
+  def assign
+    return if invalid_assignment?
     visit.assign_to(user)
     return redirect_to visits_url, notice: 'Visita asignada' if visit.save
     redirect_to visits_url, alert: visit.errors.full_messages.to_sentence
   end
 
-  def assignment_validations
-    assignment_alert
-    return redirect_to visits_url, alert: @alert if @alert.present?
-  end
-
   def assignment_alert
-    @alert = 'User_id is required and must be a preventos' unless
-        params.require(:user_id) && user.role_preventor?
-    @alert = 'Visit not in status pending' unless visit.status_pending?
-    @alert = 'User and Visit have different zones' unless visit.institution.zone.eql?(user.zone)
+    @errors = []
+    validate_user
+    validate_status_pending
+    validate_zones
   end
 
-  def invalid_html_error(format, msg)
-    format.html { redirect_to visits_url, alert: msg }
-  end
-
-  def revert_assignment
-    return if revert_assignment_valid_params?
-    visit.revert_assignment
+  def remove_assignment
+    return if invalid_remotion?
+    visit.remove_assignment
     return redirect_to visits_url, notice: 'Visita desasignada.' if visit.save
     redirect_to visits_url, alert: visit.errors.full_messages.to_sentence
   end
 
+  private
+
+  def validate_user
+    @errors << 'Id de usuario es necesario y debe ser un preventor' unless
+        params.require(:user_id) && user.role_preventor?
+  end
+
+  def validate_zones
+    @errors << 'El usuario y la visita tienen diferente zona' unless
+        visit.institution.zone.eql?(user.zone)
+  end
+
+  def validate_status_pending
+    @errors << 'La visita no esta en estado: pendiente' unless visit.status_pending?
+  end
+
+  def invalid_assignment?
+    assignment_alert
+    return redirect_to visits_url, alert: @errors.join(', ') unless @errors.empty?
+  end
+
   def visit
-    @visit ||= Visit.includes(:institution).find(params[:id])
+    visit_id = params[:id] || params[:visit_id]
+    @visit ||= Visit.includes(:institution).find(visit_id)
   end
 
   def user
     @user ||= User.find(params[:user_id])
-    # como salvo la excepcion cuando el user que me pasan no esta?
   end
 
   def show_return_not_found
     respond_to do |format|
       format.json do
-        render json: visit, status: :not_found
+        render render_nothing_not_found
       end
-      format.html { redirect_to visits_url, notice: 'Visit not founded' }
+      format.html do
+        flash[:alert] = 'Visita no encontrada'
+        redirect_to visits_url
+      end
     end
   end
 
@@ -77,9 +92,9 @@ class VisitsController < ApplicationController
     params[:status].present? ? Visit.statuses.include?(params[:status]) : true
   end
 
-  def revert_assignment_valid_params?
-    return redirect_to visits_url, alert: 'Visit not exists' unless visit.present?
-    return redirect_to visits_url, alert: 'Visit not in status assigned' unless
+  def invalid_remotion?
+    return redirect_to visits_url, alert: 'La visita no existe' unless visit.present?
+    return redirect_to visits_url, alert: 'La visita no esta en estado: Asignada' unless
         visit.status_assigned?
   end
 end

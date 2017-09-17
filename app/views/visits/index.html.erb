@@ -60,6 +60,8 @@
                 <th class="column-title">Tareas </th>
                 <th class="column-title">Fecha de inspección </th>
                 <th class="column-title">Fecha de finalización </th>
+                <th class="column-title">Asignar </th>
+                <th class="column-title">Desasignar</th>
                 <!--<th class="column-title no-link last"><span class="nobr">Action</span>-->
                 <!--</th>-->
                 <th class="bulk-actions" colspan="7">
@@ -108,13 +110,14 @@
                     <td><%= visit.priority %></td>
                     <td><%= Visit.human_attribute_name("status.#{visit.status}") %></td>
                     <!-- TODO: Agregar navegación a Usuario -->
-                    <!-- TODO: <%= link_to 'assign', assignment_visit_path(:id => visit.id, :user_id => 3), method: :post %></td> -->
-                    <!-- TODO: <%= link_to 'revert assign', revert_assignment_visit_path(:id => visit.id), method: :post %></td> -->
-
                     <td><%= visit.user.full_name if visit.user.present? %> </td>
                     <td> Descripción de Tareas </td>
                     <td><%= l(visit.to_visit_on, format: :short_date) if visit.to_visit_on.present? %></td>
                     <td><%= l(visit.completed_at, format: :short_date) if visit.finished? %></td>
+
+                    <td><%= link_to 'assign', visit_assignment_path(:user_id => 3, :visit_id => visit.id), method: :post %></td>
+                    <td><%= link_to 'remove', visit_remotion_path(:visit_id => visit.id), method: :put %></td>
+
                     <!--<td class=" last"><a href="#">Ver</a>-->
                   </tr>
               <% end %>

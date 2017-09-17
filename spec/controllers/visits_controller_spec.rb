@@ -10,7 +10,7 @@ describe VisitsController, type: :controller do
   let!(:visit) do
     create(:visit, :completed, user: user_1, institution: institution_1)
   end
-  let!(:another_visit) do
+  let!(:assigned_visit) do
     create(:visit, user: user_2, to_visit_on: Time.zone.today,
                    status: 'assigned', institution: institution_2)
   end
@@ -122,7 +122,7 @@ describe VisitsController, type: :controller do
 
   describe 'POST #assignment' do
     before do
-      request.headers['Accept'] = 'text/html'
+      request.headers['Content-Type'] = 'text/html'
     end
     context 'When the visit exists,' do
       context 'have status pending' do
@@ -132,69 +132,110 @@ describe VisitsController, type: :controller do
             let(:role) { 'backoffice' }
             let!(:user_backoffice) { create(:user, role: role) }
             before do
-              post :assignment, params: { id: pend_visit_2.id, user_id: user_backoffice.id }
+              post :assign, params: { visit_id: pend_visit_2.id, user_id: user_backoffice.id }
             end
             it 'responds found' do
               expect(response.response_code).to eq 302
             end
             it 'not was assigned to the user' do
-              expect(Visit.find(pend_visit_2.id).user).to eq nil
+              expect(pend_visit_2.reload.user).to eq nil
             end
             it 'status not change' do
-              expect(Visit.find(pend_visit_2.id).status).to eq 'pending'
+              expect(pend_visit_2.reload.status).to eq 'pending'
             end
           end
           context 'and both have the same zone' do
             let!(:pend_visit_2) { create(:visit, status: 'pending', institution: institution_1) }
             before do
-              post :assignment, params: { id: pend_visit_2.id, user_id: user_1.id }
+              post :assign, params: { visit_id: pend_visit_2.id, user_id: user_1.id }
             end
             it 'responds found' do
               expect(response.response_code).to eq 302
             end
             it 'assign the visit to the user' do
-              expect(Visit.find(pend_visit_2.id).user).to eq user_1
+              expect(pend_visit_2.reload.user).to eq user_1
             end
             it 'changed status to assigned' do
-              expect(Visit.find(pend_visit_2.id).status).to eq 'assigned'
+              expect(pend_visit_2.reload.status).to eq 'assigned'
             end
           end
           context 'and have not the same zone' do
             let!(:pend_visit_3) { create(:visit, status: 'pending', institution: institution_2) }
             before do
-              post :assignment, params: { id: pend_visit_3.id, user_id: user_1.id }
+              post :assign, params: { id: pend_visit_3.id, visit_id: pend_visit_3.id,
+                                      user_id: user_1.id }
             end
             it 'responds found' do
               expect(response.response_code).to eq 302
             end
             it 'not was assigned to the user' do
-              expect(Visit.find(pend_visit_3.id).user).to eq nil
+              expect(pend_visit_3.reload.user).to eq nil
             end
             it 'status not change' do
-              expect(Visit.find(pend_visit_3.id).status).to eq 'pending'
+              expect(pend_visit_3.reload.status).to eq 'pending'
             end
           end
         end
         context 'and the user not exists' do
           let!(:pend_visit_3) { create(:visit, status: 'pending', institution: institution_2) }
           before do
-            post :assignment, params: { id: pend_visit_3.id, user_id: user_1.id * 1000 }
+            post :assign, params: { visit_id: pend_visit_3.id, user_id: user_1.id * 1000 }
           end
-          # quiero que se comporte asi, pero actualmente devuelve un 404
-          # it 'responds found' do
-          #  expect(response.response_code).to eq 302
-          # end
-          # it 'not was assigned to the user' do
-          #  expect(Visit.find(pend_visit_3.id).user).to eq nil
-          # end
-          # it 'status not change' do
-          #  expect(Visit.find(pend_visit_3.id).status).to eq 'pending'
-          # end
+          it 'responds found' do
+            expect(response.response_code).to eq 404
+          end
+          it 'not was assigned to the user' do
+            expect(pend_visit_3.reload.user).to eq nil
+          end
+          it 'status not change' do
+            expect(pend_visit_3.reload.status).to eq 'pending'
+          end
+        end
+      end
+      context 'have not status pending and different zones' do
+        before do
+          post :assign, params: { visit_id: assigned_visit.id, user_id: user_1.id }
+        end
+        it 'responds found' do
+          expect(response.response_code).to eq 302
+        end
+        it 'responds with an alarm' do
+          expect(response.flash.alert).to eq 'La visita no esta en estado: pendiente,' \
+            ' El usuario y la visita tienen diferente zona'
         end
       end
     end
-
-    context 'When the visit not exists' do
+  end
+  describe 'PUT #remove_assignment' do
+    before do
+      request.headers['Content-Type'] = 'text/html'
+    end
+    context 'When the visit exists' do
+      context 'and have status assigned' do
+        before do
+          post :remove_assignment, params: { visit_id: assigned_visit.id }
+        end
+        it 'responds found' do
+          expect(response.response_code).to eq 302
+        end
+        it 'not was assigned to the user' do
+          expect(assigned_visit.reload.user).to eq nil
+        end
+        it 'status not change' do
+          expect(assigned_visit.reload.status).to eq 'pending'
+        end
+      end
+      context 'and have not status assigned' do
+        before do
+          post :remove_assignment, params: { visit_id: pending_visit.id }
+        end
+        it 'responds found' do
+          expect(response.response_code).to eq 302
+        end
+        it 'responds with an alarm' do
+          expect(response.flash.alert).to eq 'La visita no esta en estado: Asignada'
+        end
+      end
     end
   end
 end
