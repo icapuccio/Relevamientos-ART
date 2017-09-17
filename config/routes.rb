@@ -9,7 +9,10 @@ Rails.application.routes.draw do
 
   root 'home#index'
 
-  resources :visits, only: [:index, :show]
+  resources :visits, only: [:index, :show] do
+    post :assignment, to: 'visits#assign'
+    put :remotion, to: 'visits#remove_assignment'
+  end
   resources :institutions, only: [:show]
 
   require 'sidekiq/web'

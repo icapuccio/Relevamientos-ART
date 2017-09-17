@@ -13,11 +13,11 @@ describe Institution, type: :model do
   it { should validate_presence_of(:phone_number) }
   it { should validate_presence_of(:contract) }
   it { should validate_presence_of(:postal_code) }
-  it { should validate_presence_of(:latitude) }
-  it { should validate_presence_of(:longitude) }
+  it { should validate_presence_of(:zone) }
 
   context '#destroy' do
-    let!(:institution) { create(:institution) }
+    let!(:zone) { create(:zone) }
+    let!(:institution) { create(:institution, zone: zone) }
 
     subject { institution.destroy }
 
@@ -28,7 +28,7 @@ describe Institution, type: :model do
     end
 
     context 'with visits assigned' do
-      let!(:user) { create(:user) }
+      let!(:user) { create(:user, zone: zone) }
       let!(:visit) do
         create(:visit, user: user, institution: institution, status: :assigned,
                        to_visit_on: Date.yesterday)
