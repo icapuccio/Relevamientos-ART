@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170917063219) do
+ActiveRecord::Schema.define(version: 20170917195304) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -60,7 +60,6 @@ ActiveRecord::Schema.define(version: 20170917063219) do
 
   create_table "cap_results", force: :cascade do |t|
     t.string   "topic",               null: false
-    t.integer  "attendees_count",     null: false
     t.string   "used_materials"
     t.string   "delivered_materials"
     t.integer  "task_id",             null: false
