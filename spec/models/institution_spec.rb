@@ -13,8 +13,7 @@ describe Institution, type: :model do
   it { should validate_presence_of(:phone_number) }
   it { should validate_presence_of(:contract) }
   it { should validate_presence_of(:postal_code) }
-  it { should validate_presence_of(:latitude) }
-  it { should validate_presence_of(:longitude) }
+  it { should validate_presence_of(:zone) }
 
   context '#destroy' do
     let!(:institution) { create(:institution) }

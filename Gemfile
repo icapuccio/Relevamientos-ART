@@ -77,6 +77,9 @@ gem 'newrelic_rpm'
 
 gem 'recipient_interceptor'
 
+# Geolocalization API
+gem 'geocoder'
+
 group :development do
   # Gem to detect N+1 queries
   gem 'better_errors'

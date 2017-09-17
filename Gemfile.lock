@@ -231,6 +231,7 @@ GEM
       sass-rails (>= 5.0)
       select2-rails
       switchery-rails
+    geocoder (1.4.4)
     globalid (0.3.7)
       activesupport (>= 4.1.0)
     has_scope (0.7.0)
@@ -543,6 +544,7 @@ DEPENDENCIES
   foreman
   formulaic
   gentelella-rails
+  geocoder
   inherited_resources!
   jbuilder (~> 2.5)
   jquery-rails
@@ -587,4 +589,4 @@ RUBY VERSION
    ruby 2.3.3p222
 
 BUNDLED WITH
-   1.15.3
+   1.15.4
