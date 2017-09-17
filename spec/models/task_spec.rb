@@ -16,16 +16,41 @@ RSpec.describe Task, type: :model do
     end
   end
 
-  context 'when the task is completed' do
+  context 'when is completed' do
     let(:user) { create(:user, :preventor) }
-    let!(:visit) do
-      create(:visit, :completed, user: user)
-    end
+    let!(:visit) { create(:visit, :completed, user: user) }
 
     context 'without completed_at date' do
-      subject { create(:task, visit: visit, status: 'completed') }
+      subject { create(:task, visit: visit, status: 'completed', task_type: :cap) }
       it 'returns an error' do
         expect { subject }.to raise_error(ActiveRecord::RecordInvalid)
+      end
+    end
+    context 'its a cap task' do
+      let!(:task) { create(:task, visit: visit, status: 'pending', task_type: :cap) }
+      let!(:completed_at) { DateTime.current }
+      context 'and have not a cap result' do
+        it 'returns an error' do
+          expect { task.complete(completed_at) }.to raise_error(ActiveRecord::RecordInvalid)
+        end
+      end
+      context ', have a cap result without employees' do
+        let!(:cap_result) { create(:cap_result, task: task) }
+        it 'returns an error' do
+          expect { task.complete(completed_at) }.to raise_error(ActiveRecord::RecordInvalid)
+        end
+      end
+      context ', have a cap result with employees' do
+        let!(:cap_result) { create(:cap_result, task: task) }
+        let!(:cap_employee) { create(:cap_employee, cap_result: cap_result) }
+        it 'returns ok. change the status ' do
+          expect { task.complete(completed_at) }.to change { task.status }
+            .from('pending').to('completed')
+        end
+        it 'and complete the completed_at date' do
+          expect { task.complete(completed_at) }.to change { task.completed_at }
+            .from(nil).to(completed_at)
+        end
       end
     end
   end

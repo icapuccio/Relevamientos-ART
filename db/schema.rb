@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170917045838) do
+ActiveRecord::Schema.define(version: 20170917195304) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -44,6 +44,28 @@ ActiveRecord::Schema.define(version: 20170917045838) do
     t.datetime "updated_at",                          null: false
     t.index ["email"], name: "index_admin_users_on_email", unique: true, using: :btree
     t.index ["reset_password_token"], name: "index_admin_users_on_reset_password_token", unique: true, using: :btree
+  end
+
+  create_table "cap_employees", force: :cascade do |t|
+    t.string   "name",          null: false
+    t.string   "last_name",     null: false
+    t.string   "cuil",          null: false
+    t.string   "sector"
+    t.integer  "cap_result_id", null: false
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+    t.index ["cap_result_id"], name: "index_cap_employees_on_cap_result_id", using: :btree
+    t.index ["cuil", "cap_result_id"], name: "index_cap_employees_on_cuil_and_cap_result_id", unique: true, using: :btree
+  end
+
+  create_table "cap_results", force: :cascade do |t|
+    t.string   "topic",               null: false
+    t.string   "used_materials"
+    t.string   "delivered_materials"
+    t.integer  "task_id",             null: false
+    t.datetime "created_at",          null: false
+    t.datetime "updated_at",          null: false
+    t.index ["task_id"], name: "index_cap_results_on_task_id", using: :btree
   end
 
   create_table "institutions", force: :cascade do |t|
@@ -125,6 +147,8 @@ ActiveRecord::Schema.define(version: 20170917045838) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "cap_employees", "cap_results"
+  add_foreign_key "cap_results", "tasks"
   add_foreign_key "institutions", "zones"
   add_foreign_key "tasks", "visits"
   add_foreign_key "users", "zones"
