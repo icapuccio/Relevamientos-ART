@@ -6,6 +6,10 @@ class Task < ApplicationRecord
   enum task_type: [:cap, :rgrl, :rar], _prefix: true
   validate :validate_values
 
+  def completed?
+    status_completed?
+  end
+
   private
 
   def validate_values

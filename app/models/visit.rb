@@ -6,7 +6,7 @@ class Visit < ApplicationRecord
   has_many :tasks, dependent: :destroy
 
   validates :status, :priority, :institution, presence: true
-  validate :validate_values
+  validate :validate_values, :validate_completed_tasks
 
   enum status: [:pending, :assigned, :in_process, :completed], _prefix: true
 
@@ -18,6 +18,10 @@ class Visit < ApplicationRecord
     self.status = 'assigned'
     self.user = user
     self.to_visit_on = Date.tomorrow
+  end
+
+  def complete(completed_at, observations)
+    update_attributes(status: 'completed', completed_at: completed_at, observations: observations)
   end
 
   def valid_for_assignment?(user)
@@ -36,6 +40,15 @@ class Visit < ApplicationRecord
   end
 
   private
+
+  def validate_completed_tasks
+    return unless status_completed?
+    errors.add('error', 'La visita contiene tareas sin finalizar') unless all_tasks_completed?
+  end
+
+  def all_tasks_completed?
+    tasks.reject(&:completed?).empty?
+  end
 
   def validate_values
     errors.add('Pending visit', 'Invalid values') unless valid_pending_values?

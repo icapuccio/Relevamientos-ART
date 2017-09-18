@@ -238,4 +238,50 @@ describe VisitsController, type: :controller do
       end
     end
   end
+  describe 'PUT #complete' do
+    context 'When the visit id does not exist' do
+      let!(:completed_at) { DateTime.current }
+      before do
+        put :complete, params: { visit_id: assigned_visit.id * 1000, completed_at: completed_at }
+      end
+      it 'responds with not found status' do
+        expect(response).to have_http_status(:not_found)
+      end
+    end
+    context 'when the visit id exists' do
+      let!(:completed_at) { DateTime.current }
+      context 'and has pending tasks' do
+        let!(:task) { create(:task, visit: assigned_visit, status: 'pending') }
+        before do
+          put :complete, params: { visit_id: assigned_visit.id, completed_at: completed_at }
+        end
+        it 'responds with and not_modified status' do
+          expect(response).to have_http_status(:not_modified)
+        end
+      end
+      context 'and has all the tasks completed' do
+        let!(:task) do
+          create(:task, visit: assigned_visit, status: 'completed', completed_at: completed_at)
+        end
+        let!(:obs) { 'todo OK' }
+        before do
+          put :complete, params: { visit_id: assigned_visit.id, completed_at: completed_at,
+                                   observations: obs }
+        end
+        it 'responds with ok' do
+          expect(response).to have_http_status(:ok)
+        end
+        it 'returns the updated visit' do
+          expect(response_body.to_json).to eq VisitSerializer
+            .new(assigned_visit.reload, root: false).to_json
+        end
+        it 'visit is completed' do
+          expect(assigned_visit.reload.status).to eq 'completed'
+        end
+        it 'visit has obs' do
+          expect(assigned_visit.reload.observations).to eq obs
+        end
+      end
+    end
+  end
 end

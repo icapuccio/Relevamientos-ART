@@ -1,6 +1,6 @@
 class VisitsController < ApplicationController
   def index
-    return render json: { error: 'Invalid params' }, status: :bad_request unless ind_valid_params?
+    return render json: { error: 'invalid params' }, status: :bad_request unless ind_valid_params?
     @visits = Visit.includes(:institution, :user).filter(params.slice(:status, :user_id))
     respond_to do |format|
       format.json do
@@ -17,8 +17,11 @@ class VisitsController < ApplicationController
   def assign
     return if invalid_assignment?
     visit.assign_to(user)
-    return redirect_to visits_url, notice: 'Visita asignada' if visit.save
-    redirect_to visits_url, alert: visit.errors.full_messages.to_sentence
+    if visit.save
+      redirect_to visits_url, notice: 'Visita asignada'
+    else
+      redirect_to visits_url, alert: visit.errors.full_messages.to_sentence
+    end
   end
 
   def assignment_alert
@@ -31,11 +34,29 @@ class VisitsController < ApplicationController
   def remove_assignment
     return if invalid_remotion?
     visit.remove_assignment
-    return redirect_to visits_url, notice: 'Visita desasignada.' if visit.save
-    redirect_to visits_url, alert: visit.errors.full_messages.to_sentence
+    if visit.save
+      redirect_to visits_url, notice: 'Visita desasignada.'
+    else
+      redirect_to visits_url, alert: visit.errors.full_messages.to_sentence
+    end
+  end
+
+  def complete
+    return render json: { error: 'Fecha de finalización requerida' }, status: :bad_request unless
+        complete_valid_params?
+    visit.complete(params[:completed_at], params[:observations])
+    complete_response
   end
 
   private
+
+  def complete_response
+    if visit.save
+      render json: visit, status: :ok
+    else
+      render json: { error: visit.errors.full_messages.to_sentence }, status: :not_modified
+    end
+  end
 
   def validate_user
     @errors << 'Id de usuario es necesario y debe ser un preventor' unless
@@ -86,10 +107,14 @@ class VisitsController < ApplicationController
     end
   end
 
-  # status param is optional
-  # user_id param is optional
+  # status and user_id param is optional
   def ind_valid_params?
     params[:status].present? ? Visit.statuses.include?(params[:status]) : true
+  end
+
+  # completed_at date is mandatory
+  def complete_valid_params?
+    params[:completed_at].present?
   end
 
   def invalid_remotion?
