@@ -43,10 +43,25 @@ completed_visit_another_user = Visit.create!(institution: another_institution, u
                                              status: :completed, priority: 4, to_visit_on: Date.yesterday,
                                              completed_at: Date.yesterday, observations: 'Se observa humedad en el area de trabajo')
 
+#Visits and tasks CAP
+assigned_visit_cap = Visit.create!(institution: institution, user: preventor_user, status: :assigned, priority: 9,
+                                   to_visit_on: Date.today)
+pending_visit_cap = Visit.create!(institution: institution, status: :pending, priority: 8)
+assigned_visit_cap_2 = Visit.create!(institution: institution, user: preventor_user, status: :assigned, priority: 9,
+                                     to_visit_on: Date.today)
+
+completed_cap_task = Task.create!(task_type: :cap, status: :pending, visit: assigned_visit_cap )
+cap_result = CapResult.create!(task: completed_cap_task, topic: 'Optimización de Salidas de emergencia' )
+Attendee.create!(name:'Julian', last_name:'Alvarez', cuil:'23-12345621-6', sector: 'Seguridad e higiene', cap_result: cap_result)
+completed_cap_task.complete(DateTime.yesterday)
+
+completed_cap_task_2 = Task.create!(task_type: :cap, status: :pending, visit: assigned_visit_cap_2 )
+cap_result_2 = CapResult.create!(task: completed_cap_task_2, topic: 'Como aprobar proyecto?' )
+Attendee.create!(name:'Tomas', last_name:'Capuccio', cuil:'23-123235621-6', sector: '5to año utn frba', cap_result: cap_result_2)
+completed_cap_task_2.complete(DateTime.yesterday)
+
+Task.create!(task_type: :cap, status: :pending, visit: pending_visit_cap )
+
 # Tasks
 Task.create!(task_type: :rgrl, status: :pending, visit: pending_visit )
 Task.create!(task_type: :rgrl, status: :pending, visit: assigned_visit )
-Task.create!(task_type: :cap, status: :completed, completed_at:Date.yesterday,  visit: completed_visit )
-Task.create!(task_type: :rgrl, status: :completed, completed_at:Date.yesterday, visit: completed_visit )
-Task.create!(task_type: :rgrl, status: :completed, completed_at:Date.yesterday, visit: completed_visit_another_user )
-Task.create!(task_type: :cap, status: :completed, completed_at:Date.yesterday, visit: completed_visit_another_user )
