@@ -21,15 +21,11 @@ class Task < ApplicationRecord
 
   def validate_completed_values
     return unless status_completed?
-    errors.add(:invalid, 'La tarea completada debe tener fecha de finalización') unless
+    errors.add(:base, 'La tarea completada debe tener fecha de finalización') unless
         completed_at.present?
-    validate_result
-  end
-
-  def validate_result
-    return errors.add(:invalid, 'La tarea completada debe tener un resultado') unless
+    return errors.add(:base, 'La tarea completada debe tener un resultado') unless
         result.present?
-    errors.add(:invalid, 'La tarea completada debe tener al menos un empleado') unless
+    errors.add(:base, 'La tarea completada debe tener al menos un empleado') unless
         result.valid_result?
   end
 end
