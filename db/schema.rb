@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170924212737) do
+ActiveRecord::Schema.define(version: 20170924230752) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -90,8 +90,23 @@ ActiveRecord::Schema.define(version: 20170924212737) do
     t.index ["zone_id"], name: "index_institutions_on_zone_id", using: :btree
   end
 
+  create_table "questions", force: :cascade do |t|
+    t.string   "category",       null: false
+    t.string   "description",    null: false
+    t.string   "answer",         null: false
+    t.integer  "rgrl_result_id", null: false
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+    t.index ["rgrl_result_id"], name: "index_questions_on_rgrl_result_id", using: :btree
+  end
+
   create_table "rar_results", force: :cascade do |t|
     t.string   "topic",      null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "rgrl_results", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -180,6 +195,7 @@ ActiveRecord::Schema.define(version: 20170924212737) do
 
   add_foreign_key "attendees", "cap_results"
   add_foreign_key "institutions", "zones"
+  add_foreign_key "questions", "rgrl_results"
   add_foreign_key "risks", "workers"
   add_foreign_key "tasks", "visits"
   add_foreign_key "users", "zones"

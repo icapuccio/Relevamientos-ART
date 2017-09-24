@@ -82,5 +82,32 @@ RSpec.describe Task, type: :model do
         end
       end
     end
+    context 'its a rgrl task' do
+      let!(:task) { create(:task, visit: visit, status: 'pending', task_type: :rgrl) }
+      let!(:completed_at) { DateTime.current }
+      context 'and have not a cap result' do
+        it 'returns an error' do
+          expect { task.complete(completed_at) }.to raise_error(ActiveRecord::RecordInvalid)
+        end
+      end
+      context ', have a rgrl result without questions' do
+        let!(:rgrl_result) { create(:rgrl_result, task: task) }
+        it 'returns an error' do
+          expect { task.complete(completed_at) }.to raise_error(ActiveRecord::RecordInvalid)
+        end
+      end
+      context ', have a rgrl result with questions' do
+        let!(:rgrl_result) { create(:rgrl_result, task: task) }
+        let!(:question) { create(:question, rgrl_result: rgrl_result) }
+        it 'returns ok. change the status ' do
+          expect { task.complete(completed_at) }.to change { task.status }
+            .from('pending').to('completed')
+        end
+        it 'and complete the completed_at date' do
+          expect { task.complete(completed_at) }.to change { task.completed_at }
+            .from(nil).to(completed_at)
+        end
+      end
+    end
   end
 end

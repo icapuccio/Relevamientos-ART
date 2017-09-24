@@ -81,6 +81,22 @@ Risk.create!(description:'derrumbe', worker: worker_1)
 completed_rar_task_2.complete(DateTime.yesterday)
 Task.create!(task_type: :rar, status: :pending, visit: pending_visit_rar )
 
-# Tasks
-Task.create!(task_type: :rgrl, status: :pending, visit: pending_visit )
-Task.create!(task_type: :rgrl, status: :pending, visit: assigned_visit )
+# Visits and Tasks rgrl
+assigned_visit_rgrl = Visit.create!(institution: institution, user: preventor_user, status: :assigned, priority: 20,
+                                   to_visit_on: Date.today)
+pending_visit_rgrl = Visit.create!(institution: institution, status: :pending, priority: 8)
+assigned_visit_rgrl_2 = Visit.create!(institution: institution, user: preventor_user, status: :assigned, priority: 9,
+                                     to_visit_on: Date.today)
+
+completed_rgrl_task = Task.create!(task_type: :rgrl, status: :pending, visit: assigned_visit_rgrl )
+rgrl_result = RgrlResult.create!(task: completed_rgrl_task )
+Question.create!(description:'Quien soy', answer:'El Junior de la muelte', category: 'Maniiiel', rgrl_result: rgrl_result)
+
+completed_rgrl_task.complete(DateTime.yesterday)
+
+completed_rgrl_task_2 = Task.create!(task_type: :rgrl, status: :pending, visit: assigned_visit_rgrl_2 )
+rgrl_result_2 = RgrlResult.create!(task: completed_rgrl_task_2)
+Question.create!(description:'quien es el mas poronga en este conventillo del orto', answer:'yo soy el mas poronga', category: 'okupas', rgrl_result: rgrl_result_2)
+completed_rgrl_task_2.complete(DateTime.yesterday)
+Task.create!(task_type: :rgrl, status: :pending, visit: pending_visit_rgrl )
+
