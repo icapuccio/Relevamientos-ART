@@ -200,8 +200,8 @@ describe VisitsController, type: :controller do
           expect(response.response_code).to eq 302
         end
         it 'responds with an alarm' do
-          expect(response.flash.alert).to eq 'La visita no esta en estado: pendiente,' \
-            ' El usuario y la visita tienen diferente zona'
+          expect(response.flash.alert).to eq 'La visita debe estar en estado pendiente '\
+          'and EL usuario y la visita deben tener la misma zona'
         end
       end
     end
@@ -256,7 +256,7 @@ describe VisitsController, type: :controller do
           put :complete, params: { visit_id: assigned_visit.id, completed_at: completed_at }
         end
         it 'responds with and not_modified status' do
-          expect(response).to have_http_status(:not_modified)
+          expect(response).to have_http_status(:unprocessable_entity)
         end
       end
       context 'and has all the tasks completed' do

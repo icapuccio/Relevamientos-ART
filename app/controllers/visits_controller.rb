@@ -1,6 +1,7 @@
 class VisitsController < ApplicationController
   def index
-    return render json: { error: 'invalid params' }, status: :bad_request unless ind_valid_params?
+    return render json: { error: 'invalid params' }, status: :bad_request unless
+      index_valid_params?
     @visits = Visit.includes(:institution, :user).filter(params.slice(:status, :user_id))
     respond_to do |format|
       format.json do
@@ -15,26 +16,17 @@ class VisitsController < ApplicationController
   end
 
   def assign
-    return if invalid_assignment?
-    visit.assign_to(user)
-    if visit.save
+    return redirect_to visits_url, alert: 'Se debe enviar user_id' unless user_present?
+    if visit.assign_to(user)
       redirect_to visits_url, notice: 'Visita asignada'
     else
       redirect_to visits_url, alert: visit.errors.full_messages.to_sentence
     end
   end
 
-  def assignment_alert
-    @errors = []
-    validate_user
-    validate_status_pending
-    validate_zones
-  end
-
   def remove_assignment
     return if invalid_remotion?
-    visit.remove_assignment
-    if visit.save
+    if visit.remove_assignment
       redirect_to visits_url, notice: 'Visita desasignada.'
     else
       redirect_to visits_url, alert: visit.errors.full_messages.to_sentence
@@ -43,38 +35,22 @@ class VisitsController < ApplicationController
 
   def complete
     return render json: { error: 'Fecha de finalización requerida' }, status: :bad_request unless
-        complete_valid_params?
-    visit.complete(params[:completed_at], params[:observations])
+        complete_date_present?
     complete_response
   end
 
   private
 
   def complete_response
-    if visit.save
+    if visit.complete(params[:completed_at], params[:observations])
       render json: visit, status: :ok
     else
-      render json: { error: visit.errors.full_messages.to_sentence }, status: :not_modified
+      render json: { error: visit.errors.full_messages.to_sentence }, status: :unprocessable_entity
     end
   end
 
-  def validate_user
-    @errors << 'Id de usuario es necesario y debe ser un preventor' unless
-        params.require(:user_id) && user.role_preventor?
-  end
-
-  def validate_zones
-    @errors << 'El usuario y la visita tienen diferente zona' unless
-        visit.institution.zone.eql?(user.zone)
-  end
-
-  def validate_status_pending
-    @errors << 'La visita no esta en estado: pendiente' unless visit.status_pending?
-  end
-
-  def invalid_assignment?
-    assignment_alert
-    return redirect_to visits_url, alert: @errors.join(', ') unless @errors.empty?
+  def user_present?
+    params[:user_id].present?
   end
 
   def visit
@@ -108,12 +84,12 @@ class VisitsController < ApplicationController
   end
 
   # status and user_id param is optional
-  def ind_valid_params?
+  def index_valid_params?
     params[:status].present? ? Visit.statuses.include?(params[:status]) : true
   end
 
   # completed_at date is mandatory
-  def complete_valid_params?
+  def complete_date_present?
     params[:completed_at].present?
   end
 

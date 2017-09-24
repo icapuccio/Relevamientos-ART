@@ -12,7 +12,7 @@ Rails.application.routes.draw do
   resources :visits, only: [:index, :show] do
     post :assignment, to: 'visits#assign'
     put :remotion, to: 'visits#remove_assignment'
-    put :complete, to: 'visits#complete'
+    put :completion, to: 'visits#complete'
   end
   resources :institutions, only: [:show]
 
