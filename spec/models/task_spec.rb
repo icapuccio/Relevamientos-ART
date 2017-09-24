@@ -30,10 +30,6 @@ RSpec.describe Task, type: :model do
     context 'its a cap task' do
       let!(:task) { create(:task, visit: visit, status: 'pending', task_type: :cap) }
       let!(:completed_at) { DateTime.current }
-    end
-    context 'its a cap task' do
-      let!(:task) { create(:task, visit: visit, status: 'pending', task_type: :cap) }
-      let!(:completed_at) { DateTime.current }
       context 'and have not a cap result' do
         it 'returns an error' do
           expect { task.complete(completed_at) }.to raise_error(ActiveRecord::RecordInvalid)
@@ -48,6 +44,34 @@ RSpec.describe Task, type: :model do
       context ', have a cap result with employees' do
         let!(:cap_result) { create(:cap_result, task: task) }
         let!(:attendee) { create(:attendee, cap_result: cap_result) }
+        it 'returns ok. change the status ' do
+          expect { task.complete(completed_at) }.to change { task.status }
+            .from('pending').to('completed')
+        end
+        it 'and complete the completed_at date' do
+          expect { task.complete(completed_at) }.to change { task.completed_at }
+            .from(nil).to(completed_at)
+        end
+      end
+    end
+    context 'its a rar task' do
+      let!(:task) { create(:task, visit: visit, status: 'pending', task_type: :rar) }
+      let!(:completed_at) { DateTime.current }
+      context 'and have not a cap result' do
+        it 'returns an error' do
+          expect { task.complete(completed_at) }.to raise_error(ActiveRecord::RecordInvalid)
+        end
+      end
+      context ', have a rar result without working_men' do
+        let!(:rar_result) { create(:rar_result, task: task) }
+        it 'returns an error' do
+          expect { task.complete(completed_at) }.to raise_error(ActiveRecord::RecordInvalid)
+        end
+      end
+      context ', have a rar result with working_man' do
+        let!(:rar_result) { create(:rar_result, task: task) }
+        let!(:worker) { create(:worker, rar_result: rar_result) }
+        let!(:risk) { create(:risk, worker: worker) }
         it 'returns ok. change the status ' do
           expect { task.complete(completed_at) }.to change { task.status }
             .from('pending').to('completed')
