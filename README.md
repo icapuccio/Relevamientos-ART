@@ -1,7 +1,23 @@
 RelevamientosArt
 ===============
 
+## API Documentation
 
+`URL:` http://relevamientos-art.herokuapp.com/
+
+`Headers`: 
+  + For GET requests: `Accept: application/json`
+  + For POST requests (with a body): `Content-Type: application/json`
+
+### Institutions
+
+Details of an Institution: `GET /institutions/:id`
+
+### Visits
+
+List of all visits: `GET /visits{?status=:some_status&user_id=:id}`
+
+Details of a visit: `GET /visits/:id`
 
 ## Ruby on Rails Learning
 Recomended sites to start discovering Ruby and the Ruby on Rails framework!
