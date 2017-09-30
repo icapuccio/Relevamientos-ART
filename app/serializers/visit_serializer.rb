@@ -5,4 +5,8 @@ class VisitSerializer < ActiveModel::Serializer
   def institution_name
     object.institution.name.capitalize
   end
+
+  def status
+    object.status.to_i
+  end
 end
