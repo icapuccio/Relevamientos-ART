@@ -52,10 +52,11 @@ describe Visit, type: :model do
   end
 
   context 'when the visit is completed' do
-    context 'without completed_at date' do
-      let(:user) { create(:user, :preventor) }
-      subject { create(:visit, user: user, status: 'completed') }
+    let(:user) { create(:user, :preventor) }
+    let(:institution) { create(:institution, zone: user.zone) }
 
+    context 'without completed_at date' do
+      subject { create(:visit, user: user, status: 'completed') }
       it 'returns an error' do
         expect { subject }.to raise_error(ActiveRecord::RecordInvalid)
       end

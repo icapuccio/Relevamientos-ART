@@ -23,3 +23,7 @@ Style/FrozenStringLiteralComment:
 
 Metrics/BlockLength:
   ExcludedMethods: ['describe', 'context', 'register']
+
+# Allow classes longer than 100 lines of code
+ClassLength:
+  Max: 250

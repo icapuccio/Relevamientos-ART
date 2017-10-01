@@ -6,7 +6,7 @@ class Visit < ApplicationRecord
   has_many :tasks, dependent: :destroy
 
   validates :status, :priority, :institution, presence: true
-  validate :validate_values
+  validate :validate_values, :validate_completed_tasks
 
   enum status: [:pending, :assigned, :in_process, :completed], _prefix: true
 
@@ -14,14 +14,15 @@ class Visit < ApplicationRecord
   scope :user_id, ->(user) { where user_id: user }
 
   def assign_to(user)
-    return unless valid_for_assignment?(user)
+    return false unless valid_assignment?(user)
     self.status = 'assigned'
     self.user = user
     self.to_visit_on = Date.tomorrow
+    save
   end
 
-  def valid_for_assignment?(user)
-    status_pending? && user.present? && user.role_preventor?
+  def complete(completed_at, observations)
+    update_attributes(status: 'completed', completed_at: completed_at, observations: observations)
   end
 
   def remove_assignment
@@ -29,6 +30,7 @@ class Visit < ApplicationRecord
     self.status = 'pending'
     self.user = nil
     self.to_visit_on = nil
+    save
   end
 
   def finished?
@@ -36,6 +38,23 @@ class Visit < ApplicationRecord
   end
 
   private
+
+  def valid_assignment?(user)
+    errors.add(:base, 'El usuario debe ser preventor') unless user.role_preventor?
+    errors.add(:base, 'La visita debe estar en estado pendiente') unless status_pending?
+    errors.add(:base, 'EL usuario y la visita deben tener la misma zona') unless
+        valid_user_zone(user)
+    !errors.present?
+  end
+
+  def validate_completed_tasks
+    errors.add('error', 'La visita contiene tareas sin finalizar') if
+      status_completed? && !all_tasks_completed?
+  end
+
+  def all_tasks_completed?
+    tasks.reject(&:completed?).empty?
+  end
 
   def validate_values
     errors.add('Pending visit', 'Invalid values') unless valid_pending_values?
@@ -64,6 +83,10 @@ class Visit < ApplicationRecord
   end
 
   def valid_assigned_values_fields?
-    to_visit_on.present? && user.present? && user.zone.eql?(institution.zone)
+    to_visit_on.present? && user.present? && valid_user_zone(user)
+  end
+
+  def valid_user_zone(user)
+    user.zone.eql?(institution.zone)
   end
 end
