@@ -43,10 +43,60 @@ completed_visit_another_user = Visit.create!(institution: another_institution, u
                                              status: :completed, priority: 4, to_visit_on: Date.yesterday,
                                              completed_at: Date.yesterday, observations: 'Se observa humedad en el area de trabajo')
 
-# Tasks
-Task.create!(task_type: :rgrl, status: :pending, visit: pending_visit )
-Task.create!(task_type: :rgrl, status: :pending, visit: assigned_visit )
-Task.create!(task_type: :cap, status: :completed, completed_at:Date.yesterday,  visit: completed_visit )
-Task.create!(task_type: :rgrl, status: :completed, completed_at:Date.yesterday, visit: completed_visit )
-Task.create!(task_type: :rgrl, status: :completed, completed_at:Date.yesterday, visit: completed_visit_another_user )
-Task.create!(task_type: :cap, status: :completed, completed_at:Date.yesterday, visit: completed_visit_another_user )
+#Visits and tasks CAP
+assigned_visit_cap = Visit.create!(institution: institution, user: preventor_user, status: :assigned, priority: 9,
+                                   to_visit_on: Date.today)
+pending_visit_cap = Visit.create!(institution: institution, status: :pending, priority: 8)
+assigned_visit_cap_2 = Visit.create!(institution: institution, user: preventor_user, status: :assigned, priority: 9,
+                                     to_visit_on: Date.today)
+
+completed_cap_task = Task.create!(task_type: :cap, status: :pending, visit: assigned_visit_cap )
+cap_result = CapResult.create!(task: completed_cap_task, topic: 'Optimización de Salidas de emergencia' )
+Attendee.create!(name:'Julian', last_name:'Alvarez', cuil:'23-12345621-6', sector: 'Seguridad e higiene', cap_result: cap_result)
+completed_cap_task.complete(DateTime.yesterday)
+
+completed_cap_task_2 = Task.create!(task_type: :cap, status: :pending, visit: assigned_visit_cap_2 )
+cap_result_2 = CapResult.create!(task: completed_cap_task_2, topic: 'Como aprobar proyecto?' )
+Attendee.create!(name:'Tomas', last_name:'Capuccio', cuil:'23-123235621-6', sector: '5to año utn frba', cap_result: cap_result_2)
+completed_cap_task_2.complete(DateTime.yesterday)
+
+Task.create!(task_type: :cap, status: :pending, visit: pending_visit_cap )
+
+#Visits and tasks RAR
+assigned_visit_rar = Visit.create!(institution: institution, user: preventor_user, status: :assigned, priority: 20,
+                                   to_visit_on: Date.today)
+pending_visit_rar = Visit.create!(institution: institution, status: :pending, priority: 8)
+assigned_visit_rar_2 = Visit.create!(institution: institution, user: preventor_user, status: :assigned, priority: 9,
+                                     to_visit_on: Date.today)
+
+completed_rar_task = Task.create!(task_type: :rar, status: :pending, visit: assigned_visit_rar )
+rar_result = RarResult.create!(task: completed_rar_task, topic: 'Minería' )
+Worker.create!(name:'Julian', last_name:'Alvarez', cuil:'23-12345621-6', sector: 'Seguridad e higiene', rar_result: rar_result)
+completed_rar_task.complete(DateTime.yesterday)
+
+completed_rar_task_2 = Task.create!(task_type: :rar, status: :pending, visit: assigned_visit_rar_2 )
+rar_result_2 = RarResult.create!(task: completed_rar_task_2, topic: 'Trabajadores en mina 5' )
+worker_1 = Worker.create!(name:'Tomas', last_name:'Capuccio', cuil:'23-123235621-6', sector: 'minero', rar_result: rar_result_2)
+Risk.create!(description:'derrumbe', worker: worker_1)
+completed_rar_task_2.complete(DateTime.yesterday)
+Task.create!(task_type: :rar, status: :pending, visit: pending_visit_rar )
+
+# Visits and Tasks rgrl
+assigned_visit_rgrl = Visit.create!(institution: institution, user: preventor_user, status: :assigned, priority: 20,
+                                   to_visit_on: Date.today)
+pending_visit_rgrl = Visit.create!(institution: institution, status: :pending, priority: 8)
+assigned_visit_rgrl_2 = Visit.create!(institution: institution, user: preventor_user, status: :assigned, priority: 9,
+                                     to_visit_on: Date.today)
+
+completed_rgrl_task = Task.create!(task_type: :rgrl, status: :pending, visit: assigned_visit_rgrl )
+rgrl_result = RgrlResult.create!(task: completed_rgrl_task )
+Question.create!(description:'Quien soy', answer:'El Junior de la muelte', category: 'Maniiiel', rgrl_result: rgrl_result)
+
+completed_rgrl_task.complete(DateTime.yesterday)
+
+completed_rgrl_task_2 = Task.create!(task_type: :rgrl, status: :pending, visit: assigned_visit_rgrl_2 )
+rgrl_result_2 = RgrlResult.create!(task: completed_rgrl_task_2)
+Question.create!(description:'quien es el mas poronga en este conventillo del orto', answer:'yo soy el mas poronga', category: 'okupas', rgrl_result: rgrl_result_2)
+completed_rgrl_task_2.complete(DateTime.yesterday)
+Task.create!(task_type: :rgrl, status: :pending, visit: pending_visit_rgrl )
+

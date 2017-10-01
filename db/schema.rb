@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170917045838) do
+ActiveRecord::Schema.define(version: 20170924230752) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -46,6 +46,27 @@ ActiveRecord::Schema.define(version: 20170917045838) do
     t.index ["reset_password_token"], name: "index_admin_users_on_reset_password_token", unique: true, using: :btree
   end
 
+  create_table "attendees", force: :cascade do |t|
+    t.string   "name",          null: false
+    t.string   "last_name",     null: false
+    t.string   "cuil",          null: false
+    t.string   "sector"
+    t.integer  "cap_result_id", null: false
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+    t.index ["cap_result_id"], name: "index_attendees_on_cap_result_id", using: :btree
+    t.index ["cuil", "cap_result_id"], name: "index_attendees_on_cuil_and_cap_result_id", unique: true, using: :btree
+  end
+
+  create_table "cap_results", force: :cascade do |t|
+    t.string   "topic",               null: false
+    t.string   "used_materials"
+    t.string   "coordinators"
+    t.string   "delivered_materials"
+    t.datetime "created_at",          null: false
+    t.datetime "updated_at",          null: false
+  end
+
   create_table "institutions", force: :cascade do |t|
     t.string   "name",                           null: false
     t.string   "cuit",                           null: false
@@ -69,6 +90,35 @@ ActiveRecord::Schema.define(version: 20170917045838) do
     t.index ["zone_id"], name: "index_institutions_on_zone_id", using: :btree
   end
 
+  create_table "questions", force: :cascade do |t|
+    t.string   "category",       null: false
+    t.string   "description",    null: false
+    t.string   "answer",         null: false
+    t.integer  "rgrl_result_id", null: false
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+    t.index ["rgrl_result_id"], name: "index_questions_on_rgrl_result_id", using: :btree
+  end
+
+  create_table "rar_results", force: :cascade do |t|
+    t.string   "topic",      null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "rgrl_results", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "risks", force: :cascade do |t|
+    t.string   "description"
+    t.integer  "worker_id",   null: false
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.index ["worker_id"], name: "index_risks_on_worker_id", using: :btree
+  end
+
   create_table "tasks", force: :cascade do |t|
     t.integer  "task_type",                null: false
     t.integer  "status",       default: 0, null: false
@@ -76,6 +126,9 @@ ActiveRecord::Schema.define(version: 20170917045838) do
     t.integer  "visit_id",                 null: false
     t.datetime "created_at",               null: false
     t.datetime "updated_at",               null: false
+    t.string   "result_type"
+    t.integer  "result_id"
+    t.index ["result_type", "result_id"], name: "index_tasks_on_result_type_and_result_id", using: :btree
     t.index ["visit_id"], name: "index_tasks_on_visit_id", using: :btree
   end
 
@@ -119,15 +172,34 @@ ActiveRecord::Schema.define(version: 20170917045838) do
     t.index ["user_id"], name: "index_visits_on_user_id", using: :btree
   end
 
+  create_table "workers", force: :cascade do |t|
+    t.string   "name",             null: false
+    t.string   "last_name",        null: false
+    t.string   "cuil",             null: false
+    t.string   "sector"
+    t.date     "checked_in_on"
+    t.date     "exposed_from_at"
+    t.date     "exposed_until_at"
+    t.integer  "rar_result_id",    null: false
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+    t.index ["cuil", "rar_result_id"], name: "index_workers_on_cuil_and_rar_result_id", unique: true, using: :btree
+    t.index ["rar_result_id"], name: "index_workers_on_rar_result_id", using: :btree
+  end
+
   create_table "zones", force: :cascade do |t|
     t.string   "name",       null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "attendees", "cap_results"
   add_foreign_key "institutions", "zones"
+  add_foreign_key "questions", "rgrl_results"
+  add_foreign_key "risks", "workers"
   add_foreign_key "tasks", "visits"
   add_foreign_key "users", "zones"
   add_foreign_key "visits", "institutions"
   add_foreign_key "visits", "users"
+  add_foreign_key "workers", "rar_results"
 end
