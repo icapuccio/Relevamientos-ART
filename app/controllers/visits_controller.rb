@@ -55,7 +55,7 @@ class VisitsController < ApplicationController
 
   def visit
     visit_id = params[:id] || params[:visit_id]
-    @visit ||= Visit.includes(:institution).find(visit_id)
+    @visit ||= Visit.includes(:institution, :tasks).find(visit_id)
   end
 
   def user

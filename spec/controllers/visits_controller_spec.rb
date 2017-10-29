@@ -261,10 +261,16 @@ describe VisitsController, type: :controller do
       end
       context 'and has all the tasks completed' do
         let!(:task) do
-          create(:task, visit: assigned_visit, status: 'completed', completed_at: completed_at)
+          create(:task, visit: assigned_visit, task_type: :rgrl, status: 'pending')
+        end
+        let!(:rgrl_result) { create(:rgrl_result, task: task) }
+        let!(:question) do
+          create(:question, description: 'Quien soy', answer: 'El Junior de la muelte',
+                            category: 'Maniiiel', rgrl_result: rgrl_result)
         end
         let!(:obs) { 'todo OK' }
         before do
+          task.complete(completed_at)
           put :complete, params: { visit_id: assigned_visit.id, completed_at: completed_at,
                                    observations: obs }
         end

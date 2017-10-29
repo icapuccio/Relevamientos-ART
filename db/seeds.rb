@@ -70,12 +70,12 @@ assigned_visit_rar_2 = Visit.create!(institution: institution, user: preventor_u
                                      to_visit_on: Date.today)
 
 completed_rar_task = Task.create!(task_type: :rar, status: :pending, visit: assigned_visit_rar )
-rar_result = RarResult.create!(task: completed_rar_task, topic: 'Minería' )
+rar_result = RarResult.create!(task: completed_rar_task)
 Worker.create!(name:'Julian', last_name:'Alvarez', cuil:'23-12345621-6', sector: 'Seguridad e higiene', rar_result: rar_result)
 completed_rar_task.complete(DateTime.yesterday)
 
 completed_rar_task_2 = Task.create!(task_type: :rar, status: :pending, visit: assigned_visit_rar_2 )
-rar_result_2 = RarResult.create!(task: completed_rar_task_2, topic: 'Trabajadores en mina 5' )
+rar_result_2 = RarResult.create!(task: completed_rar_task_2)
 worker_1 = Worker.create!(name:'Tomas', last_name:'Capuccio', cuil:'23-123235621-6', sector: 'minero', rar_result: rar_result_2)
 Risk.create!(description:'derrumbe', worker: worker_1)
 completed_rar_task_2.complete(DateTime.yesterday)

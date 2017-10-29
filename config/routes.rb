@@ -16,6 +16,10 @@ Rails.application.routes.draw do
   end
   resources :institutions, only: [:show]
 
+  resources :tasks, only:[] do
+    put :completion, to: 'tasks#complete'
+  end
+
   require 'sidekiq/web'
   mount Sidekiq::Web, at: 'sidekiq'
   mount PgHero::Engine, at: 'pghero'
