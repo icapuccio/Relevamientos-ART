@@ -51,12 +51,12 @@ assigned_visit_cap_2 = Visit.create!(institution: institution, user: preventor_u
                                      to_visit_on: Date.today)
 
 completed_cap_task = Task.create!(task_type: :cap, status: :pending, visit: assigned_visit_cap )
-cap_result = CapResult.create!(task: completed_cap_task, topic: 'Optimización de Salidas de emergencia' )
+cap_result = CapResult.create!(task: completed_cap_task, course_name: 'Optimización de Salidas de emergencia', contents: 'Salidas de emergencia', methodology: "agile")
 Attendee.create!(name:'Julian', last_name:'Alvarez', cuil:'23-12345621-6', sector: 'Seguridad e higiene', cap_result: cap_result)
 completed_cap_task.complete(DateTime.yesterday)
 
 completed_cap_task_2 = Task.create!(task_type: :cap, status: :pending, visit: assigned_visit_cap_2 )
-cap_result_2 = CapResult.create!(task: completed_cap_task_2, topic: 'Como aprobar proyecto?' )
+cap_result_2 = CapResult.create!(task: completed_cap_task_2, course_name: 'Como aprobar proyecto?', contents: 'Salidas de emergencia', methodology: "agile" )
 Attendee.create!(name:'Tomas', last_name:'Capuccio', cuil:'23-123235621-6', sector: '5to año utn frba', cap_result: cap_result_2)
 completed_cap_task_2.complete(DateTime.yesterday)
 

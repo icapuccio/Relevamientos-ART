@@ -10,4 +10,11 @@ class RgrlResult < ApplicationRecord
   def questions_count
     questions.size
   end
+
+  def create_questions(questions)
+    questions.each do |question|
+      Question.create!(description: question[:description], answer: question[:answer],
+                       category: question[:category], rgrl_result: self)
+    end
+  end
 end
