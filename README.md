@@ -20,6 +20,7 @@ List of all visits: `GET /visits{?status=:some_status&user_id=:id}`
 Details of a visit: `GET /visits/:id`
 
 ### Tasks 
+
 Complete a task (with a body): `PUT /tasks/:task_id/completion`
 
 ## Ruby on Rails Learning
