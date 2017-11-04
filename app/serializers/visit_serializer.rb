@@ -1,4 +1,5 @@
 class VisitSerializer < ActiveModel::Serializer
+  has_many :tasks
   attributes :id, :status, :priority, :to_visit_on, :institution_id, :institution_name,
              :completed_at, :observations
 
@@ -7,6 +8,6 @@ class VisitSerializer < ActiveModel::Serializer
   end
 
   def status
-    object.status.to_i
+    object.status_before_type_cast
   end
 end

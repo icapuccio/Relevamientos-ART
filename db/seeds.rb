@@ -51,12 +51,12 @@ assigned_visit_cap_2 = Visit.create!(institution: institution, user: preventor_u
                                      to_visit_on: Date.today)
 
 completed_cap_task = Task.create!(task_type: :cap, status: :pending, visit: assigned_visit_cap )
-cap_result = CapResult.create!(task: completed_cap_task, topic: 'Optimización de Salidas de emergencia' )
+cap_result = CapResult.create!(task: completed_cap_task, course_name: 'Optimización de Salidas de emergencia', contents: 'Salidas de emergencia', methodology: "agile")
 Attendee.create!(name:'Julian', last_name:'Alvarez', cuil:'23-12345621-6', sector: 'Seguridad e higiene', cap_result: cap_result)
 completed_cap_task.complete(DateTime.yesterday)
 
 completed_cap_task_2 = Task.create!(task_type: :cap, status: :pending, visit: assigned_visit_cap_2 )
-cap_result_2 = CapResult.create!(task: completed_cap_task_2, topic: 'Como aprobar proyecto?' )
+cap_result_2 = CapResult.create!(task: completed_cap_task_2, course_name: 'Como aprobar proyecto?', contents: 'Salidas de emergencia', methodology: "agile" )
 Attendee.create!(name:'Tomas', last_name:'Capuccio', cuil:'23-123235621-6', sector: '5to año utn frba', cap_result: cap_result_2)
 completed_cap_task_2.complete(DateTime.yesterday)
 
@@ -70,12 +70,12 @@ assigned_visit_rar_2 = Visit.create!(institution: institution, user: preventor_u
                                      to_visit_on: Date.today)
 
 completed_rar_task = Task.create!(task_type: :rar, status: :pending, visit: assigned_visit_rar )
-rar_result = RarResult.create!(task: completed_rar_task, topic: 'Minería' )
+rar_result = RarResult.create!(task: completed_rar_task)
 Worker.create!(name:'Julian', last_name:'Alvarez', cuil:'23-12345621-6', sector: 'Seguridad e higiene', rar_result: rar_result)
 completed_rar_task.complete(DateTime.yesterday)
 
 completed_rar_task_2 = Task.create!(task_type: :rar, status: :pending, visit: assigned_visit_rar_2 )
-rar_result_2 = RarResult.create!(task: completed_rar_task_2, topic: 'Trabajadores en mina 5' )
+rar_result_2 = RarResult.create!(task: completed_rar_task_2)
 worker_1 = Worker.create!(name:'Tomas', last_name:'Capuccio', cuil:'23-123235621-6', sector: 'minero', rar_result: rar_result_2)
 Risk.create!(description:'derrumbe', worker: worker_1)
 completed_rar_task_2.complete(DateTime.yesterday)
