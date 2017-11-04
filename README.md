@@ -19,6 +19,8 @@ List of all visits: `GET /visits{?status=:some_status&user_id=:id}`
 
 Details of a visit: `GET /visits/:id`
 
+Complete a Visit (with a body): `PUT /visits/:visit_id/completion`
+
 ### Tasks 
 
 Complete a task (with a body): `PUT /tasks/:task_id/completion`
