@@ -8,6 +8,7 @@ class Task < ApplicationRecord
   validate :validate_pending_values, :validate_completed_values
 
   def complete(completed_at)
+    # Test
     update_attributes!(status: 'completed', completed_at: completed_at)
   end
 
