@@ -30,6 +30,10 @@ gem 'autoprefixer-rails'
 
 gem 'bootstrap-sass'
 
+gem 'httparty'
+
+gem  'webmock'
+
 # Gentelella Admin template
 gem 'gentelella-rails'
 

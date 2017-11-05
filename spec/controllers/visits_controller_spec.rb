@@ -1,4 +1,5 @@
 require 'rails_helper'
+require 'webmock/rspec'
 
 describe VisitsController, type: :controller do
   let!(:zone_1) { create(:zone) }
@@ -354,7 +355,7 @@ describe VisitsController, type: :controller do
       end
       it 'responds with a notice' do
         expect(response.flash.alert).to eq 'No existen nuevas visitas para enviar '\
-          'a la Superintencia de Riesgo de Trabajo.'
+          'a la Superintendencia de Riesgo de Trabajo.'
       end
     end
     context 'when there are completed visits' do
@@ -379,10 +380,68 @@ describe VisitsController, type: :controller do
       end
       it 'responds with a notice' do
         expect(response.flash.notice).to eq 'Las visitas fueron enviadas a la '\
-          'Superintencia de Riesgo de Trabajo exitosamente.'
+          'Superintendencia de Riesgo de Trabajo exitosamente.'
       end
       it 'the completed visits change status to sent' do
         expect(completed_visit.reload.status).to eq 'sent'
+      end
+    end
+  end
+  describe 'POST #syncro_visits' do
+    context 'the SRT GET returns a valid visit to create' do
+      before do
+        body = [{ 'priority': 1, 'institution_id': institution_1.id,
+                  'tasks': [{ 'type': 'rar' }, { 'type': 'rgrl' }], 'external_id': 100 }]
+        stub_request(:get, 'https://private-13dd3-relevamientosart.apiary-mock.com/visits')
+          .to_return('headers': { 'Content-Type': 'application/json' }, 'body': body.to_json)
+        request.headers['Content-Type'] = 'text/html'
+        post :syncro_visits
+      end
+      it 'responds with a notice' do
+        expect(response.flash.notice).to eq 'Se crearon exitosamente 1 visitas a realizar.'
+      end
+      it 'The Visit with that external_id was created' do
+        expect(Visit.where(external_id: 100)).not_to eq nil
+      end
+    end
+    context 'the SRT GET returns an invalid visit to create' do
+      before do
+        body = [{ 'priority': 2, 'institution_id': institution_1.id,
+                  'tasks': [{ 'type': 'rar' }, { 'type': 'asdfasdf' }], 'external_id': 101 }]
+        stub_request(:get, 'https://private-13dd3-relevamientosart.apiary-mock.com/visits')
+          .to_return('headers': { 'Content-Type': 'application/json' }, 'body': body.to_json)
+        request.headers['Content-Type'] = 'text/html'
+        post :syncro_visits
+      end
+      it 'responds with an alert' do
+        expect(response.flash.alert).to eq 'Todas las visitas (1) contienen errores.'
+      end
+      it 'The invalid visit was not created' do
+        expect(!Visit.where(external_id: 101).present?)
+      end
+    end
+    context 'the SRT GET returns a valid an invalid visit to create' do
+      before do
+        body = [
+          { 'priority': 2, 'institution_id': institution_1.id,
+            'tasks': [{ 'type': 'rar' }, { 'type': 'asdfasdf' }], 'external_id': 101 },
+          { 'priority': 10, 'institution_id': institution_1.id,
+            'tasks': [{ 'type': 'rar' }], 'external_id': 201 }
+        ]
+        stub_request(:get, 'https://private-13dd3-relevamientosart.apiary-mock.com/visits')
+          .to_return('headers': { 'Content-Type': 'application/json' }, 'body': body.to_json)
+        request.headers['Content-Type'] = 'text/html'
+        post :syncro_visits
+      end
+      it 'responds with an alert' do
+        expect(response.flash.alert).to eq 'Se crearon exitosamente 1 visitas a realizar.'\
+          ' Existen 1 con inconsistencias.'
+      end
+      it 'The invalid visit was not created' do
+        expect(!Visit.where(external_id: 101).present?)
+      end
+      it 'The valid visit was created' do
+        expect(!Visit.where(external_id: 201).present?)
       end
     end
   end

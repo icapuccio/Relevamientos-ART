@@ -15,9 +15,9 @@ north_zone = Zone.create!(name: 'Norte')
 
 # Users
 admin_user = User.create!(email: 'juan_perez@example.com', password: '12345678', password_confirmation: '12345678',
-                          name: 'Juan', last_name: 'Perez', role: :admin)
+                          name: 'Juan', last_name: 'Perez', role: :admin, address: 'Av del Libertador 6363, Buenos Aires')
 backoffice_user = User.create!(email: 'jose_gomez@example.com', password: '12345678', password_confirmation: '12345678',
-                               name: 'Jose', last_name: 'Perez', role: :backoffice)
+                               name: 'Jose', last_name: 'Perez', role: :backoffice, address: 'Av del Libertador 6363, Buenos Aires')
 preventor_user = User.create!(email: 'pedro_gonzalez@example.com', password: '12345678', password_confirmation: '12345678',
                               name: 'Pedro', last_name: 'Gonzalez', role: :preventor, address: 'San Nicolás 771, Buenos Aires', zone: west_zone)
 another_preventor_user = User.create!(email: 'luis_rodriguez@example.com', password: '12345678', password_confirmation: '12345678',
@@ -27,27 +27,27 @@ another_preventor_user = User.create!(email: 'luis_rodriguez@example.com', passw
 institution = Institution.create!(name: 'YPF', street: 'Boyacá', city: 'Buenos Aires',
                                   province: 'Buenos Aires', number: 379, surface: 120, workers_count: 123,
                                   institutions_count: 1, activity: 'Estación de Servicio', contract: 'Pepelui',
-                                  postal_code: '1406', cuit: '30-12345678-2', phone_number: 45543212, zone: west_zone)
+                                  postal_code: '1406', cuit: '30-12345678-2', phone_number: 45543212, zone: west_zone, address: 'Av del Libertador 6363, Buenos Aires', latitude:123.123, longitude: 123.12345)
 another_institution = Institution.create!(name: 'Shell', street: 'Neuquén', city: 'Buenos Aires',province: 'Buenos Aires',
                                           number: 2329, surface: 100, workers_count: 123, institutions_count: 1,
                                           activity: 'Estación de Servicio', contract: 'Luzbelito', postal_code: '1426',
-                                          cuit: '30-12345678-4', phone_number: 45443212, zone: north_zone)
+                                          cuit: '30-12345678-4', phone_number: 45443212, zone: north_zone, address: 'Av del Libertador 6363, Buenos Aires', latitude:123.123, longitude: 123.12345)
 
 # Visits
-pending_visit = Visit.create!(institution: institution, status: :pending, priority: 1)
+pending_visit = Visit.create!(institution: institution, status: :pending, priority: 1, external_id: 1)
 assigned_visit = Visit.create!(institution: institution, user: preventor_user, status: :assigned, priority: 9,
-                               to_visit_on: Date.today)
+                               to_visit_on: Date.today, external_id: 2)
 
 completed_visit_another_user = Visit.create!(institution: another_institution, user: another_preventor_user,
                                              status: :completed, priority: 4, to_visit_on: Date.yesterday,
-                                             completed_at: Date.yesterday, observations: 'Se observa humedad en el area de trabajo')
+                                             completed_at: Date.yesterday, observations: 'Se observa humedad en el area de trabajo', external_id: 3)
 
 # Visits and tasks CAP
 assigned_visit_cap = Visit.create!(institution: institution, user: preventor_user, status: :assigned, priority: 9,
-                                   to_visit_on: Date.today)
-pending_visit_cap = Visit.create!(institution: institution, status: :pending, priority: 8)
+                                   to_visit_on: Date.today, external_id: 4)
+pending_visit_cap = Visit.create!(institution: institution, status: :pending, priority: 8 , external_id: 13)
 assigned_visit_cap_2 = Visit.create!(institution: institution, user: preventor_user, status: :assigned, priority: 9,
-                                     to_visit_on: Date.today)
+                                     to_visit_on: Date.today , external_id: 5)
 
 completed_cap_task = Task.create!(task_type: :cap, status: :pending, visit: assigned_visit_cap )
 cap_result = CapResult.create!(task: completed_cap_task, course_name: 'Optimización de Salidas de emergencia', contents: 'Salidas de emergencia', methodology: "agile")
@@ -63,10 +63,10 @@ Task.create!(task_type: :cap, status: :pending, visit: pending_visit_cap )
 
 # Visits and tasks RAR
 assigned_visit_rar = Visit.create!(institution: institution, user: preventor_user, status: :assigned, priority: 20,
-                                   to_visit_on: Date.today)
-pending_visit_rar = Visit.create!(institution: institution, status: :pending, priority: 8)
+                                   to_visit_on: Date.today, external_id: 6)
+pending_visit_rar = Visit.create!(institution: institution, status: :pending, priority: 8, external_id: 7)
 assigned_visit_rar_2 = Visit.create!(institution: institution, user: preventor_user, status: :assigned, priority: 9,
-                                     to_visit_on: Date.today)
+                                     to_visit_on: Date.today, external_id: 8)
 
 completed_rar_task = Task.create!(task_type: :rar, status: :pending, visit: assigned_visit_rar )
 rar_result = RarResult.create!(task: completed_rar_task)
@@ -82,10 +82,10 @@ Task.create!(task_type: :rar, status: :pending, visit: pending_visit_rar )
 
 # Visits and Tasks rgrl
 assigned_visit_rgrl = Visit.create!(institution: institution, user: preventor_user, status: :assigned, priority: 20,
-                                   to_visit_on: Date.today)
+                                   to_visit_on: Date.today, external_id: 9)
 assigned_visit_rgrl_2 = Visit.create!(institution: institution, user: preventor_user, status: :assigned, priority: 9,
-                                     to_visit_on: Date.today)
-pending_visit_rgrl = Visit.create!(institution: institution, status: :pending, priority: 8)
+                                     to_visit_on: Date.today, external_id: 10)
+pending_visit_rgrl = Visit.create!(institution: institution, status: :pending, priority: 8, external_id: 11)
 
 completed_rgrl_task = Task.create!(task_type: :rgrl, status: :pending, visit: assigned_visit_rgrl )
 rgrl_result = RgrlResult.create!(task: completed_rgrl_task )
@@ -101,7 +101,7 @@ Task.create!(task_type: :rgrl, status: :pending, visit: pending_visit_rgrl )
 Task.create!(task_type: :cap, status: :pending, visit: pending_visit_rgrl )
 
 completed_visit_rgrl = Visit.create!(institution: institution, user: preventor_user, status: :completed, priority: 4,
-                                to_visit_on: Date.yesterday, completed_at: Date.yesterday)
+                                to_visit_on: Date.yesterday, completed_at: Date.yesterday, external_id: 12)
 
 completed_rgrl_task2 = Task.create!(task_type: :rgrl, status: :pending, visit: completed_visit_rgrl )
 rgrl_result2 = RgrlResult.create!(task: completed_rgrl_task2 )
