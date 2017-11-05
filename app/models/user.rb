@@ -33,7 +33,7 @@ class User < ApplicationRecord
   end
 
   def assignable?
-    role_preventor? && visits.uncompleted.count < MAX_NUMBER_OF_VISITS
+    role_preventor? && visits.not_finished.count < MAX_NUMBER_OF_VISITS
   end
 
   def assignable_for_visit?(visit)
