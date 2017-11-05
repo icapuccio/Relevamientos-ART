@@ -7,9 +7,6 @@ describe VisitsController, type: :controller do
   let!(:institution_2) { create(:institution, zone: zone_2) }
   let(:user_1) { create(:user, :preventor, zone: zone_1) }
   let(:user_2) { create(:user, :preventor, zone: zone_2) }
-  let!(:visit) do
-    create(:visit, :completed, user: user_1, institution: institution_1)
-  end
   let!(:assigned_visit) do
     create(:visit, user: user_2, to_visit_on: Time.zone.today,
                    status: 'assigned', institution: institution_2)
@@ -21,6 +18,9 @@ describe VisitsController, type: :controller do
   end
 
   describe 'GET #index' do
+    let!(:visit) do
+      create(:visit, :completed, user: user_1, institution: institution_1)
+    end
     context 'when no filters are sent' do
       before do
         get :index
@@ -98,6 +98,9 @@ describe VisitsController, type: :controller do
   end
 
   describe 'GET #show' do
+    let!(:visit) do
+      create(:visit, :completed, user: user_1, institution: institution_1)
+    end
     context 'When the visit id does not exist' do
       before do
         get :show, params: { id: visit.id * 1000 }
@@ -334,6 +337,52 @@ describe VisitsController, type: :controller do
             expect(assigned_visit.reload.visit_noises.size).to eq(2)
           end
         end
+      end
+    end
+  end
+  describe 'POST #completed_report' do
+    let!(:pend_visit_2) { create(:visit, status: 'pending', institution: institution_1) }
+    before do
+      request.headers['Content-Type'] = 'text/html'
+    end
+    context 'when there are no completed visits' do
+      before do
+        post :completed_report
+      end
+      it 'responds found' do
+        expect(response.response_code).to eq 302
+      end
+      it 'responds with a notice' do
+        expect(response.flash.alert).to eq 'No existen nuevas visitas para enviar '\
+          'a la Superintencia de Riesgo de Trabajo.'
+      end
+    end
+    context 'when there are completed visits' do
+      let!(:completed_visit) do
+        create(:visit, :completed, to_visit_on: Time.zone.today, completed_at: Time.zone.today,
+                                   user: user_1, institution: institution_1)
+      end
+      let!(:task_rgrl) do
+        create(:task, task_type: 'rgrl', status: 'pending', visit: completed_visit)
+      end
+
+      before do
+        post :completed_report
+      end
+      it 'responds found' do
+        task_rgrl.create_result(completed_at: Time.zone.today.to_s,
+                                questions: [
+                                  { description: 'quien sos?', answer: 'el virrey',
+                                    category: 'personales' }
+                                ])
+        expect(response.response_code).to eq 302
+      end
+      it 'responds with a notice' do
+        expect(response.flash.notice).to eq 'Las visitas fueron enviadas a la '\
+          'Superintencia de Riesgo de Trabajo exitosamente.'
+      end
+      it 'the completed visits change status to sent' do
+        expect(completed_visit.reload.status).to eq 'sent'
       end
     end
   end

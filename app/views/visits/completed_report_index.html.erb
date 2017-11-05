@@ -1,0 +1,69 @@
+<!-- page content -->
+<div class="right_col" role="main">
+  <div class="">
+    <div class="page-title">
+      <div class="title_left">
+        <h3><%= t('activerecord.models.visit.completed_inform', default: 'Visits') %></h3>
+      </div>
+
+      <div class="title_right">
+        <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
+        </div>
+      </div>
+    </div>
+
+    <div class="clearfix"></div>
+    <div class="col-md-12 col-sm-12 col-xs-12">
+      <div class="x_panel">
+        <div class="x_title">
+          <h2><%= t('activerecord.models.visit.other', default: 'Visits') %> <small>Solo lectura</small></h2>
+        </ul>
+        <div class="clearfix"></div>
+      </div>
+
+      <div class="x_content">
+          <div class="table-responsive">
+            <table class="table table-striped jambo_table bulk_action">
+              <thead>
+              <tr class="headings">
+                <th class="column-title">Visita </th>
+                <th class="column-title">Establecimiento </th>
+                <th class="column-title">Prioridad </th>
+                <th class="column-title">Estado </th>
+                <th class="column-title">Preventor </th>
+                <th class="column-title">Tareas </th>
+                <th class="column-title">Fecha de inspección </th>
+                <th class="column-title">Fecha de finalización </th>
+                <th class="bulk-actions" colspan="7">
+                  <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
+                </th>
+              </tr>
+              </thead>
+
+              <tbody>
+              <% @visits.each do |visit| %>
+                  <tr class="odd pointer">
+                    <td><%= visit.id %></td>
+                    <td><%= visit.institution.name %></td>
+                    <td><%= visit.priority %></td>
+                    <td><%= Visit.human_attribute_name("status.#{visit.status}") %></td>
+                    <td><%= visit.user.full_name if visit.user.present? %> </td>
+                    <td> Descripción de Tareas </td>
+                    <td><%= l(visit.to_visit_on, format: :short_date) if visit.to_visit_on.present? %></td>
+                    <td><%= l(visit.completed_at, format: :short_date) if visit.finished? %></td>
+                  </tr>
+              <% end %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="ln_solid"></div>
+          <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-11">
+            <%= button_to "Enviar", completed_report_visits_path, method: :post, class: "btn btn-primary" %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- /page content -->
