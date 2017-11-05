@@ -37,8 +37,7 @@ another_institution = Institution.create!(name: 'Shell', street: 'Neuquén', cit
 pending_visit = Visit.create!(institution: institution, status: :pending, priority: 1)
 assigned_visit = Visit.create!(institution: institution, user: preventor_user, status: :assigned, priority: 9,
                                to_visit_on: Date.today)
-completed_visit = Visit.create!(institution: institution, user: preventor_user, status: :completed, priority: 4,
-                                to_visit_on: Date.yesterday, completed_at: Date.yesterday)
+
 completed_visit_another_user = Visit.create!(institution: another_institution, user: another_preventor_user,
                                              status: :completed, priority: 4, to_visit_on: Date.yesterday,
                                              completed_at: Date.yesterday, observations: 'Se observa humedad en el area de trabajo')
@@ -100,3 +99,14 @@ Question.create!(description:'quien es el mas poronga en este conventillo del or
 completed_rgrl_task_2.complete(DateTime.yesterday)
 Task.create!(task_type: :rgrl, status: :pending, visit: pending_visit_rgrl )
 
+completed_visit_rgrl = Visit.create!(institution: institution, user: preventor_user, status: :completed, priority: 4,
+                                to_visit_on: Date.yesterday, completed_at: Date.yesterday)
+
+completed_rgrl_task2 = Task.create!(task_type: :rgrl, status: :pending, visit: completed_visit_rgrl )
+rgrl_result2 = RgrlResult.create!(task: completed_rgrl_task2 )
+Question.create!(description:'Quien soy', answer:'El Junior de la muelte', category: 'Maniiiel', rgrl_result: rgrl_result2)
+completed_rgrl_task2.complete(DateTime.yesterday)
+
+VisitNoise.create!(visit:completed_visit_rgrl, description: 'muestra 1', decibels: 16.123456)
+VisitNoise.create!(visit:completed_visit_rgrl, description: 'muestra 2', decibels: 116.123)
+VisitImage.create!(visit:completed_visit_rgrl, url_image: 'http:asdasd/12345fdsg1234')

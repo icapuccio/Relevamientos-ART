@@ -58,7 +58,7 @@ class VisitsController < ApplicationController
   private
 
   def complete_response
-    if visit.complete(params[:completed_at], params[:observations])
+    if visit.complete(params)
       render json: visit, status: :ok
     else
       render json: { error: visit.errors.full_messages.to_sentence }, status: :unprocessable_entity
