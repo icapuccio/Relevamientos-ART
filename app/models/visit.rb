@@ -14,7 +14,13 @@ class Visit < ApplicationRecord
 
   scope :status, ->(status) { where status: status }
   scope :user_id, ->(user) { where user_id: user }
+  scope :assignable, -> { where(status: :pending).or(where(status: :assigned)) }
+  scope :not_finished, -> { where.not(status: :completed).where.not(status: :sent) }
   scope :completed, -> { where status: :completed }
+
+  def valid_for_assignment?(user)
+    status_pending? && user.assignable?
+  end
 
   def assign_to(user)
     return false unless valid_assignment?(user)
@@ -45,6 +51,18 @@ class Visit < ApplicationRecord
 
   def finished?
     status_completed?
+  end
+
+  def cap_task_related?
+    tasks.cap.exists?
+  end
+
+  def rgrl_task_related?
+    tasks.rgrl.exists?
+  end
+
+  def rar_task_related?
+    tasks.rar.exists?
   end
 
   private

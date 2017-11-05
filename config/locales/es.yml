@@ -102,6 +102,7 @@ es:
         one: Visita
         other: Visitas
         index: Seguimiento de Visitas
+        assignments: Asignación de Visitas
         completed_inform: Visitas Finalizadas a Informar
         assigments: Asignación de Visitas
     attributes:

@@ -3,18 +3,7 @@
   <div class="">
     <div class="page-title">
       <div class="title_left">
-        <h3><%= t('activerecord.models.visit.index', default: 'Visits') %></h3>
-      </div>
-
-      <div class="title_right">
-        <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
-          <div class="input-group">
-            <input type="text" class="form-control" placeholder="Buscar...">
-            <span class="input-group-btn">
-              <button class="btn btn-default" type="button">Ir</button>
-            </span>
-          </div>
-        </div>
+        <h3><%= t('activerecord.models.visit.assignments', default: 'Visits') %></h3>
       </div>
     </div>
 
@@ -22,14 +11,12 @@
     <div class="col-md-12 col-sm-12 col-xs-12">
       <div class="x_panel">
         <div class="x_title">
-          <h2><%= t('activerecord.models.visit.other', default: 'Visits') %> <small>Solo lectura</small></h2>
+          <h2><%= t('activerecord.models.visit.other', default: 'Visits') %><small>Asignación manual</small></h2>
           <div class="clearfix"></div>
         </div>
 
         <div class="x_content">
-
           <!--<p>Add class <code>bulk_action</code> to table for bulk actions options on row select</p>-->
-
           <div class="table-responsive">
             <table class="table table-striped jambo_table bulk_action">
               <thead>
@@ -45,8 +32,7 @@
                 <th class="column-title">Fecha de inspección </th>
                 <th class="column-title">Fecha de finalización </th>
                 <th class="column-title no-link last"><span class="nobr">Acciones</span>
-                <!--<th class="column-title no-link last"><span class="nobr">Action</span>-->
-                <!--</th>-->
+                </th>
                 <th class="bulk-actions" colspan="8">
                   <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
                 </th>
@@ -69,12 +55,19 @@
                       <td><%= visit.user.full_name if visit.user.present? %> </td>
                       <td><%= l(visit.to_visit_on, format: :short_date) if visit.to_visit_on.present? %></td>
                       <td><%= l(visit.completed_at, format: :short_date) if visit.finished? %></td>
-                      <!--<td class=" last"><a href="#">Ver</a>-->
-                      <td>
-                        <%=  link_to visit_path(id: visit.id), class: "btn btn-primary btn-xs" do %>
-                            <i class="fa fa-file-text"></i> Ver Detalle
+
+                      <td class=" last">
+                        <% if visit.status_pending? %>
+                          <%=  link_to edit_visit_path(id: visit.id), class: "btn btn-primary btn-xs" do %>
+                              <i class="fa fa-pencil"></i> Asignar
+                          <% end %>
+                        <% else %>
+                          <%= link_to visit_remotion_path(visit_id: visit.id), method: :put, data: {confirm: "¿Está seguro?"}, class: "btn btn-warning btn-xs" do %>
+                              <i class="fa fa-remove"></i> Desasignar
+                          <% end %>
                         <% end %>
                       </td>
+                      <!--<td class=" last"><a href="#">Ver</a>-->
                     </tr>
                 <% end %>
               </tbody>

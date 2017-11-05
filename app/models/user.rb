@@ -1,4 +1,6 @@
 class User < ApplicationRecord
+  MAX_NUMBER_OF_VISITS = 5
+
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
@@ -27,7 +29,19 @@ class User < ApplicationRecord
   enum role: [:backoffice, :admin, :preventor], _prefix: true
 
   def full_name
-    name + ' ' + last_name
+    "#{name} #{last_name}"
+  end
+
+  def assignable?
+    role_preventor? && visits.not_finished.count < MAX_NUMBER_OF_VISITS
+  end
+
+  def assignable_for_visit?(visit)
+    visit.status_pending? && assignable? && visit.institution.zone == zone
+  end
+
+  def self.assignable_for_visit(visit)
+    User.select { |user| user.assignable_for_visit?(visit) }
   end
 
   private

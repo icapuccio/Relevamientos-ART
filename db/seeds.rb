@@ -42,7 +42,7 @@ completed_visit_another_user = Visit.create!(institution: another_institution, u
                                              status: :completed, priority: 4, to_visit_on: Date.yesterday,
                                              completed_at: Date.yesterday, observations: 'Se observa humedad en el area de trabajo')
 
-#Visits and tasks CAP
+# Visits and tasks CAP
 assigned_visit_cap = Visit.create!(institution: institution, user: preventor_user, status: :assigned, priority: 9,
                                    to_visit_on: Date.today)
 pending_visit_cap = Visit.create!(institution: institution, status: :pending, priority: 8)
@@ -61,7 +61,7 @@ completed_cap_task_2.complete(DateTime.yesterday)
 
 Task.create!(task_type: :cap, status: :pending, visit: pending_visit_cap )
 
-#Visits and tasks RAR
+# Visits and tasks RAR
 assigned_visit_rar = Visit.create!(institution: institution, user: preventor_user, status: :assigned, priority: 20,
                                    to_visit_on: Date.today)
 pending_visit_rar = Visit.create!(institution: institution, status: :pending, priority: 8)
@@ -83,9 +83,9 @@ Task.create!(task_type: :rar, status: :pending, visit: pending_visit_rar )
 # Visits and Tasks rgrl
 assigned_visit_rgrl = Visit.create!(institution: institution, user: preventor_user, status: :assigned, priority: 20,
                                    to_visit_on: Date.today)
-pending_visit_rgrl = Visit.create!(institution: institution, status: :pending, priority: 8)
 assigned_visit_rgrl_2 = Visit.create!(institution: institution, user: preventor_user, status: :assigned, priority: 9,
                                      to_visit_on: Date.today)
+pending_visit_rgrl = Visit.create!(institution: institution, status: :pending, priority: 8)
 
 completed_rgrl_task = Task.create!(task_type: :rgrl, status: :pending, visit: assigned_visit_rgrl )
 rgrl_result = RgrlResult.create!(task: completed_rgrl_task )
@@ -98,6 +98,7 @@ rgrl_result_2 = RgrlResult.create!(task: completed_rgrl_task_2)
 Question.create!(description:'quien es el mas poronga en este conventillo del orto', answer:'yo soy el mas poronga', category: 'okupas', rgrl_result: rgrl_result_2)
 completed_rgrl_task_2.complete(DateTime.yesterday)
 Task.create!(task_type: :rgrl, status: :pending, visit: pending_visit_rgrl )
+Task.create!(task_type: :cap, status: :pending, visit: pending_visit_rgrl )
 
 completed_visit_rgrl = Visit.create!(institution: institution, user: preventor_user, status: :completed, priority: 4,
                                 to_visit_on: Date.yesterday, completed_at: Date.yesterday)

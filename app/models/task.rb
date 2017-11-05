@@ -7,6 +7,10 @@ class Task < ApplicationRecord
   enum task_type: [:cap, :rgrl, :rar], _prefix: true
   validate :validate_pending_values, :validate_completed_values
 
+  scope :rgrl, -> { where(task_type: :rgrl) }
+  scope :cap, -> { where(task_type: :cap) }
+  scope :rar, -> { where(task_type: :rar) }
+
   def complete(completed_at)
     update_attributes!(status: 'completed', completed_at: completed_at)
   end
