@@ -65,6 +65,10 @@ class Visit < ApplicationRecord
     tasks.rar.exists?
   end
 
+  def create_tasks(tasks)
+    tasks.each { |task| Task.create!(task_type: task['type'], visit: self) }
+  end
+
   private
 
   def create_noises(noises)

@@ -16,10 +16,10 @@ class User < ApplicationRecord
   validate :complete_preventor_data
 
   # Geocoder
-  geocoded_by :address
+  # geocoded_by :address
 
   # Hooks
-  before_validation :geocode, if: :address_changed?
+  # before_validation :geocode, if: :address_changed?
   before_validation :generate_password, on: :create
   after_validation :coordinates_changed?
   after_create :create_admin_user, if: :role_admin?
