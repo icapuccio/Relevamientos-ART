@@ -4,6 +4,8 @@ class Visit < ApplicationRecord
   belongs_to :user
   belongs_to :institution
   has_many :tasks, dependent: :destroy
+  has_many :visit_images, dependent: :destroy
+  has_many :visit_noises, dependent: :destroy
 
   validates :status, :priority, :institution, presence: true
   validate :validate_values, :validate_completed_tasks
@@ -21,8 +23,11 @@ class Visit < ApplicationRecord
     save
   end
 
-  def complete(completed_at, observations)
-    update_attributes(status: 'completed', completed_at: completed_at, observations: observations)
+  def complete(params)
+    create_noises(params[:noises])
+    create_images(params[:images])
+    update_attributes(status: 'completed', completed_at: date_format(params[:completed_at]),
+                      observations: params[:observations])
   end
 
   def remove_assignment
@@ -38,6 +43,24 @@ class Visit < ApplicationRecord
   end
 
   private
+
+  def create_noises(noises)
+    return unless noises.present?
+    noises.each do |noise|
+      VisitNoise.create!(description: noise[:description], decibels: noise[:decibels], visit: self)
+    end
+  end
+
+  def create_images(images)
+    return unless images.present?
+    images.each do |image|
+      VisitImage.create!(url_image: image[:url_cloud], visit: self)
+    end
+  end
+
+  def date_format(date)
+    Time.zone.parse(date)
+  end
 
   def valid_assignment?(user)
     errors.add(:base, 'El usuario debe ser preventor') unless user.role_preventor?
