@@ -37,8 +37,7 @@ another_institution = Institution.create!(name: 'Shell', street: 'Neuquén', cit
 pending_visit = Visit.create!(institution: institution, status: :pending, priority: 1)
 assigned_visit = Visit.create!(institution: institution, user: preventor_user, status: :assigned, priority: 9,
                                to_visit_on: Date.today)
-completed_visit = Visit.create!(institution: institution, user: preventor_user, status: :completed, priority: 4,
-                                to_visit_on: Date.yesterday, completed_at: Date.yesterday)
+
 completed_visit_another_user = Visit.create!(institution: another_institution, user: another_preventor_user,
                                              status: :completed, priority: 4, to_visit_on: Date.yesterday,
                                              completed_at: Date.yesterday, observations: 'Se observa humedad en el area de trabajo')
@@ -51,12 +50,12 @@ assigned_visit_cap_2 = Visit.create!(institution: institution, user: preventor_u
                                      to_visit_on: Date.today)
 
 completed_cap_task = Task.create!(task_type: :cap, status: :pending, visit: assigned_visit_cap )
-cap_result = CapResult.create!(task: completed_cap_task, topic: 'Optimización de Salidas de emergencia' )
+cap_result = CapResult.create!(task: completed_cap_task, course_name: 'Optimización de Salidas de emergencia', contents: 'Salidas de emergencia', methodology: "agile")
 Attendee.create!(name:'Julian', last_name:'Alvarez', cuil:'23-12345621-6', sector: 'Seguridad e higiene', cap_result: cap_result)
 completed_cap_task.complete(DateTime.yesterday)
 
 completed_cap_task_2 = Task.create!(task_type: :cap, status: :pending, visit: assigned_visit_cap_2 )
-cap_result_2 = CapResult.create!(task: completed_cap_task_2, topic: 'Como aprobar proyecto?' )
+cap_result_2 = CapResult.create!(task: completed_cap_task_2, course_name: 'Como aprobar proyecto?', contents: 'Salidas de emergencia', methodology: "agile" )
 Attendee.create!(name:'Tomas', last_name:'Capuccio', cuil:'23-123235621-6', sector: '5to año utn frba', cap_result: cap_result_2)
 completed_cap_task_2.complete(DateTime.yesterday)
 
@@ -70,12 +69,12 @@ assigned_visit_rar_2 = Visit.create!(institution: institution, user: preventor_u
                                      to_visit_on: Date.today)
 
 completed_rar_task = Task.create!(task_type: :rar, status: :pending, visit: assigned_visit_rar )
-rar_result = RarResult.create!(task: completed_rar_task, topic: 'Minería' )
+rar_result = RarResult.create!(task: completed_rar_task)
 Worker.create!(name:'Julian', last_name:'Alvarez', cuil:'23-12345621-6', sector: 'Seguridad e higiene', rar_result: rar_result)
 completed_rar_task.complete(DateTime.yesterday)
 
 completed_rar_task_2 = Task.create!(task_type: :rar, status: :pending, visit: assigned_visit_rar_2 )
-rar_result_2 = RarResult.create!(task: completed_rar_task_2, topic: 'Trabajadores en mina 5' )
+rar_result_2 = RarResult.create!(task: completed_rar_task_2)
 worker_1 = Worker.create!(name:'Tomas', last_name:'Capuccio', cuil:'23-123235621-6', sector: 'minero', rar_result: rar_result_2)
 Risk.create!(description:'derrumbe', worker: worker_1)
 completed_rar_task_2.complete(DateTime.yesterday)
@@ -100,3 +99,15 @@ Question.create!(description:'quien es el mas poronga en este conventillo del or
 completed_rgrl_task_2.complete(DateTime.yesterday)
 Task.create!(task_type: :rgrl, status: :pending, visit: pending_visit_rgrl )
 Task.create!(task_type: :cap, status: :pending, visit: pending_visit_rgrl )
+
+completed_visit_rgrl = Visit.create!(institution: institution, user: preventor_user, status: :completed, priority: 4,
+                                to_visit_on: Date.yesterday, completed_at: Date.yesterday)
+
+completed_rgrl_task2 = Task.create!(task_type: :rgrl, status: :pending, visit: completed_visit_rgrl )
+rgrl_result2 = RgrlResult.create!(task: completed_rgrl_task2 )
+Question.create!(description:'Quien soy', answer:'El Junior de la muelte', category: 'Maniiiel', rgrl_result: rgrl_result2)
+completed_rgrl_task2.complete(DateTime.yesterday)
+
+VisitNoise.create!(visit:completed_visit_rgrl, description: 'muestra 1', decibels: 16.123456)
+VisitNoise.create!(visit:completed_visit_rgrl, description: 'muestra 2', decibels: 116.123)
+VisitImage.create!(visit:completed_visit_rgrl, url_image: 'http:asdasd/12345fdsg1234')

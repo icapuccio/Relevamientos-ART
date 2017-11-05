@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170924230752) do
+ActiveRecord::Schema.define(version: 20171104201024) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -59,12 +59,11 @@ ActiveRecord::Schema.define(version: 20170924230752) do
   end
 
   create_table "cap_results", force: :cascade do |t|
-    t.string   "topic",               null: false
-    t.string   "used_materials"
-    t.string   "coordinators"
-    t.string   "delivered_materials"
-    t.datetime "created_at",          null: false
-    t.datetime "updated_at",          null: false
+    t.string   "contents"
+    t.string   "course_name"
+    t.string   "methodology"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
   end
 
   create_table "institutions", force: :cascade do |t|
@@ -101,7 +100,6 @@ ActiveRecord::Schema.define(version: 20170924230752) do
   end
 
   create_table "rar_results", force: :cascade do |t|
-    t.string   "topic",      null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -157,6 +155,23 @@ ActiveRecord::Schema.define(version: 20170924230752) do
     t.index ["zone_id"], name: "index_users_on_zone_id", using: :btree
   end
 
+  create_table "visit_images", force: :cascade do |t|
+    t.string   "url_image",  null: false
+    t.integer  "visit_id",   null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["visit_id"], name: "index_visit_images_on_visit_id", using: :btree
+  end
+
+  create_table "visit_noises", force: :cascade do |t|
+    t.string   "description", null: false
+    t.string   "decibels",    null: false
+    t.integer  "visit_id",    null: false
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.index ["visit_id"], name: "index_visit_noises_on_visit_id", using: :btree
+  end
+
   create_table "visits", force: :cascade do |t|
     t.integer  "user_id"
     t.integer  "status",         default: 0, null: false
@@ -199,6 +214,8 @@ ActiveRecord::Schema.define(version: 20170924230752) do
   add_foreign_key "risks", "workers"
   add_foreign_key "tasks", "visits"
   add_foreign_key "users", "zones"
+  add_foreign_key "visit_images", "visits"
+  add_foreign_key "visit_noises", "visits"
   add_foreign_key "visits", "institutions"
   add_foreign_key "visits", "users"
   add_foreign_key "workers", "rar_results"

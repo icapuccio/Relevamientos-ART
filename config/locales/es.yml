@@ -103,12 +103,15 @@ es:
         other: Visitas
         index: Seguimiento de Visitas
         assignments: Asignación de Visitas
+        completed_inform: Visitas Finalizadas a Informar
+        assigments: Asignación de Visitas
     attributes:
       visit/status:
         pending: Pendiente
         assigned: Asignada
         in_process: En Progreso
         completed: Finalizada
+        sent: Enviada a SRT
     errors:
       messages:
         record_invalid: "La validación falló: %{errors}"

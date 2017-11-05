@@ -19,7 +19,48 @@ class Task < ApplicationRecord
     status_completed?
   end
 
+  def create_result(params)
+    ActiveRecord::Base.transaction do
+      task_type_case(params)
+      complete(date_format(params[:completed_at]))
+    end
+  end
+
   private
+
+  def task_type_case(params)
+    case task_type
+    when 'rgrl'
+      create_result_rgrl(params)
+    when 'cap'
+      create_result_cap(params)
+    when 'rar'
+      create_result_rar(params)
+    else
+      raise 'task_type does not exist'
+    end
+  end
+
+  def create_result_rgrl(params)
+    rgrl_result = RgrlResult.create!(task: self)
+    rgrl_result.create_questions(params[:questions])
+  end
+
+  def create_result_rar(params)
+    rar_result = RarResult.create!(task: self)
+    rar_result.create_workers(params[:working_men])
+  end
+
+  def create_result_cap(params)
+    cap_result = CapResult.create!(task: self, contents: params[:contents],
+                                   course_name: params[:course_name],
+                                   methodology: params[:methodology])
+    cap_result.create_attendees(params[:attendees])
+  end
+
+  def date_format(date)
+    Time.zone.parse(date)
+  end
 
   def validate_pending_values
     return unless status_pending? && completed_at.present?

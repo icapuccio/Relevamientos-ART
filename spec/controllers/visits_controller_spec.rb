@@ -7,9 +7,6 @@ describe VisitsController, type: :controller do
   let!(:institution_2) { create(:institution, zone: zone_2) }
   let(:user_1) { create(:user, :preventor, zone: zone_1) }
   let(:user_2) { create(:user, :preventor, zone: zone_2) }
-  let!(:visit) do
-    create(:visit, :completed, user: user_1, institution: institution_1)
-  end
   let!(:assigned_visit) do
     create(:visit, user: user_2, to_visit_on: Time.zone.today,
                    status: 'assigned', institution: institution_2)
@@ -21,6 +18,9 @@ describe VisitsController, type: :controller do
   end
 
   describe 'GET #index' do
+    let!(:visit) do
+      create(:visit, :completed, user: user_1, institution: institution_1)
+    end
     context 'when no filters are sent' do
       before do
         get :index
@@ -98,6 +98,9 @@ describe VisitsController, type: :controller do
   end
 
   describe 'GET #show' do
+    let!(:visit) do
+      create(:visit, :completed, user: user_1, institution: institution_1)
+    end
     context 'When the visit id does not exist' do
       before do
         get :show, params: { id: visit.id * 1000 }
@@ -240,7 +243,7 @@ describe VisitsController, type: :controller do
   end
   describe 'PUT #complete' do
     context 'When the visit id does not exist' do
-      let!(:completed_at) { DateTime.current }
+      let!(:completed_at) { DateTime.current.to_s }
       before do
         put :complete, params: { visit_id: assigned_visit.id * 1000, completed_at: completed_at }
       end
@@ -249,7 +252,7 @@ describe VisitsController, type: :controller do
       end
     end
     context 'when the visit id exists' do
-      let!(:completed_at) { DateTime.current }
+      let!(:completed_at) { DateTime.current.to_s }
       context 'and has pending tasks' do
         let!(:task) { create(:task, visit: assigned_visit, status: 'pending') }
         before do
@@ -261,26 +264,125 @@ describe VisitsController, type: :controller do
       end
       context 'and has all the tasks completed' do
         let!(:task) do
-          create(:task, visit: assigned_visit, status: 'completed', completed_at: completed_at)
+          create(:task, visit: assigned_visit, task_type: :rgrl, status: 'pending')
+        end
+        let!(:rgrl_result) { create(:rgrl_result, task: task) }
+        let!(:question) do
+          create(:question, description: 'Quien soy', answer: 'El Junior de la muelte',
+                            category: 'Maniiiel', rgrl_result: rgrl_result)
         end
         let!(:obs) { 'todo OK' }
-        before do
-          put :complete, params: { visit_id: assigned_visit.id, completed_at: completed_at,
-                                   observations: obs }
+        context 'and has not images and noises' do
+          before do
+            task.complete(completed_at)
+            put :complete, params: { visit_id: assigned_visit.id, completed_at: completed_at,
+                                     observations: obs }
+          end
+          it 'responds with ok' do
+            expect(response).to have_http_status(:ok)
+          end
+          it 'returns the updated visit' do
+            expect(response_body.to_json).to eq VisitSerializer
+              .new(assigned_visit.reload, root: false).to_json
+          end
+          it 'visit is completed' do
+            expect(assigned_visit.reload.status).to eq 'completed'
+          end
+          it 'visit has obs' do
+            expect(assigned_visit.reload.observations).to eq obs
+          end
+          it 'visit has not images' do
+            expect(assigned_visit.reload.visit_images.size).to eq(0)
+          end
+          it 'visit has not noises' do
+            expect(assigned_visit.reload.visit_noises.size).to eq(0)
+          end
         end
-        it 'responds with ok' do
-          expect(response).to have_http_status(:ok)
+        context 'and has images and noises' do
+          before do
+            task.complete(completed_at)
+            put :complete,
+                params: {
+                  visit_id: assigned_visit.id,
+                  completed_at: completed_at,
+                  observations: obs,
+                  noises: [
+                    { description: 'muestra 1', decibels: 16.123456 },
+                    { description: 'muestra 2', decibels: 16.2345 }
+                  ],
+                  images: [
+                    { url_cloud: 'http:lalala.com/1234' },
+                    { url_cloud: 'http:lalala.com/1235' }
+                  ]
+                }
+          end
+          it 'responds with ok' do
+            expect(response).to have_http_status(:ok)
+          end
+          it 'returns the updated visit' do
+            expect(response_body.to_json).to eq VisitSerializer.new(
+              assigned_visit.reload, root: false
+            ).to_json
+          end
+          it 'visit is completed' do
+            expect(assigned_visit.reload.status).to eq 'completed'
+          end
+          it 'visit has obs' do
+            expect(assigned_visit.reload.observations).to eq obs
+          end
+          it 'visit has images' do
+            expect(assigned_visit.reload.visit_images.size).to eq(2)
+          end
+          it 'visit has noises' do
+            expect(assigned_visit.reload.visit_noises.size).to eq(2)
+          end
         end
-        it 'returns the updated visit' do
-          expect(response_body.to_json).to eq VisitSerializer
-            .new(assigned_visit.reload, root: false).to_json
-        end
-        it 'visit is completed' do
-          expect(assigned_visit.reload.status).to eq 'completed'
-        end
-        it 'visit has obs' do
-          expect(assigned_visit.reload.observations).to eq obs
-        end
+      end
+    end
+  end
+  describe 'POST #completed_report' do
+    let!(:pend_visit_2) { create(:visit, status: 'pending', institution: institution_1) }
+    before do
+      request.headers['Content-Type'] = 'text/html'
+    end
+    context 'when there are no completed visits' do
+      before do
+        post :completed_report
+      end
+      it 'responds found' do
+        expect(response.response_code).to eq 302
+      end
+      it 'responds with a notice' do
+        expect(response.flash.alert).to eq 'No existen nuevas visitas para enviar '\
+          'a la Superintencia de Riesgo de Trabajo.'
+      end
+    end
+    context 'when there are completed visits' do
+      let!(:completed_visit) do
+        create(:visit, :completed, to_visit_on: Time.zone.today, completed_at: Time.zone.today,
+                                   user: user_1, institution: institution_1)
+      end
+      let!(:task_rgrl) do
+        create(:task, task_type: 'rgrl', status: 'pending', visit: completed_visit)
+      end
+
+      before do
+        post :completed_report
+      end
+      it 'responds found' do
+        task_rgrl.create_result(completed_at: Time.zone.today.to_s,
+                                questions: [
+                                  { description: 'quien sos?', answer: 'el virrey',
+                                    category: 'personales' }
+                                ])
+        expect(response.response_code).to eq 302
+      end
+      it 'responds with a notice' do
+        expect(response.flash.notice).to eq 'Las visitas fueron enviadas a la '\
+          'Superintencia de Riesgo de Trabajo exitosamente.'
+      end
+      it 'the completed visits change status to sent' do
+        expect(completed_visit.reload.status).to eq 'sent'
       end
     end
   end

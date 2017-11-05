@@ -15,9 +15,15 @@ Rails.application.routes.draw do
     put :completion, to: 'visits#complete'
     collection do
       get :assignment_index
+      post :completed_report, to: 'visits#completed_report'
+      get 'completed_report', to: 'visits#completed_report_index'
     end
   end
   resources :institutions, only: [:show]
+
+  resources :tasks, only:[] do
+    put :completion, to: 'tasks#complete'
+  end
 
   require 'sidekiq/web'
   mount Sidekiq::Web, at: 'sidekiq'

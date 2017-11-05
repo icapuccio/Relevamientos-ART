@@ -16,6 +16,10 @@ class VisitsController < ApplicationController
                    .assignable.order(status: :asc, priority: :asc, id: :asc)
   end
 
+  def completed_report_index
+    @visits = Visit.includes(:institution, :user).completed
+  end
+
   def show
     visit.nil? ? show_return_not_found : show_return_ok
   end
@@ -48,14 +52,25 @@ class VisitsController < ApplicationController
 
   def complete
     return render json: { error: 'Fecha de finalización requerida' }, status: :bad_request unless
-        complete_date_present?
+      complete_date_present?
     complete_response
+  end
+
+  def completed_report
+    @visits = Visit.completed
+    @message = 'No existen nuevas visitas para enviar a la Superintencia de Riesgo de Trabajo.'
+    return redirect_to completed_report_visits_url, alert: @message unless @visits.present?
+    ActiveRecord::Base.transaction { @visits.each(&:status_sent) }
+    @message = 'Las visitas fueron enviadas a la Superintencia de Riesgo de Trabajo exitosamente.'
+    return redirect_to completed_report_visits_url, notice: @message
+  rescue ActiveRecord::RecordInvalid => exception
+    return redirect_to completed_report_visits_url, alert: exception.message
   end
 
   private
 
   def complete_response
-    if visit.complete(params[:completed_at], params[:observations])
+    if visit.complete(params)
       render json: visit, status: :ok
     else
       render json: { error: visit.errors.full_messages.to_sentence }, status: :unprocessable_entity
@@ -64,7 +79,7 @@ class VisitsController < ApplicationController
 
   def visit
     visit_id = params[:id] || params[:visit_id]
-    @visit ||= Visit.includes(:institution).find(visit_id)
+    @visit ||= Visit.includes(:institution, :tasks).find(visit_id)
   end
 
   def user

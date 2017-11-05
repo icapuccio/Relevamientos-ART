@@ -4,16 +4,19 @@ class Visit < ApplicationRecord
   belongs_to :user
   belongs_to :institution
   has_many :tasks, dependent: :destroy
+  has_many :visit_images, dependent: :destroy
+  has_many :visit_noises, dependent: :destroy
 
   validates :status, :priority, :institution, presence: true
   validate :validate_values, :validate_completed_tasks
 
-  enum status: [:pending, :assigned, :in_process, :completed], _prefix: true
+  enum status: [:pending, :assigned, :in_process, :completed, :sent], _prefix: true
 
   scope :status, ->(status) { where status: status }
   scope :user_id, ->(user) { where user_id: user }
   scope :assignable, -> { where(status: :pending).or(where(status: :assigned)) }
   scope :uncompleted, -> { where.not status: :completed }
+  scope :completed, -> { where status: :completed }
 
   def valid_for_assignment?(user)
     status_pending? && user.assignable?
@@ -27,8 +30,15 @@ class Visit < ApplicationRecord
     save
   end
 
-  def complete(completed_at, observations)
-    update_attributes(status: 'completed', completed_at: completed_at, observations: observations)
+  def complete(params)
+    create_noises(params[:noises])
+    create_images(params[:images])
+    update_attributes(status: 'completed', completed_at: date_format(params[:completed_at]),
+                      observations: params[:observations])
+  end
+
+  def status_sent
+    update_attributes!(status: 'sent')
   end
 
   def remove_assignment
@@ -56,6 +66,24 @@ class Visit < ApplicationRecord
   end
 
   private
+
+  def create_noises(noises)
+    return unless noises.present?
+    noises.each do |noise|
+      VisitNoise.create!(description: noise[:description], decibels: noise[:decibels], visit: self)
+    end
+  end
+
+  def create_images(images)
+    return unless images.present?
+    images.each do |image|
+      VisitImage.create!(url_image: image[:url_cloud], visit: self)
+    end
+  end
+
+  def date_format(date)
+    Time.zone.parse(date)
+  end
 
   def valid_assignment?(user)
     errors.add(:base, 'El usuario debe ser preventor') unless user.role_preventor?
@@ -93,7 +121,7 @@ class Visit < ApplicationRecord
   end
 
   def valid_completed_values?
-    status_completed? ? completed_at.present? : completed_at.blank?
+    status_completed? || status_sent? ? completed_at.present? : completed_at.blank?
   end
 
   def valid_assigned_values?
