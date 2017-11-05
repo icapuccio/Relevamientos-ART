@@ -8,7 +8,7 @@ class Visit < ApplicationRecord
   validates :status, :priority, :institution, presence: true
   validate :validate_values, :validate_completed_tasks
 
-  enum status: [:pending, :assigned, :in_process, :completed], _prefix: true
+  enum status: [:pending, :assigned, :in_process, :completed, :sent], _prefix: true
 
   scope :status, ->(status) { where status: status }
   scope :user_id, ->(user) { where user_id: user }
@@ -23,6 +23,10 @@ class Visit < ApplicationRecord
 
   def complete(completed_at, observations)
     update_attributes(status: 'completed', completed_at: completed_at, observations: observations)
+  end
+
+  def status_sent
+    update_attributes!(status: 'sent')
   end
 
   def remove_assignment
@@ -75,7 +79,7 @@ class Visit < ApplicationRecord
   end
 
   def valid_completed_values?
-    status_completed? ? completed_at.present? : completed_at.blank?
+    status_completed? || status_sent? ? completed_at.present? : completed_at.blank?
   end
 
   def valid_assigned_values?

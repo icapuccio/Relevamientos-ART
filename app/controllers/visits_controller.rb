@@ -11,6 +11,11 @@ class VisitsController < ApplicationController
     end
   end
 
+  def completed_report_index
+    @visits = Visit.includes(:institution, :user).filter({ status: :completed }
+                                                             .slice(:status))
+  end
+
   def show
     visit.nil? ? show_return_not_found : show_return_ok
   end
@@ -35,8 +40,19 @@ class VisitsController < ApplicationController
 
   def complete
     return render json: { error: 'Fecha de finalización requerida' }, status: :bad_request unless
-        complete_date_present?
+      complete_date_present?
     complete_response
+  end
+
+  def completed_report
+    @visits = Visit.filter({ status: :completed }.slice(:status))
+    @message = 'No existen nuevas visitas para enviar a la Superintencia de Riesgo de Trabajo.'
+    return redirect_to completed_report_visits_url, alert: @message unless @visits.present?
+    ActiveRecord::Base.transaction { @visits.each(&:status_sent) }
+    @message = 'Las visitas fueron enviadas a la Superintencia de Riesgo de Trabajo exitosamente.'
+    return redirect_to completed_report_visits_url, notice: @message
+  rescue ActiveRecord::RecordInvalid => exception
+    return redirect_to completed_report_visits_url, alert: exception.message
   end
 
   private
