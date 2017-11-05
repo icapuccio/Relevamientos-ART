@@ -102,8 +102,10 @@ es:
         one: Visita
         other: Visitas
         index: Seguimiento de Visitas
+        finished: Visitas Finalizadas
         assignments: Asignación de Visitas
         completed_inform: Visitas Finalizadas a Informar
+        finished_inform: Informe de cumplimiento de Visitas
         assigments: Asignación de Visitas
     attributes:
       visit/status:
@@ -112,6 +114,47 @@ es:
         in_process: En Progreso
         completed: Finalizada
         sent: Enviada a SRT
+      user:
+        name: Nombre
+        last_name: Apellido
+        role: Rol
+        zone: Zona
+        latitude: Latitud
+        longitude: Longitud
+        address: Dirección
+        visits: Visitas
+        created_at: Fecha de Creación
+        updated_at: Fecha de última actualización
+      zone:
+        name: Nombre
+        institutions: Instituciones
+        created_at: Fecha de Creación
+        updated_at: Ultima actualización
+        users: Usuarios
+      institution:
+        zone: Zona
+        province: Provincia
+        city: Ciudad
+        number: Altura
+        activity: Actividad
+        postal_code: Código postal
+        phone_number: Número de telefono
+        street: Calle
+        contract: Tipo de Contrato
+        surface: Superficie
+        name: Nombre
+        latitude: Latitud
+        longitude: Longitud
+        address: Dirección
+        visits: Visitas
+        created_at: Fecha de Creación
+        updated_at: Fecha de última actualización
+      admin_user:
+        sign_in_count: Cantidad de ingresos
+        current_sign_in_at: Ultimo ingreso
+        name: Nombre
+        created_at: Fecha de Creación
+        updated_at: Fecha de última actualización
     errors:
       messages:
         record_invalid: "La validación falló: %{errors}"

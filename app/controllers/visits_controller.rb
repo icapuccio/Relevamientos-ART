@@ -21,6 +21,10 @@ class VisitsController < ApplicationController
     @visits = Visit.includes(:institution, :user).completed
   end
 
+  def finished_report_index
+    @visits = Visit.includes(:institution, :user).finished
+  end
+
   def show
     visit.nil? ? show_return_not_found : show_return_ok
   end
