@@ -1,3 +1,4 @@
+require 'net/http'
 class VisitsController < ApplicationController
   def index
     return render json: { error: 'invalid params' }, status: :bad_request unless
@@ -58,16 +59,41 @@ class VisitsController < ApplicationController
 
   def completed_report
     @visits = Visit.completed
-    @message = 'No existen nuevas visitas para enviar a la Superintencia de Riesgo de Trabajo.'
+    @message = 'No existen nuevas visitas para enviar a la Superintendencia de Riesgo de Trabajo.'
     return redirect_to completed_report_visits_url, alert: @message unless @visits.present?
     ActiveRecord::Base.transaction { @visits.each(&:status_sent) }
-    @message = 'Las visitas fueron enviadas a la Superintencia de Riesgo de Trabajo exitosamente.'
+    @message = 'Las visitas fueron enviadas a la Superintendengitch cia '\
+      'de Riesgo de Trabajo exitosamente.'
     return redirect_to completed_report_visits_url, notice: @message
   rescue ActiveRecord::RecordInvalid => exception
     return redirect_to completed_report_visits_url, alert: exception.message
   end
 
+  def syncronization
+    response_body = get_visits_srt
+    @message = 'No existen nuevas visitas en la Superintendencia de Riesgo de Trabajo.'
+    return redirect_to visits_url, alert: @message unless response_body.present?
+    create_visits(response_body)
+  end
+
+  def get_visits_srt
+    url = URI.parse('https://private-13dd3-relevamientosart.apiary-mock.com/visits')
+    req = Net::HTTP::Get.new(url.to_s)
+    res = Net::HTTP.start(url.host, url.port) {|http|
+      http.request(req)
+    }
+    res.body
+  end
+
   private
+
+  def create_visits(response_body)
+    response_body.each do |visit_json|
+      Visit.create!(instition_id: visit_json[:institution_id], priority: visit_json[:priority],
+      to_visit_on: visit_json[:to_visit_on]
+      )
+    end
+  end
 
   def complete_response
     if visit.complete(params)

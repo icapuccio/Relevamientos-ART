@@ -17,6 +17,7 @@ Rails.application.routes.draw do
       get :assignment_index
       post :completed_report, to: 'visits#completed_report'
       get 'completed_report', to: 'visits#completed_report_index'
+      post :syncronization, to: 'visits#syncronization'
     end
   end
   resources :institutions, only: [:show]
