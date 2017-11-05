@@ -1,4 +1,5 @@
 class VisitsController < ApplicationController
+  include HTTParty
   def index
     return render json: { error: 'invalid params' }, status: :bad_request unless
       index_valid_params?
@@ -58,16 +59,55 @@ class VisitsController < ApplicationController
 
   def completed_report
     @visits = Visit.completed
-    @message = 'No existen nuevas visitas para enviar a la Superintencia de Riesgo de Trabajo.'
+    @message = 'No existen nuevas visitas para enviar a la Superintendencia de Riesgo de Trabajo.'
     return redirect_to completed_report_visits_url, alert: @message unless @visits.present?
     ActiveRecord::Base.transaction { @visits.each(&:status_sent) }
-    @message = 'Las visitas fueron enviadas a la Superintencia de Riesgo de Trabajo exitosamente.'
+    @message = 'Las visitas fueron enviadas a la Superintendencia '\
+      'de Riesgo de Trabajo exitosamente.'
     return redirect_to completed_report_visits_url, notice: @message
   rescue ActiveRecord::RecordInvalid => exception
     return redirect_to completed_report_visits_url, alert: exception.message
   end
 
+  def syncro_visits
+    response = HTTParty.get('https://private-13dd3-relevamientosart.apiary-mock.com/visits')
+    @message = 'No existen nuevas visitas en la Superintendencia de Riesgo de Trabajo.'
+    return redirect_to visits_url, alert: @message unless response.present?
+    create_visits(response)
+  end
+
   private
+
+  def create_visits(response_body)
+    @visits_created = 0
+    @visits_errors = 0
+    response_body.each do |visit_json|
+      create_visit(visit_json)
+    end
+    create_visits_response
+  end
+
+  def create_visit(visit_json)
+    ActiveRecord::Base.transaction do
+      visit = Visit.create!(institution_id: visit_json['institution_id'],
+                            priority: visit_json['priority'],
+                            external_id: visit_json['external_id'])
+      visit.create_tasks(visit_json['tasks'])
+      @visits_created += 1
+    end
+  rescue StandardError
+    @visits_errors += 1
+  end
+
+  def create_visits_response
+    @message = "Se crearon exitosamente #{@visits_created} visitas a realizar."
+    return redirect_to visits_url, notice: @message unless @visits_errors.positive?
+    @message = "Se crearon exitosamente #{@visits_created} visitas a realizar. "\
+      "Existen #{@visits_errors} con inconsistencias."
+    return redirect_to visits_url, alert: @message if @visits_created.positive?
+    @message = "Todas las visitas (#{@visits_errors}) contienen errores."
+    redirect_to visits_url, alert: @message
+  end
 
   def complete_response
     if visit.complete(params)

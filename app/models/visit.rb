@@ -15,7 +15,7 @@ class Visit < ApplicationRecord
   scope :status, ->(status) { where status: status }
   scope :user_id, ->(user) { where user_id: user }
   scope :assignable, -> { where(status: :pending).or(where(status: :assigned)) }
-  scope :uncompleted, -> { where.not status: :completed }
+  scope :not_finished, -> { where.not(status: :completed).where.not(status: :sent) }
   scope :completed, -> { where status: :completed }
 
   def valid_for_assignment?(user)
@@ -63,6 +63,10 @@ class Visit < ApplicationRecord
 
   def rar_task_related?
     tasks.rar.exists?
+  end
+
+  def create_tasks(tasks)
+    tasks.each { |task| Task.create!(task_type: task['type'], visit: self) }
   end
 
   private

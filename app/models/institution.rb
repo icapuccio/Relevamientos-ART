@@ -7,11 +7,11 @@ class Institution < ApplicationRecord
             :zone, presence: true
 
   # Geocoder
-  geocoded_by :address
+  # geocoded_by :address
 
   # Hooks
   before_validation :set_address, if: :address_attributes?
-  before_validation :geocode, if: :address_changed?
+  # before_validation :geocode, if: :address_changed?
   after_validation :coordinates_changed?
   before_destroy :check_institution_with_visits
 

@@ -16,10 +16,11 @@ class User < ApplicationRecord
   validate :complete_preventor_data
 
   # Geocoder
-  geocoded_by :address
+  # geocoded_by :address
 
   # Hooks
-  before_validation :geocode, if: :address_changed?
+
+  # before_validation :geocode, if: :address_changed?
   before_validation :generate_password, on: :create, unless: :password_given?
   after_validation :coordinates_changed?
   after_create :create_admin_user, if: :role_admin?
@@ -33,7 +34,7 @@ class User < ApplicationRecord
   end
 
   def assignable?
-    role_preventor? && visits.uncompleted.count < MAX_NUMBER_OF_VISITS
+    role_preventor? && visits.not_finished.count < MAX_NUMBER_OF_VISITS
   end
 
   def assignable_for_visit?(visit)
