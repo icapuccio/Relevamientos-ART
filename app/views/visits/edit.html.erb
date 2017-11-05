@@ -5,17 +5,6 @@
       <div class="title_left">
         <h3>Visita Nº <%= @visit.id %> </h3>
       </div>
-
-      <!--<div class="title_right">
-        <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
-          <div class="input-group">
-            <input type="text" class="form-control" placeholder="Search for...">
-            <span class="input-group-btn">
-                      <button class="btn btn-default" type="button">Go!</button>
-                    </span>
-          </div>
-        </div>
-      </div>-->
     </div>
 
     <div class="clearfix"></div>
@@ -39,6 +28,7 @@
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="institution">Establecimiento <span class="required">*</span>
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
+                  <%#= f.select :institution, options_for_select(Institution.all.collect{ |i| [i.name, i.id] }, @visit.institution.id), id: 'institution', required: 'required', class: 'form-control col-md-7 col-xs-12' %>
                   <select id="institution" class="form-control" disabled="disabled" required>
                     <option><%= @visit.institution.name %></option>
                   </select>
@@ -55,9 +45,7 @@
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="preventor">Preventor <span class="required">*</span>
                 </label>
                 <div class="col-md-6 col-sm-6 col-xs-12">
-                  <select id="preventor" class="form-control" disabled="disabled" required>
-                    <option><%= @visit.user.full_name if @visit.user.present? %></option>
-                  </select>
+                  <%= f.select :user, options_for_select(User.includes(:zone).assignable_for_visit(@visit).collect{ |u| [u.full_name, u.id] }), { include_blank: true }, { class: "form-control", required: "required", id: 'preventor'} %>
                 </div>
               </div>
               <div class="form-group">
@@ -77,6 +65,8 @@
               <div class="form-group">
                 <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
                   <%= link_to "Volver", :back, class: "btn btn-primary" %>
+                  <button class="btn btn-primary" type="reset">Resetear</button>
+                  <%= f.submit "Asignar Visita", class: "btn btn-success" %>
                 </div>
               </div>
           <% end %>
@@ -85,4 +75,3 @@
     </div>
   </div>
 </div>
-

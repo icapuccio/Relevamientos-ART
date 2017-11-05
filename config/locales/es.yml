@@ -102,7 +102,7 @@ es:
         one: Visita
         other: Visitas
         index: Seguimiento de Visitas
-        assigments: Asignación de Visitas
+        assignments: Asignación de Visitas
     attributes:
       visit/status:
         pending: Pendiente

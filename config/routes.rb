@@ -9,10 +9,13 @@ Rails.application.routes.draw do
 
   root 'home#index'
 
-  resources :visits, only: [:index, :show] do
+  resources :visits, only: [:index, :show, :edit, :update] do
     post :assignment, to: 'visits#assign'
     put :remotion, to: 'visits#remove_assignment'
     put :completion, to: 'visits#complete'
+    collection do
+      get :assignment_index
+    end
   end
   resources :institutions, only: [:show]
 
