@@ -12,8 +12,7 @@ class VisitsController < ApplicationController
   end
 
   def completed_report_index
-    @visits = Visit.includes(:institution, :user).filter({ status: :completed }
-                                                             .slice(:status))
+    @visits = Visit.includes(:institution, :user).completed
   end
 
   def show
@@ -45,7 +44,7 @@ class VisitsController < ApplicationController
   end
 
   def completed_report
-    @visits = Visit.filter({ status: :completed }.slice(:status))
+    @visits = Visit.completed
     @message = 'No existen nuevas visitas para enviar a la Superintencia de Riesgo de Trabajo.'
     return redirect_to completed_report_visits_url, alert: @message unless @visits.present?
     ActiveRecord::Base.transaction { @visits.each(&:status_sent) }
