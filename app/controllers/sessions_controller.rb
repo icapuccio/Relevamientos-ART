@@ -1,9 +1,16 @@
 class SessionsController < Devise::SessionsController
   # http_basic_authenticate_with name: "admin", password: "secret"
 
+  # rubocop:disable Metrics/MethodLength
   def create
     respond_to do |format|
-      format.html { super }
+      format.html do
+        # TODO: Revisar si esta validacion se hara. Tener en cuenta que impide el cambio
+        #   de password en el mail de bienvenida
+        # return redirect_to login_url, alert: 'El rol asociado a su usuario no tiene permisos
+        #   para acceder' if authenticated_user_preventor?
+        super
+      end
       format.json do
         if authenticated_user?
           render json: { id: user.id, email: user.email }, status: :ok
@@ -13,6 +20,7 @@ class SessionsController < Devise::SessionsController
       end
     end
   end
+  # rubocop:enable Metrics/MethodLength
 
   private
 
@@ -22,6 +30,16 @@ class SessionsController < Devise::SessionsController
 
   def user
     @user ||= User.find_by(email: session_params[:email])
+  end
+
+  def authenticated_user_preventor?
+    web_user.present? &&
+      web_user.valid_password?(params[:user][:password]) &&
+      web_user.role_preventor?
+  end
+
+  def web_user
+    @web_user ||= User.find_by(email: params[:user][:email])
   end
 
   def session_params

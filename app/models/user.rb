@@ -20,7 +20,7 @@ class User < ApplicationRecord
 
   # Hooks
   before_validation :geocode, if: :address_changed?
-  before_validation :generate_password, on: :create
+  before_validation :generate_password, on: :create, unless: :password_given?
   after_validation :coordinates_changed?
   after_create :create_admin_user, if: :role_admin?
   before_destroy :check_user_with_visits
@@ -44,15 +44,24 @@ class User < ApplicationRecord
     User.select { |user| user.assignable_for_visit?(visit) }
   end
 
+  def reset_password
+    generated_password = Devise.friendly_token.first(8)
+    update_attributes!(password: generated_password, password_confirmation: generated_password)
+    WelcomeMailer.reset_password_send(self, generated_password).deliver
+  end
+
   private
 
-  # TODO: Eliminar el hardcodeo de password cuando se implemente el envio de mail
+  def password_given?
+    password.present?
+  end
+
   def generate_password
-    # generated_password = Devise.friendly_token.first(8)
-    generated_password = '12345678'
+    generated_password = Devise.friendly_token.first(8)
     self.password = generated_password
     self.password_confirmation = generated_password
-    # RegistrationMailer.welcome(user, generated_password).deliver
+    return if Rails.env.test?
+    WelcomeMailer.welcome_send(self, generated_password).deliver
   end
 
   def check_user_with_visits
@@ -67,6 +76,8 @@ class User < ApplicationRecord
 
   def delete_admin_user
     AdminUser.find_by(email: email).destroy
+  rescue => e
+    Rails.logger.info "Cannot find/delete AdminUser for: #{email}. Error: #{e.inspect}"
   end
 
   def complete_preventor_data

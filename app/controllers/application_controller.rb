@@ -7,7 +7,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :null_session
   # TODO: Quitar el salteo ante un request JSON
   #   http://jessewolgamott.com/blog/2012/01/19/the-one-with-a-json-api-login-using-devise
-  before_action :authenticated_user!, except: [:new, :create], unless: :json_request?
+  before_action :authenticated_user!, except: [:new, :create], unless: :not_authenticate_request?
 
   # i18n configuration. See: http://guides.rubyonrails.org/i18n.html
   # before_action :set_locale
@@ -43,8 +43,10 @@ class ApplicationController < ActionController::Base
 
   private
 
-  def json_request?
-    request.format == 'json'
+  def not_authenticate_request?
+    request.url.include?('/users/password') ||
+      request.format == 'json' ||
+      request.url.include?('/users/new_password_request')
   end
 
   # Serializer methods
@@ -73,5 +75,9 @@ class ApplicationController < ActionController::Base
 
   def render_incorrect_parameter(error)
     render json: { error: error.message }, status: :bad_request
+  end
+
+  def render_error(error_message, status)
+    render json: { error: error_message }, status: status
   end
 end
