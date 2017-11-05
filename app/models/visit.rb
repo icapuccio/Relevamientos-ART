@@ -14,6 +14,7 @@ class Visit < ApplicationRecord
 
   scope :status, ->(status) { where status: status }
   scope :user_id, ->(user) { where user_id: user }
+  scope :completed, -> { where status: :completed }
 
   def assign_to(user)
     return false unless valid_assignment?(user)
