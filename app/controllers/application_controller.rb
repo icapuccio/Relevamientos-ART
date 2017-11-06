@@ -44,7 +44,7 @@ class ApplicationController < ActionController::Base
   private
 
   def json_request?
-    request.format == 'json'
+    request.format == 'json' || request.content_type == 'application/json'
   end
 
   # Serializer methods
