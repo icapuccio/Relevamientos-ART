@@ -80,6 +80,8 @@ Risk.create!(description:'derrumbe', worker: worker_1)
 completed_rar_task_2.complete(DateTime.yesterday)
 Task.create!(task_type: :rar, status: :pending, visit: pending_visit_rar )
 
+pending_rar_task = Task.create!(task_type: :rar, status: :pending, visit: assigned_visit_rar_2 )
+
 # Visits and Tasks rgrl
 assigned_visit_rgrl = Visit.create!(institution: institution, user: preventor_user, status: :assigned, priority: 20,
                                    to_visit_on: Date.today, external_id: 9)

@@ -66,13 +66,24 @@
                   <label class="control-label col-md-3 col-sm-3 col-xs-12" for="preventor">Tareas:
                   </label>
                   <div class="col-md-6 col-sm-6 col-xs-12">
-                    <%= f.check_box :rar_task_related?, class: "flat", disabled: "disabled" %> Relevamiento de Agentes de Riesgo
-                    <br />
-
-                    <%= f.check_box :rgrl_task_related?, class: "flat", disabled: "disabled" %> Relevamiento General de Riegos Laborales
-                    <br />
-
-                    <%= f.check_box :cap_task_related?, class: "flat", disabled: "disabled" %> Capacitación
+                    <%= f.check_box :rar_task_related?, class: "flat", disabled: "disabled" %>
+                    <% if !@visit.rar_task_related? %>
+                        Relevamiento de Agentes de Riesgo<br />
+                    <% else %>
+                        <a href= <%= "https://coderanch.com/t/117526/Disable-link-href" %>> Relevamiento de Agentes de Riesgo</a><br />
+                    <% end %>
+                    <%= f.check_box :rgrl_task_related?, class: "flat", disabled: "disabled" %>
+                    <% if !@visit.rgrl_task_related? %>
+                        Relevamiento General de Riegos Laborales<br />
+                    <% else %>
+                        <a href= <%= "https://coderanch.com/t/117526/Disable-link-href" %>> Relevamiento General de Riegos Laborales</a><br />
+                    <% end %>
+                    <%= f.check_box :cap_task_related?, class: "flat", disabled: "disabled" %>
+                    <% if !@visit.cap_task_related? %>
+                        Capacitación<br />
+                    <% else %>
+                        <a href= <%= "https://coderanch.com/t/117526/Disable-link-href" %>> Capacitación</a><br />
+                    <% end %>
                   </div>
                 </div>
                 <div class="ln_solid"></div>

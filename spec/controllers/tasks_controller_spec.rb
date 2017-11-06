@@ -94,7 +94,7 @@ describe TasksController, type: :controller do
                     cuil: '20345851372', last_name: 'Grula', name: 'Lucas', sector: 'IT' }
                 ],
                 completed_at: 'Oct 24, 2017 8:43:59 PM',
-                task: { id: task_rar.id, type: task_rar.task_type.to_i }
+                task: { id: task_rar.id, task_type: task_rar.task_type.to_i }
               }
         end
         it 'responds with ok' do
