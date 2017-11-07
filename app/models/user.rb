@@ -21,7 +21,7 @@ class User < ApplicationRecord
   # Hooks
   # before_validation :geocode, if: :address_changed?
   before_validation :generate_password, on: :create
-  after_validation :coordinates_changed?
+  # after_validation :coordinates_changed?
   after_create :create_admin_user, if: :role_admin?
   before_destroy :check_user_with_visits
   before_destroy :delete_admin_user, if: :role_admin?
@@ -72,8 +72,8 @@ class User < ApplicationRecord
   def complete_preventor_data
     return unless role_preventor?
     return if complete_preventor_data?
-    errors.add(:latitude, :blank) if latitude.nil?
-    errors.add(:longitude, :blank) if longitude.nil?
+    # errors.add(:latitude, :blank) if latitude.nil?
+    # errors.add(:longitude, :blank) if longitude.nil?
     errors.add(:zone, :blank) if zone.nil?
   end
 
