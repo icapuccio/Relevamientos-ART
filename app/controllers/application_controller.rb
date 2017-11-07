@@ -47,6 +47,7 @@ class ApplicationController < ActionController::Base
     request.url.include?('/users/password') ||
       request.url.include?('/users/new_password_request') ||
       json_request?
+  end
 
   def json_request?
     request.format == 'json' || request.content_type == 'application/json'
