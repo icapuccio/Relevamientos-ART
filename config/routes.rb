@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  default_url_options host: 'relevamientosdigitales.com'
+
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
   devise_for :users, controllers: { sessions: 'sessions' },
@@ -27,6 +29,12 @@ Rails.application.routes.draw do
     put :completion, to: 'tasks#complete'
   end
 
+  resources :users, only: :none, defaults: { format: :json } do
+    collection  do
+      post 'new_password_request', to: 'users#reset_password'
+    end
+    put 'new_password', to: 'users#update_password'
+  end
   require 'sidekiq/web'
   mount Sidekiq::Web, at: 'sidekiq'
   mount PgHero::Engine, at: 'pghero'

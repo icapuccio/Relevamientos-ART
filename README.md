@@ -7,7 +7,18 @@ RelevamientosArt
 
 `Headers`: 
   + For GET requests: `Accept: application/json`
-  + For POST requests (with a body): `Content-Type: application/json`
+  + For POST & PUT requests (with a body): `Content-Type: application/json`
+
+### Users
+
+Login: `POST /users/login`
+  - Body: `{ "session": { "email": "juan_perez@example.com", "password": "abcdef" } }`
+
+Reset password: `POST /users/new_password_request`
+  - Body: `{ "user_email": "juan_perez@example" }`
+
+Update password: `PUT /users/:user_id/new_password`
+  - Body: `{ "user": { "current_password": "abc", "password": "def", "password_confirmation": "def" } }`
 
 ### Institutions
 
