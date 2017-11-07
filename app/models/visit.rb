@@ -17,6 +17,7 @@ class Visit < ApplicationRecord
   scope :assignable, -> { where(status: :pending).or(where(status: :assigned)) }
   scope :not_finished, -> { where.not(status: :completed).where.not(status: :sent) }
   scope :completed, -> { where status: :completed }
+  scope :finished, -> { where(status: :completed).or(where(status: :sent)) }
 
   def valid_for_assignment?(user)
     status_pending? && user.assignable?

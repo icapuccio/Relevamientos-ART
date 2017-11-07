@@ -18,7 +18,8 @@ Rails.application.routes.draw do
     collection do
       get :assignment_index
       post :completed_report, to: 'visits#completed_report'
-      get 'completed_report', to: 'visits#completed_report_index'
+      get :completed_report, to: 'visits#completed_report_index'
+      get :finished_report, to: 'visits#finished_report_index'
       post :syncro_visits, to: 'visits#syncro_visits'
     end
   end

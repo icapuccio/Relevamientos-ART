@@ -45,8 +45,11 @@ class ApplicationController < ActionController::Base
 
   def not_authenticate_request?
     request.url.include?('/users/password') ||
-      request.format == 'json' ||
-      request.url.include?('/users/new_password_request')
+      request.url.include?('/users/new_password_request') ||
+      json_request?
+
+  def json_request?
+    request.format == 'json' || request.content_type == 'application/json'
   end
 
   # Serializer methods

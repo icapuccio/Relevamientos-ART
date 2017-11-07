@@ -2517,10 +2517,10 @@ if (typeof NProgress != 'undefined') {
 					$("#datatable-buttons").DataTable({
 					  dom: "Bfrtip",
 					  buttons: [
-						{
+						/*{
 						  extend: "copy",
 						  className: "btn-sm"
-						},
+						},*/
 						{
 						  extend: "csv",
 						  className: "btn-sm"
