@@ -19,67 +19,123 @@
     </div>
 
     <div class="clearfix"></div>
-    <div class="col-md-12 col-sm-12 col-xs-12">
-      <div class="x_panel">
-        <div class="x_title">
-          <h2>Detalle <small>Asignación de visita</small></h2>
-          <div class="clearfix"></div>
+
+    <div class="row">
+      <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+          <div class="x_title">
+            <h2>Detalle <small>Asignación de visita</small></h2>
+            <div class="clearfix"></div>
+          </div>
+
+          <div class="x_content">
+            <%= form_for(@visit, html: { id:"demo-form2", "data-parsley-validate" => "", class: "form-horizontal form-label-left" }) do |f| %>
+                <div class="form-group">
+                  <label class="control-label col-md-3 col-sm-3 col-xs-12" for="priority">Prioridad <span class="required">*</span>
+                  </label>
+                  <div class="col-md-6 col-sm-6 col-xs-12">
+                    <%= f.text_field :priority, id: 'priority', required: 'required', class: "form-control col-md-7 col-xs-12", disabled: "disabled" %>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="control-label col-md-3 col-sm-3 col-xs-12" for="institution">Establecimiento <span class="required">*</span>
+                  </label>
+                  <div class="col-md-6 col-sm-6 col-xs-12">
+                    <select id="institution" class="form-control" disabled="disabled" required>
+                      <option><%= @visit.institution.name %></option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="control-label col-md-3 col-sm-3 col-xs-12" for="status">Estado <span class="required">*</span>
+                  </label>
+                  <div class="col-md-6 col-sm-6 col-xs-12">
+                    <%= f.select :status, options_for_select(Visit.statuses.to_a.collect { |status| [Visit.human_attribute_name("status.#{status[0]}"), status[0]] }, @visit.status), {}, { class: "form-control", required: "required", id: 'status', disabled: "disabled" } %>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="control-label col-md-3 col-sm-3 col-xs-12" for="preventor">Preventor <span class="required">*</span>
+                  </label>
+                  <div class="col-md-6 col-sm-6 col-xs-12">
+                    <select id="preventor" class="form-control" disabled="disabled" required>
+                      <option><%= @visit.user.full_name if @visit.user.present? %></option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="control-label col-md-3 col-sm-3 col-xs-12" for="preventor">Tareas:
+                  </label>
+                  <div class="col-md-6 col-sm-6 col-xs-12">
+                    <%= f.check_box :rar_task_related?, class: "flat", disabled: "disabled" %> Relevamiento de Agentes de Riesgo
+                    <br />
+
+                    <%= f.check_box :rgrl_task_related?, class: "flat", disabled: "disabled" %> Relevamiento General de Riegos Laborales
+                    <br />
+
+                    <%= f.check_box :cap_task_related?, class: "flat", disabled: "disabled" %> Capacitación
+                  </div>
+                </div>
+                <div class="ln_solid"></div>
+                <div class="form-group">
+                  <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                    <%= link_to "Volver", :back, class: "btn btn-primary" %>
+                  </div>
+                </div>
+            <% end %>
+          </div>
         </div>
+      </div>
+    </div>
 
-        <div class="x_content">
-          <%= form_for(@visit, html: { id:"demo-form2", "data-parsley-validate" => "", class: "form-horizontal form-label-left" }) do |f| %>
-              <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="priority">Prioridad <span class="required">*</span>
-                </label>
-                <div class="col-md-6 col-sm-6 col-xs-12">
-                  <%= f.text_field :priority, id: 'priority', required: 'required', class: "form-control col-md-7 col-xs-12", disabled: "disabled" %>
-                </div>
-              </div>
-              <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="institution">Establecimiento <span class="required">*</span>
-                </label>
-                <div class="col-md-6 col-sm-6 col-xs-12">
-                  <select id="institution" class="form-control" disabled="disabled" required>
-                    <option><%= @visit.institution.name %></option>
-                  </select>
-                </div>
-              </div>
-              <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="status">Estado <span class="required">*</span>
-                </label>
-                <div class="col-md-6 col-sm-6 col-xs-12">
-                  <%= f.select :status, options_for_select(Visit.statuses.to_a.collect { |status| [Visit.human_attribute_name("status.#{status[0]}"), status[0]] }, @visit.status), {}, { class: "form-control", required: "required", id: 'status', disabled: "disabled" } %>
-                </div>
-              </div>
-              <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="preventor">Preventor <span class="required">*</span>
-                </label>
-                <div class="col-md-6 col-sm-6 col-xs-12">
-                  <select id="preventor" class="form-control" disabled="disabled" required>
-                    <option><%= @visit.user.full_name if @visit.user.present? %></option>
-                  </select>
-                </div>
-              </div>
-              <div class="form-group">
-                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="preventor">Tareas:
-                </label>
-                <div class="col-md-6 col-sm-6 col-xs-12">
-                  <%= f.check_box :rar_task_related?, class: "flat", disabled: "disabled" %> Relevamiento de Agentes de Riesgo
-                  <br />
+    <div class="row">
+      <div class="col-md-12">
+        <div class="x_panel">
+          <div class="x_title">
+            <h2>Adjuntos <small> imágenes de visita </small></h2>
+            <ul class="nav navbar-right panel_toolbox">
+              <li> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </li>
+              <li><a class="collapse-link"><i class="fa fa-chevron-down"></i></a>
+              </li>
+            </ul>
+            <div class="clearfix"></div>
+          </div>
+          <div class="x_content collapse">
 
-                  <%= f.check_box :rgrl_task_related?, class: "flat", disabled: "disabled" %> Relevamiento General de Riegos Laborales
-                  <br />
+            <div class="row">
 
-                  <%= f.check_box :cap_task_related?, class: "flat", disabled: "disabled" %> Capacitación
+              <% if @visit.visit_images.empty? %>
+                <p>No existen adjuntos para la visita</p>
+              <% end %>
+
+              <% @visit.visit_images.each do |image| %>
+                <div class="col-md-55">
+                  <div class="thumbnail">
+                    <div class="image view view-first">
+                      <%= image_tag(image.url_image, alt: 'image', style: "width: 100%; display: block;") %>
+                      <!--<img style="width: 100%; display: block;" src="http://www.hotelroomsearch.net/im/hotels/gr/fabrica-11.jpg" alt="image" />-->
+                      <div class="mask">
+                        <p>Ver</p>
+                        <div class="tools tools-bottom">
+                          <!--<a href="http://www.hotelroomsearch.net/im/hotels/gr/fabrica-11.jpg" target="_blank"><i class="fa fa-link"></i></a>-->
+                          <%= link_to image.url_image, target: '_blank' do %>
+                            <i class="fa fa-link"></i>
+                          <% end %>
+                          <!--<a href="#"><i class="fa fa-pencil"></i></a>-->
+                          <!--<a href="#"><i class="fa fa-times"></i></a>-->
+                        </div>
+                      </div>
+                    </div>
+                    <div class="caption">
+                      <p>
+                        Imagen Nº <%= image.id %><br/>
+                        &nbsp;
+                      </p>
+                    </div>
+                  </div>
                 </div>
-              </div>
-              <div class="ln_solid"></div>
-              <div class="form-group">
-                <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                  <%= link_to "Volver", :back, class: "btn btn-primary" %>
-                </div>
-              </div>
-          <% end %>
+              <% end %>
+            </div>
+          </div>
         </div>
       </div>
     </div>
