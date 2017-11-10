@@ -21,7 +21,8 @@ describe TasksController, type: :controller do
       before do
         put :complete, params: { task_id: task_cap.id * 1000, task: { id: task_cap.id * 1000,
                                                                       type: 3 },
-                                 completed_at: 'Oct 28, 2017 12:00:00 AM' }
+                                 completed_at: 'Oct 28, 2017 12:00:00 AM',
+                                 url_cloud: 'http://www.pdf995.com/samples/pdf.pdf' }
       end
       it 'responds with not found status' do
         expect(response).to have_http_status(:not_found)
@@ -31,7 +32,8 @@ describe TasksController, type: :controller do
       context 'and the body is inconsistent' do
         before do
           put :complete, params: { task_id: task_cap.id, completed_at: 'Oct 28, 2017 12:00:00 AM',
-                                   task: { id: task_cap.id, type: 3 } }
+                                   task: { id: task_cap.id, type: 3 },
+                                   url_cloud: 'http://www.pdf995.com/samples/pdf.pdf' }
         end
         it 'responds with and not_modified status' do
           expect(response).to have_http_status(:unprocessable_entity)
@@ -46,6 +48,7 @@ describe TasksController, type: :controller do
                     name: 'Fernando', sector: 'Sistemas' },
                   { cuil: '20345851311', last_name: 'Grula', name: 'Lucas', sector: 'IT' }
                 ],
+                url_cloud: 'http://www.pdf995.com/samples/pdf.pdf',
                 contents: 'Seguridad e higiene', course_name: 'Curso 1',
                 methodology: 'Clásica', completed_at: 'Oct 28, 2017 8:44:04 PM',
                 task: { id: task_cap.id, type: task_cap.task_type.to_i },
@@ -73,7 +76,7 @@ describe TasksController, type: :controller do
         before do
           put :complete,
               params: {
-                task_id: task_rar.id,
+                task_id: task_rar.id, url_cloud: 'http://www.pdf995.com/samples/pdf.pdf',
                 working_men: [
                   { checked_in_on: 'Oct 28, 2017 12:00:00 AM',
                     exposed_from_at: 'Oct 28, 2017 12:00:00 AM',
@@ -122,6 +125,7 @@ describe TasksController, type: :controller do
           put :complete,
               params: {
                 task_id: task_rgrl.id,
+                url_cloud: 'http://www.pdf995.com/samples/pdf.pdf',
                 questions: [
                   { answer: 'Sí', category: 'Servicio de Higiente y Seguridad en el trabajo',
                     description: '¿Dispone del Servicio de Higiene y Seguridad?', id: 1 },

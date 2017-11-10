@@ -21,6 +21,10 @@ class VisitsController < ApplicationController
     @visits = Visit.includes(:institution, :user).completed
   end
 
+  def report_index
+    @visits = Visit.includes(:institution, :user).completed
+  end
+
   def finished_report_index
     @visits = Visit.includes(:institution, :user).finished
   end

@@ -372,6 +372,7 @@ describe VisitsController, type: :controller do
       end
       it 'responds found' do
         task_rgrl.create_result(completed_at: Time.zone.today.to_s,
+                                url_cloud: 'blablabla.pdf',
                                 questions: [
                                   { description: 'quien sos?', answer: 'el virrey',
                                     category: 'personales' }
