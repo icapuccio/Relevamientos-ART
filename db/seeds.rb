@@ -110,4 +110,7 @@ completed_rgrl_task2.complete(DateTime.yesterday)
 
 VisitNoise.create!(visit:completed_visit_rgrl, description: 'muestra 1', decibels: 16.123456)
 VisitNoise.create!(visit:completed_visit_rgrl, description: 'muestra 2', decibels: 116.123)
-VisitImage.create!(visit:completed_visit_rgrl, url_image: 'http:asdasd/12345fdsg1234')
+VisitImage.create!(visit:completed_visit_rgrl, url_image: 'http://www.hotelroomsearch.net/im/hotels/gr/fabrica-11.jpg')
+VisitImage.create!(visit:completed_visit_rgrl, url_image: 'https://upload.wikimedia.org/wikipedia/commons/7/71/Wolfsburg_VW-Werk.jpg')
+VisitImage.create!(visit:completed_visit_rgrl, url_image: 'https://upload.wikimedia.org/wikipedia/commons/9/97/Interior_de_una_F%C3%A1brica_de_Calzado_mecanizada.JPG')
+VisitImage.create!(visit:completed_visit_rgrl, url_image: 'https://www.diariomotor.com/imagenes/2016/03/fabrica-bugatti-abandonada-25.jpg')
