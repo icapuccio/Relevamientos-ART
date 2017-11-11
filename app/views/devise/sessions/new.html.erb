@@ -15,15 +15,15 @@
             </div>
             <div>
               <%= f.submit  t('.sign_in', default: 'Sign in'), class: 'btn btn-default submit' %>
-              <%= render 'devise/shared/links' %>
+              <%#= render 'devise/shared/links' %>
             </div>
 
             <div class="clearfix"></div>
 
             <div class="separator">
-              <!--<p class="change_link">New to site?-->
-              <!--<a href="#signup" class="to_register"> Create Account </a>-->
-              <!--</p>-->
+              <p class="change_link"> <!--New to site?-->
+              <a href="#signup" class="to_register"> ¿Ha olvidado su contraseña? </a>
+              </p>
 
               <div class="clearfix"></div>
               <br />
@@ -40,37 +40,63 @@
 
     <div id="register" class="animate form registration_form">
       <section class="login_content">
-        <form>
-          <h1>Create Account</h1>
-          <div>
-            <input type="text" class="form-control" placeholder="Username" required="" />
-          </div>
-          <div>
-            <input type="email" class="form-control" placeholder="Email" required="" />
-          </div>
-          <div>
-            <input type="password" class="form-control" placeholder="Password" required="" />
-          </div>
-          <div>
-            <a class="btn btn-default submit" href="index.html">Submit</a>
-          </div>
-
-          <div class="clearfix"></div>
-
-          <div class="separator">
-            <p class="change_link">Already a member ?
-              <a href="#signin" class="to_register"> Log in </a>
-            </p>
+        <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post, role: 'form' }) do |f| %>
+            <h2>Recuperar Contraseña</h2>
+            <div class="form-group">
+              <%= f.email_field :email, autofocus: true, class: 'form-control', placeholder: 'Email', required: '' %>
+            </div>
+            <div>
+              <%= f.submit 'Recuperar Contraseña', class: 'btn btn-default submit' %>
+              <%#= render 'devise/shared/links' %>
+            </div>
 
             <div class="clearfix"></div>
-            <br />
 
-            <div>
-              <h1><i class="fa fa-paw"></i> Gentelella Alela!</h1>
-              <p>©2016 All Rights Reserved. Gentelella Alela! is a Bootstrap 3 template. Privacy and Terms</p>
+            <div class="separator">
+              <p class="change_link"><!--Already a member ?-->
+              <a href="#signin" class="to_register"> Iniciar Sesión </a>
+              </p>
+
+              <div class="clearfix"></div>
+              <br />
+
+              <div>
+                <h1><i class="fa fa-check"></i> Relevamientos ART</h1>
+                <p>©2017 Todos los derechos reservados. Relevamientos ART es un producto de Relevamientos Digitales</p>
+              </div>
             </div>
-          </div>
-        </form>
+        <% end %>
+        <!--<form>-->
+          <!--<h1>Create Account</h1>-->
+          <!--<div>-->
+            <!--<input type="text" class="form-control" placeholder="Username" required="" />-->
+          <!--</div>-->
+          <!--<div>-->
+            <!--<input type="email" class="form-control" placeholder="Email" required="" />-->
+          <!--</div>-->
+          <!--<div>-->
+            <!--<input type="password" class="form-control" placeholder="Password" required="" />-->
+          <!--</div>-->
+          <!--<div>-->
+            <!--<a class="btn btn-default submit" href="index.html">Submit</a>-->
+          <!--</div>-->
+
+          <!--<div class="clearfix"></div>-->
+
+          <!--<div class="separator">-->
+            <!--<p class="change_link">Already a member ?-->
+              <!--<a href="#signin" class="to_register"> Log in </a>-->
+            <!--</p>-->
+
+            <!--<div class="clearfix"></div>-->
+            <!--<br />-->
+
+            <!--<div>-->
+              <!--<h1><i class="fa fa-paw"></i> Gentelella Alela!</h1>-->
+              <!--<p>©2016 All Rights Reserved. Gentelella Alela! is a Bootstrap 3 template. Privacy and Terms</p>-->
+            <!--</div>-->
+          <!--</div>-->
+        <!--</form>-->
       </section>
     </div>
   </div>
