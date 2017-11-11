@@ -19,7 +19,7 @@ class UsersController < ApplicationController
   #   render_error('invalid-email', :not_found)
   # end
   def reset_password
-    user_by_email.try(:reset_password) ||
+    user_by_email.try(:reset_password_instructions) ||
       render_error('invalid-email', :not_found)
   end
 

@@ -1,13 +1,15 @@
 <h2>Bienvenido a Relevamientos Digitales</h2>
 <h3>¡Hola <%= @user.name %>!</h3>
 <p>
-  Fuiste registrado exitosamente en la plataforma de Relevamientos Digitales<br>
+  Fuiste registrado exitosamente en la plataforma de Relevamientos ART<br>
   Tu usuario es: <b><%= @user.email %></b>, y tu contraseña: <b><%= @password %></b><br>
 </p>
-<p>
-  Para ingresar al sitio, ingresa al siguiente link: <%= login_url %>
-</p>
-<p>
-  Tené en cuenta que podés solicitar cambiar tu contraseña ingresando al siguiente link: <%= new_user_password_url %>
-</p>
+<% unless @user.role_preventor? %>
+  <p>
+    Para ingresar al sitio, ingresa al siguiente link: <%= login_url %>
+  </p>
+  <p>
+    Tené en cuenta que podés solicitar cambiar tu contraseña ingresando al siguiente link: <%= new_user_password_url %>
+  </p>
+<% end %>
 <p>¡Gracias por unirte y que tengas un buen día!</p>

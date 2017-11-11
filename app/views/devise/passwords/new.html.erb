@@ -1,17 +1,34 @@
 <%= bootstrap_devise_error_messages! %>
-<div class="panel panel-default devise-bs">
-  <div class="panel-heading">
-    <h4><%= t('.forgot_your_password', default: 'Forgot your password?') %></h4>
-  </div>
-  <div class="panel-body">
-    <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post, role: "form" }) do |f| %>
-      <div class="form-group">
-        <%= f.label :email %>
-        <%= f.email_field :email, autofocus: true, class: 'form-control' %>
-      </div>
+<div>
+  <a class="hiddenanchor" id="signin"></a>
 
-      <%= f.submit t('.send_me_reset_password_instructions', default: 'Send me reset password instructions'), class: 'btn btn-primary' %>
-    <% end %>
+  <div class="login_wrapper">
+    <div class="animate form login_form">
+      <section class="login_content">
+        <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post, role: 'form' }) do |f| %>
+            <h2>Recuperar Contraseña</h2>
+            <div class="form-group">
+              <%= f.email_field :email, autofocus: true, class: 'form-control', placeholder: 'Email', required: '' %>
+            </div>
+            <div>
+              <%= f.submit 'Recuperar Contraseña', class: 'btn btn-default submit' %>
+              <%= render 'devise/shared/links' %>
+            </div>
+
+            <div class="clearfix"></div>
+
+            <div class="separator">
+
+              <div class="clearfix"></div>
+              <br />
+
+              <div>
+                <h1><i class="fa fa-check"></i> Relevamientos ART</h1>
+                <p>©2017 Todos los derechos reservados. Relevamientos ART es un producto de Relevamientos Digitales</p>
+              </div>
+            </div>
+        <% end %>
+      </section>
+    </div>
   </div>
 </div>
-<%= render 'devise/shared/links' %>

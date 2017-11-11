@@ -14,9 +14,14 @@
 
 </head>
 
-<body class="nav-md">
-  <div class="container body">
-    <div class="main_container">
+<% if user_signed_in? %>
+  <body class="nav-md">
+    <div class="container body">
+      <div class="main_container">
+<% else %>
+  <body class="login">
+<% end %>
+
       <%= flash_messages %>
 
       <%= render 'shared/navigation' %>
@@ -25,8 +30,11 @@
 
       <%= render 'shared/footer' %>
 
-    </div>
-  </div>
+      <% if user_signed_in? %>
+      <% else %>
+          </div>
+        </div>
+      <% end %>
 
   <%= javascript_include_tag 'application' %>
 </body>

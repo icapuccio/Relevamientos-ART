@@ -45,7 +45,7 @@ class User < ApplicationRecord
     User.select { |user| user.assignable_for_visit?(visit) }
   end
 
-  def reset_password
+  def reset_password_instructions
     generated_password = Devise.friendly_token.first(8)
     update_attributes!(password: generated_password, password_confirmation: generated_password)
     WelcomeMailer.reset_password_send(self, generated_password).deliver
