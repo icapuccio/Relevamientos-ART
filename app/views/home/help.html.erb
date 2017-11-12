@@ -2,20 +2,33 @@
 <div class="right_col" role="main">
   <div class="row">
     <div class="col-md-12 col-sm-12 col-xs-12">
-      <div class="dashboard_graph">
+      <br class="dashboard_graph">
 
         <div class="row x_title">
           <div class="col-md-6">
-            <h2>Ayuda </h2>
+            <h3>Ayuda </h3>
           </div>
         </div>
         <h3>Tareas</h3>
-        <h4>Seguimiento de tareas</h4>
-        <h4>Asignación de tareas</h4>
+      <h4><i class="fa fa-check"></i> Seguimiento de tareas</h4>
+      <div style="text-indent: 20px;">En esta vista se permite visualizar todas las tareas cargadas en el sistema. Sobre esta vista, se puede realizar un filtro por cualquiera de los campos. Cada registro tiene un botón de acceso "Ver Detalle", el cual abre una nueva ventana con el detalle de la visita, en donde se pueden visualizar más información de la misma como los datos de la institución, tareas a realizar, preventor designado, imagenes, etc.</div>
+        <h4><i class="fa fa-check"></i>Asignación de tareas</h4>
+        <h4>Asignación manual</h4>
+      <div style="text-indent: 20px;">Esta vista muestra a las tareas cargadas en el sistema en estado <strong>"pendiente"</strong> o <strong>"asignada"</strong>. Según el estado, permite la ejecución de dos acciones.</div>
+        <div style="text-indent: 20px;">   <strong>Asignar:</strong> Esta acción se realiza sobre visitas pendientes. Al presionar el botón, se abre una ventana que permite seleccionar el preventor al que se quiere asignar la tarea.</div>
+        <div style="text-indent: 20px;">     <strong>Desasignar:</strong> Elimina la asignación de esa visista al preventor actual. En este caso, la visita vuelve a estar en estado pendiente, pudiendo asignarse a otro preventor.</div>
+        <h4>Asignación automática</h4>
+      <div style="text-indent: 20px;">Esta vista muestra todas las visitas pendientes del sistema. Posee un botón sobre el final del listado <strong>"Asignar automáticamente"</strong>, al presionarlo, se ejecuta en el servidor, el mega algoritmo de planificación optimizada. El cual determina las visitas pendientes, y según la prioridad y ubicación de las visitas, determina la mejor distribución de visitas entre los preventores disponibles. Todas las asignaciones se planifican para el día posterior a la corrida y cada preventor tiene una cantidad máxima de cinco visitas por día laboral.</div>
         <h3>Interfaz SRT</h3>
-        <h4>Obtener visitas a realizar</h4>
-        <h4>Enviar visitas realizadas</h4>
+        <h4><i class="fa fa-check"></i> Obtener visitas a realizar</h4>
+      <div style="text-indent: 20px;">Este botón realiza la sincronización con el sistema de visitas de la SRT. Al presionar el botón del menú, se acciona el proceso que se conecta con la SRT y obtiene las visitas a realizar en los próximos días. El sistema posee validaciones para evitar la carga de visitas erróneas. Por lo tanto, al finalizar la ejecución podrá visualizar una notificación en la parte superior de la pantalla indicando el resultado de la misma. EL resultado puede ser, la carga exitosa de todas las visitas del sistema de la SRT, una carga parcial de ciertas visitas, indicando el número de visitas exitosas y con errores, o por último, que todas las visitas del sistema de SRT contengan errores.</div>
+        <h4><i class="fa fa-check"></i> Enviar visitas realizadas</h4>
+      <div style="text-indent: 20px;">Desde esta vista se pueden visualizar todas las tareas en estado <strong>"completado"</strong> del sistema. El estado completado indica que el preventor correspondiente, finalizó la visita, envíando al sistema el resultado de las tareas, los PDF, imagenes y sonidos relacionados a la misma. Al presionar el botón <strong>"Enviar"</strong>, el sistema se conecta de manera automática con los servicios de la SRT, envíando el resultado de estas tareas completadas. En el sistema, las visitas enviadas cambian al estado <strong>"Enviada a SRT"</strong>, siendo este, su estado final dentro del sistema.</div>
         <h3>Informes </h3>
+        <h4><i class="fa fa-check"></i> Impresión de formularios</h4>
+      <div style="text-indent: 20px;">Esta sección, muestra el listado de visitas finalizadas en el sistema. Sobre cada una de ellas, se puede visualizar el detalle a través del botón "Ver detalle". Una vez dentro de la pantalla de detalle de visita, haciendo click en las tareas de la visita, va a poder visualizar el PDF con el resultado de cada una de ellas.</div>
+        <h4><i class="fa fa-check"></i> Informe de cumplimiento de Visitas</h4>
+      <div style="text-indent: 20px;">Esta vista muestra a las visitas finalizadas del sistema. Sobre el listado, existen dos botones para la exportación del mismo en los formatos de archivo CSV o PDF.</div>
       </div>
     </div>
   </div>
