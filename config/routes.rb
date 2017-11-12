@@ -9,8 +9,8 @@ Rails.application.routes.draw do
     get '/login' => 'devise/sessions#new', as: 'login'
   end
 
-  # root 'home#index'
   root 'visits#index'
+  get :help, to: 'home#help'
 
   resources :visits, only: [:index, :show, :edit, :update] do
     post :assignment, to: 'visits#assign'
