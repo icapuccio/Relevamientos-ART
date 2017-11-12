@@ -1,7 +1,7 @@
 ActiveAdmin.register Institution do
   permit_params :name, :address, :street, :city, :province, :number, :surface, :workers_count,
                 :cuit, :activity, :institutions_count, :contract, :postal_code, :phone_number,
-                :longitude, :latitude, :zone_id
+                :longitude, :latitude, :zone_id, :contact, :email, :ciiu, :afip_cod
 
   controller do
     def destroy
@@ -46,6 +46,10 @@ ActiveAdmin.register Institution do
       row :zone
       row :latitude
       row :longitude
+      row :contact
+      row :email
+      row :ciiu
+      row :afip_cod
     end
   end
 
@@ -69,6 +73,10 @@ ActiveAdmin.register Institution do
       f.input :institutions_count
       f.input :contract
       f.input :phone_number
+      f.input :contact
+      f.input :email
+      f.input :ciiu
+      f.input :afip_cod
     end
     f.actions
   end
