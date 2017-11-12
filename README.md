@@ -32,7 +32,7 @@ Details of a visit: `GET /visits/:id`
 
 Complete a Visit (with a body): `PUT /visits/:visit_id/completion`
 
-Assign Visits (with a body): `POST /visits/auto_assignments`
+Assign Visits (with a body): `POST /visits/auto_assignments2`
 - Body: `{ "users":[1,2,3], "visits":[54,43,32] }`
 
 ### Tasks 
