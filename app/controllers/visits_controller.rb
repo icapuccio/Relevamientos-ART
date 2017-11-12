@@ -60,6 +60,13 @@ class VisitsController < ApplicationController
     auto_assign_response
   end
 
+  def auto_assignments2
+    @visits = Visit.where(status: :pending).order(:priority)
+    @users = User.where(role: :preventor)
+    auto_assignment_process
+    auto_assign_response
+  end
+
   def auto_assignment_process
     @assigned_visits = 0
     @pending_visits = 0
