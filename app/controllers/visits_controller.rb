@@ -18,7 +18,11 @@ class VisitsController < ApplicationController
   end
 
   def completed_report_index
-    @visits = Visit.includes(:institution, :user).completed
+    completed_visits
+  end
+
+  def report_index
+    completed_visits
   end
 
   def finished_report_index
@@ -81,6 +85,10 @@ class VisitsController < ApplicationController
   end
 
   private
+
+  def completed_visits
+    @visits = Visit.includes(:institution, :user).completed
+  end
 
   def create_visits(response_body)
     @visits_created = 0

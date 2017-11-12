@@ -50,12 +50,12 @@ assigned_visit_cap_2 = Visit.create!(institution: institution, user: preventor_u
                                      to_visit_on: Date.today , external_id: 5)
 
 completed_cap_task = Task.create!(task_type: :cap, status: :pending, visit: assigned_visit_cap )
-cap_result = CapResult.create!(task: completed_cap_task, course_name: 'Optimización de Salidas de emergencia', contents: 'Salidas de emergencia', methodology: "agile")
+cap_result = CapResult.create!(task: completed_cap_task, url_cloud: 'http://www.pdf995.com/samples/pdf.pdf', course_name: 'Optimización de Salidas de emergencia', contents: 'Salidas de emergencia', methodology: "agile")
 Attendee.create!(name:'Julian', last_name:'Alvarez', cuil:'23-12345621-6', sector: 'Seguridad e higiene', cap_result: cap_result)
 completed_cap_task.complete(DateTime.yesterday)
 
 completed_cap_task_2 = Task.create!(task_type: :cap, status: :pending, visit: assigned_visit_cap_2 )
-cap_result_2 = CapResult.create!(task: completed_cap_task_2, course_name: 'Como aprobar proyecto?', contents: 'Salidas de emergencia', methodology: "agile" )
+cap_result_2 = CapResult.create!(task: completed_cap_task_2, url_cloud: 'http://www.pdf995.com/samples/pdf.pdf', course_name: 'Como aprobar proyecto?', contents: 'Salidas de emergencia', methodology: "agile" )
 Attendee.create!(name:'Tomas', last_name:'Capuccio', cuil:'23-123235621-6', sector: '5to año utn frba', cap_result: cap_result_2)
 completed_cap_task_2.complete(DateTime.yesterday)
 
@@ -69,16 +69,18 @@ assigned_visit_rar_2 = Visit.create!(institution: institution, user: preventor_u
                                      to_visit_on: Date.today, external_id: 8)
 
 completed_rar_task = Task.create!(task_type: :rar, status: :pending, visit: assigned_visit_rar )
-rar_result = RarResult.create!(task: completed_rar_task)
+rar_result = RarResult.create!(task: completed_rar_task, url_cloud: 'http://www.pdf995.com/samples/pdf.pdf')
 Worker.create!(name:'Julian', last_name:'Alvarez', cuil:'23-12345621-6', sector: 'Seguridad e higiene', rar_result: rar_result)
 completed_rar_task.complete(DateTime.yesterday)
 
 completed_rar_task_2 = Task.create!(task_type: :rar, status: :pending, visit: assigned_visit_rar_2 )
-rar_result_2 = RarResult.create!(task: completed_rar_task_2)
+rar_result_2 = RarResult.create!(task: completed_rar_task_2, url_cloud: 'http://www.pdf995.com/samples/pdf.pdf')
 worker_1 = Worker.create!(name:'Tomas', last_name:'Capuccio', cuil:'23-123235621-6', sector: 'minero', rar_result: rar_result_2)
 Risk.create!(description:'derrumbe', worker: worker_1)
 completed_rar_task_2.complete(DateTime.yesterday)
 Task.create!(task_type: :rar, status: :pending, visit: pending_visit_rar )
+
+pending_rar_task = Task.create!(task_type: :rar, status: :pending, visit: assigned_visit_rar_2 )
 
 # Visits and Tasks rgrl
 assigned_visit_rgrl = Visit.create!(institution: institution, user: preventor_user, status: :assigned, priority: 20,
@@ -88,13 +90,13 @@ assigned_visit_rgrl_2 = Visit.create!(institution: institution, user: preventor_
 pending_visit_rgrl = Visit.create!(institution: institution, status: :pending, priority: 8, external_id: 11)
 
 completed_rgrl_task = Task.create!(task_type: :rgrl, status: :pending, visit: assigned_visit_rgrl )
-rgrl_result = RgrlResult.create!(task: completed_rgrl_task )
+rgrl_result = RgrlResult.create!(task: completed_rgrl_task, url_cloud: 'http://www.pdf995.com/samples/pdf.pdf')
 Question.create!(description:'Quien soy', answer:'El Junior de la muelte', category: 'Maniiiel', rgrl_result: rgrl_result)
 
 completed_rgrl_task.complete(DateTime.yesterday)
 
 completed_rgrl_task_2 = Task.create!(task_type: :rgrl, status: :pending, visit: assigned_visit_rgrl_2 )
-rgrl_result_2 = RgrlResult.create!(task: completed_rgrl_task_2)
+rgrl_result_2 = RgrlResult.create!(task: completed_rgrl_task_2, url_cloud: 'http://www.pdf995.com/samples/pdf.pdf')
 Question.create!(description:'quien es el mas poronga en este conventillo del orto', answer:'yo soy el mas poronga', category: 'okupas', rgrl_result: rgrl_result_2)
 completed_rgrl_task_2.complete(DateTime.yesterday)
 Task.create!(task_type: :rgrl, status: :pending, visit: pending_visit_rgrl )
@@ -104,7 +106,7 @@ completed_visit_rgrl = Visit.create!(institution: institution, user: preventor_u
                                 to_visit_on: Date.yesterday, completed_at: Date.yesterday, external_id: 12)
 
 completed_rgrl_task2 = Task.create!(task_type: :rgrl, status: :pending, visit: completed_visit_rgrl )
-rgrl_result2 = RgrlResult.create!(task: completed_rgrl_task2 )
+rgrl_result2 = RgrlResult.create!(task: completed_rgrl_task2, url_cloud: 'http://www.pdf995.com/samples/pdf.pdf' )
 Question.create!(description:'Quien soy', answer:'El Junior de la muelte', category: 'Maniiiel', rgrl_result: rgrl_result2)
 completed_rgrl_task2.complete(DateTime.yesterday)
 
