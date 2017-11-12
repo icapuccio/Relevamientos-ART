@@ -50,6 +50,35 @@ class VisitsController < ApplicationController
     process_assignment
   end
 
+  def auto_assignments
+    visits_by_ids
+    users_by_ids
+    # TODO: SETEAR URL CORRECTA
+    message = 'Se debe seleccionar al menos una visita y un preventor'
+    return redirect_to assignment_url, alert: message if invalid_auto_assigment_params
+    auto_assignment_process
+    auto_assign_response
+  end
+
+  def auto_assignments2
+    @visits = Visit.where(status: :pending).order(:priority)
+    @users = User.where(role: :preventor)
+    auto_assignment_process
+    auto_assign_response
+  end
+
+  def auto_assignment_process
+    @assigned_visits = 0
+    @pending_visits = 0
+    @visits.each do |visit|
+      if visit.assign_to_better_user(@users)
+        @assigned_visits += 1
+      else
+        @pending_visits += 1
+      end
+    end
+  end
+
   def remove_assignment
     return if invalid_remotion?
     if visit.remove_assignment
@@ -62,6 +91,8 @@ class VisitsController < ApplicationController
   def complete
     return render json: { error: 'Fecha de finalización requerida' }, status: :bad_request unless
       complete_date_present?
+    @msg = 'La visita ya se encuentra finalizada'
+    return render json: { error: @msg }, status: :unprocessable_entity if visit.finished?
     complete_response
   end
 
@@ -90,6 +121,18 @@ class VisitsController < ApplicationController
     @visits = Visit.includes(:institution, :user).completed
   end
 
+  def invalid_auto_assigment_params
+    !@visits.present? || !@visits.size.positive? || !@users.present? || !@users.size.positive?
+  end
+
+  def visits_by_ids
+    @visits = Visit.where(id: params[:visits]).order(:priority) if params[:visits].present?
+  end
+
+  def users_by_ids
+    @users = User.find(params[:users]) if params[:users].present?
+  end
+
   def create_visits(response_body)
     @visits_created = 0
     @visits_errors = 0
@@ -109,6 +152,17 @@ class VisitsController < ApplicationController
     end
   rescue StandardError
     @visits_errors += 1
+  end
+
+  def auto_assign_response
+    @message = "Se asignaron exitosamente #{@assigned_visits} visitas."
+    return redirect_to assignment_url, notice: @message unless @pending_visits.positive?
+    @message = "Se asignaron exitosamente #{@assigned_visits} visitas. "\
+      "#{@pending_visits} visitas no pudieron ser asignadas."
+    return redirect_to assignment_url, alert: @message if @assigned_visits.positive?
+    @message = 'No se pudo asignar ninguna visita de forma automática. Intente realizar'\
+      ' la asignación de forma manual.'
+    redirect_to assignment_url, alert: @message
   end
 
   def create_visits_response

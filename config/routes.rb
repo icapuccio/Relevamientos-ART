@@ -22,6 +22,8 @@ Rails.application.routes.draw do
       get :finished_report, to: 'visits#finished_report_index'
       get :report, to: 'visits#report_index'
       post :syncro_visits, to: 'visits#syncro_visits'
+      post :auto_assignments, to: 'visits#auto_assignments'
+      post :auto_assignments2, to: 'visits#auto_assignments2'
     end
   end
   resources :institutions, only: [:show]
