@@ -17,6 +17,16 @@ class VisitsController < ApplicationController
                    .assignable.order(status: :asc, priority: :asc, id: :asc)
   end
 
+  def automatic_assignment_index
+    @visits = Visit.includes(:institution, :user)
+                   .status_pending.order(priority: :asc, id: :asc)
+    @preventors = User.includes(:zone).role_preventor
+  end
+
+  def auto_assignments
+    redirect_to automatic_assignment_index_visits_url, alert: "Alert de prueba"
+  end
+
   def completed_report_index
     @visits = Visit.includes(:institution, :user).completed
   end

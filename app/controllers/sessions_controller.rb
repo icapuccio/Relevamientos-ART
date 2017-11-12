@@ -5,10 +5,8 @@ class SessionsController < Devise::SessionsController
   def create
     respond_to do |format|
       format.html do
-        # TODO: Revisar si esta validacion se hara. Tener en cuenta que impide el cambio
-        #   de password en el mail de bienvenida
-        # return redirect_to login_url, alert: 'El rol asociado a su usuario no tiene permisos
-        #   para acceder' if authenticated_user_preventor?
+        return redirect_to login_url, alert: 'El rol asociado a su usuario no tiene permisos' \
+          ' para acceder' if authenticated_user_preventor?
         super
       end
       format.json do

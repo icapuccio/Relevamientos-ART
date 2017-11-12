@@ -17,6 +17,8 @@ Rails.application.routes.draw do
     put :completion, to: 'visits#complete'
     collection do
       get :assignment_index
+      get :automatic_assignment_index
+      post :auto_assignments
       post :completed_report, to: 'visits#completed_report'
       get :completed_report, to: 'visits#completed_report_index'
       get :finished_report, to: 'visits#finished_report_index'

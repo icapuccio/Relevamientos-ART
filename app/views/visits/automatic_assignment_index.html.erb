@@ -1,0 +1,122 @@
+<!-- page content -->
+<div class="right_col" role="main">
+  <div class="">
+    <div class="page-title">
+      <div class="title_left">
+        <h3><%= t('activerecord.models.visit.automatic_assignment', default: 'Visits') %></h3>
+      </div>
+    </div>
+
+    <div class="clearfix"></div>
+    <div class="col-md-12 col-sm-12 col-xs-12">
+      <div class="x_panel">
+        <div class="x_title">
+          <h2><%= t('activerecord.models.visit.other', default: 'Visits') %><small>Sin preventor asignado</small></h2>
+          <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+          <!--<p>Add class <code>bulk_action</code> to table for bulk actions options on row select</p>-->
+          <div class="table-responsive">
+            <table class="table table-striped jambo_table">
+              <thead>
+              <tr class="headings">
+                <!--<th>-->
+                  <!--<input type="checkbox" id="check-all" class="flat">-->
+                <!--</th>-->
+                <th class="column-title">Visita </th>
+                <th class="column-title">Establecimiento </th>
+                <th class="column-title">Zona </th>
+                <th class="column-title">Prioridad </th>
+                <th class="column-title no-link last"><span class="nobr">Estado</span>
+                </th>
+                <!--<th class="bulk-actions" colspan="5">-->
+                  <!--<a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>-->
+                <!--</th>-->
+              </tr>
+              </thead>
+
+              <tbody>
+              <%= render 'no_results' %>
+              <% @visits.each do |visit| %>
+                  <!-- TODO: intercalar odd pointer / even pointer -->
+                  <tr class="odd pointer">
+                    <!--<td class="a-center ">-->
+                      <!--<input type="checkbox" class="flat" name="table_records">-->
+                    <!--</td>-->
+                    <td><%= visit.id %></td>
+                    <!-- TODO: Agregar navegación a Establecimiento -->
+                    <td><%= visit.institution.name %></td>
+                    <td><%= visit.institution.zone.name %></td>
+                    <td><%= visit.priority %></td>
+                    <td class="last"><%= Visit.human_attribute_name("status.#{visit.status}") %></td>
+                    <!--<td class=" last"><a href="#">Ver</a>-->
+                  </tr>
+              <% end %>
+              </tbody>
+            </table>
+          </div>
+
+          <!--<div class="ln_solid"></div>-->
+
+          <!--<div class="col-md-12 col-sm-12 col-xs-12">-->
+            <!--<%= button_to "Asignar automáticamente", auto_assignments_visits_path, method: :post, class: "btn btn-primary pull-right" %>-->
+          <!--</div>-->
+        </div>
+      </div>
+
+      <div class="x_panel">
+        <div class="x_title">
+          <h2>Preventores <small>Disponibles para mañana</small></h2>
+          <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+          <!--<p>Add class <code>bulk_action</code> to table for bulk actions options on row select</p>-->
+          <div class="table-responsive">
+            <table class="table table-striped jambo_table">
+              <thead>
+              <tr class="headings">
+                <!--<th>-->
+                <!--<input type="checkbox" id="check-all" class="flat">-->
+                <!--</th>-->
+                <th class="column-title">Preventor </th>
+                <th class="column-title">Nombre </th>
+                <th class="column-title">Zona </th>
+                <th class="column-title no-link last"><span class="nobr">Visitas asignadas</span>
+                </th>
+                <!--<th class="bulk-actions" colspan="5">-->
+                <!--<a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>-->
+                <!--</th>-->
+              </tr>
+              </thead>
+
+              <tbody>
+              <%= render 'no_results' %>
+              <% @preventors.each do |preventor| %>
+                  <!-- TODO: intercalar odd pointer / even pointer -->
+                  <tr class="odd pointer">
+                    <!--<td class="a-center ">-->
+                    <!--<input type="checkbox" class="flat" name="table_records">-->
+                    <!--</td>-->
+                    <td><%= preventor.id %></td>
+                    <!-- TODO: Agregar navegación a Establecimiento -->
+                    <td><%= preventor.full_name %></td>
+                    <td><%= preventor.zone.name %></td>
+                    <td class="last"><%= preventor.assigned_visits_count_for_tomorrow %></td>
+                    <!--<td class=" last"><a href="#">Ver</a>-->
+                  </tr>
+              <% end %>
+              </tbody>
+            </table>
+          </div>
+
+          <!--<div class="ln_solid"></div>-->
+
+          <div class="col-md-12 col-sm-12 col-xs-12">
+            <%= button_to "Asignar automáticamente", auto_assignments_visits_path, method: :post, class: "btn btn-success pull-right" %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- /page content -->
