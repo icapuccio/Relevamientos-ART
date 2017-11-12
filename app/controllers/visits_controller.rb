@@ -17,6 +17,12 @@ class VisitsController < ApplicationController
                    .assignable.order(status: :asc, priority: :asc, id: :asc)
   end
 
+  def automatic_assignment_index
+    @visits = Visit.includes({ institution: [:zone] }, :user)
+                   .status_pending.order(priority: :asc, id: :asc)
+    @preventors = User.includes(:zone).role_preventor
+  end
+
   def completed_report_index
     completed_visits
   end
@@ -55,7 +61,8 @@ class VisitsController < ApplicationController
     users_by_ids
     # TODO: SETEAR URL CORRECTA
     message = 'Se debe seleccionar al menos una visita y un preventor'
-    return redirect_to assignment_url, alert: message if invalid_auto_assigment_params
+    return redirect_to automatic_assignment_visits_url, alert: message if
+        invalid_auto_assigment_params
     auto_assignment_process
     auto_assign_response
   end
@@ -82,9 +89,9 @@ class VisitsController < ApplicationController
   def remove_assignment
     return if invalid_remotion?
     if visit.remove_assignment
-      redirect_to assignment_index_visits_url, notice: 'Visita desasignada.'
+      redirect_to assignment_visits_url, notice: 'Visita desasignada.'
     else
-      redirect_to assignment_index_visits_url, alert: visit.errors.full_messages.to_sentence
+      redirect_to assignment_visits_url, alert: visit.errors.full_messages.to_sentence
     end
   end
 
@@ -156,13 +163,15 @@ class VisitsController < ApplicationController
 
   def auto_assign_response
     @message = "Se asignaron exitosamente #{@assigned_visits} visitas."
-    return redirect_to assignment_url, notice: @message unless @pending_visits.positive?
+    return redirect_to automatic_assignment_visits_url, notice: @message unless
+        @pending_visits.positive?
     @message = "Se asignaron exitosamente #{@assigned_visits} visitas. "\
       "#{@pending_visits} visitas no pudieron ser asignadas."
-    return redirect_to assignment_url, alert: @message if @assigned_visits.positive?
+    return redirect_to automatic_assignment_visits_url, alert: @message if
+        @assigned_visits.positive?
     @message = 'No se pudo asignar ninguna visita de forma automática. Intente realizar'\
       ' la asignación de forma manual.'
-    redirect_to assignment_url, alert: @message
+    redirect_to automatic_assignment_visits_url, alert: @message
   end
 
   def create_visits_response
@@ -231,7 +240,7 @@ class VisitsController < ApplicationController
   end
 
   def assignment_url
-    assignment_index_visits_url
+    assignment_visits_url
   end
 
   def process_assignment

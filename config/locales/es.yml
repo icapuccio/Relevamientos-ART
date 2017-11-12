@@ -106,8 +106,8 @@ es:
         assignments: Asignación de Visitas
         completed_inform: Visitas Finalizadas a Informar
         finished_inform: Informe de cumplimiento de Visitas
+        automatic_assignment: Planificador de Visitas
         reports: Impresión de formularios
-        assigments: Asignación de Visitas
     attributes:
       visit/status:
         pending: Pendiente

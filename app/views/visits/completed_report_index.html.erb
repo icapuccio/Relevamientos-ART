@@ -19,7 +19,7 @@
           <h2><%= t('activerecord.models.visit.other', default: 'Visits') %> <small>Solo lectura</small></h2>
         </ul>
         <div class="clearfix"></div>
-      </div>
+        </div>
 
       <div class="x_content">
           <div class="table-responsive">
@@ -56,11 +56,10 @@
               </tbody>
             </table>
           </div>
-        </div>
-        <div class="ln_solid"></div>
-          <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-11">
-            <%= button_to "Enviar", completed_report_visits_path, method: :post, class: "btn btn-primary" %>
+          <div class="col-md-12 col-sm-12 col-xs-12">
+            <%= button_to "Enviar", completed_report_visits_path, method: :post, class: "btn btn-success pull-right" %>
           </div>
+        </div>
         </div>
       </div>
     </div>

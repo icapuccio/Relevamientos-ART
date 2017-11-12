@@ -33,6 +33,10 @@ class User < ApplicationRecord
     "#{name} #{last_name}"
   end
 
+  def assigned_visits_count_for_tomorrow
+    visits.assigned_for_tomorrow.count
+  end
+
   def assignable?
     role_preventor? && visits.assigned_for_tomorrow.count < MAX_NUMBER_OF_VISITS
   end
