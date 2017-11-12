@@ -1,6 +1,6 @@
 class Task < ApplicationRecord
   belongs_to :visit
-  belongs_to :result, polymorphic: true
+  belongs_to :result, polymorphic: true, dependent: :destroy
 
   validates :status, :task_type, :visit, presence: true
   enum status: [:pending, :completed], _prefix: true
@@ -42,19 +42,19 @@ class Task < ApplicationRecord
   end
 
   def create_result_rgrl(params)
-    rgrl_result = RgrlResult.create!(task: self)
+    rgrl_result = RgrlResult.create!(url_cloud: params[:url_cloud], task: self)
     rgrl_result.create_questions(params[:questions])
   end
 
   def create_result_rar(params)
-    rar_result = RarResult.create!(task: self)
+    rar_result = RarResult.create!(url_cloud: params[:url_cloud], task: self)
     rar_result.create_workers(params[:working_men])
   end
 
   def create_result_cap(params)
-    cap_result = CapResult.create!(task: self, contents: params[:contents],
+    cap_result = CapResult.create!(url_cloud: params[:url_cloud], contents: params[:contents],
                                    course_name: params[:course_name],
-                                   methodology: params[:methodology])
+                                   methodology: params[:methodology], task: self)
     cap_result.create_attendees(params[:attendees])
   end
 

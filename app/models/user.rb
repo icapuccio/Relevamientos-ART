@@ -38,7 +38,11 @@ class User < ApplicationRecord
   end
 
   def assignable?
-    role_preventor? && visits.not_finished.count < MAX_NUMBER_OF_VISITS
+    role_preventor? && visits.assigned_for_tomorrow.count < MAX_NUMBER_OF_VISITS
+  end
+
+  def more_not_finished_visits_than?(user)
+    visits.assigned_for_tomorrow.count > user.visits.assigned_for_tomorrow.count
   end
 
   def assignable_for_visit?(visit)

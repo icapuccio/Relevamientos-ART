@@ -15,7 +15,7 @@ class Visit < ApplicationRecord
   scope :status, ->(status) { where status: status }
   scope :user_id, ->(user) { where user_id: user }
   scope :assignable, -> { where(status: :pending).or(where(status: :assigned)) }
-  scope :not_finished, -> { where.not(status: :completed).where.not(status: :sent) }
+  scope :assigned_for_tomorrow, -> { where(to_visit_on: Date.tomorrow, status: :assigned) }
   scope :completed, -> { where status: :completed }
   scope :finished, -> { where(status: :completed).or(where(status: :sent)) }
   scope :for_tomorrow, -> { where(status: :assigned).where(to_visit_on: Date.tomorrow) }
@@ -39,6 +39,18 @@ class Visit < ApplicationRecord
                       observations: params[:observations])
   end
 
+  def assign_to_better_user(users)
+    better_user = nil
+    users.each do |potential_usr|
+      if potential_usr.assignable_for_visit?(self)
+        next better_user = potential_usr unless better_user.present?
+        better_user = potential_usr if better_user.more_not_finished_visits_than?(potential_usr)
+      end
+    end
+    assign_to(better_user) if better_user.present?
+    assigned?
+  end
+
   def status_sent
     update_attributes!(status: 'sent')
   end
@@ -53,6 +65,10 @@ class Visit < ApplicationRecord
 
   def finished?
     status_completed?
+  end
+
+  def assigned?
+    status_assigned?
   end
 
   def cap_task_related?

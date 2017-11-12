@@ -1,7 +1,7 @@
 class CapResult < ApplicationRecord
   has_one :task, as: :result
-  has_many :attendees
-  validates :methodology, :course_name, :contents, :task, presence: true
+  has_many :attendees, dependent: :destroy
+  validates :methodology, :course_name, :contents, :task, :url_cloud, presence: true
 
   def valid_result?
     attendees.size.positive?

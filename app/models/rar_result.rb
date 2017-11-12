@@ -1,7 +1,7 @@
 class RarResult < ApplicationRecord
   has_one :task, as: :result
-  has_many :workers
-  validates :task, presence: true
+  has_many :workers, dependent: :destroy
+  validates :task, :url_cloud, presence: true
 
   def valid_result?
     workers.size.positive?

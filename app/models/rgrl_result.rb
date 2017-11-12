@@ -1,7 +1,7 @@
 class RgrlResult < ApplicationRecord
   has_one :task, as: :result
-  has_many :questions
-  validates :task, presence: true
+  has_many :questions, dependent: :destroy
+  validates :task, :url_cloud, presence: true
 
   def valid_result?
     questions.size.positive?
