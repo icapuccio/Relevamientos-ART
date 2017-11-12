@@ -524,7 +524,7 @@ describe VisitsController, type: :controller do
       end
       it 'responds with a alert' do
         expect(response.flash.alert).to eq 'No se pudo asignar ninguna visita '\
-      'automáticamente. Intente realizar la asignación de forma manual.'
+      'de forma automática. Intente realizar la asignación de forma manual.'
       end
       it 'the visits did not change status ' do
         expect(p_visit_31.reload.status).to eq 'pending'
