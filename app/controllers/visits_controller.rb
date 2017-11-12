@@ -158,10 +158,10 @@ class VisitsController < ApplicationController
     @message = "Se asignaron exitosamente #{@assigned_visits} visitas."
     return redirect_to assignment_url, notice: @message unless @pending_visits.positive?
     @message = "Se asignaron exitosamente #{@assigned_visits} visitas. "\
-      "#{@pending_visits} visitas no fueron asignadas."
+      "#{@pending_visits} visitas no pudieron ser asignadas."
     return redirect_to assignment_url, alert: @message if @assigned_visits.positive?
-    @message = 'No se pudo asignar ninguna visita automáticamente. Intente con otra lista de'\
-      ' preventores.'
+    @message = 'No se pudo asignar ninguna visita de forma automática. Intente realizar'\
+      ' la asignación de forma manual.'
     redirect_to assignment_url, alert: @message
   end
 
