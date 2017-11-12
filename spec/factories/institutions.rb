@@ -16,6 +16,10 @@ FactoryGirl.define do
     longitude { Faker::Address.longitude }
     latitude { Faker::Address.latitude }
     address { Faker:: Address.full_address }
+    contact { Faker:: GameOfThrones.character }
+    email { Faker:: Internet.email }
+    afip_cod { Faker:: GameOfThrones.dragon }
+    ciiu { Faker:: GameOfThrones.city }
     zone
   end
 end
