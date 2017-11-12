@@ -4,15 +4,55 @@ require 'webmock/rspec'
 describe VisitsController, type: :controller do
   let!(:zone_1) { create(:zone) }
   let!(:zone_2) { create(:zone) }
+  let!(:zone_3) { create(:zone) }
+  let!(:zone_4) { create(:zone) }
   let!(:institution_1) { create(:institution, zone: zone_1) }
   let!(:institution_2) { create(:institution, zone: zone_2) }
+  let!(:institution_3) { create(:institution, zone: zone_3) }
+  let!(:institution_4) { create(:institution, zone: zone_4) }
+  let!(:institution_11) { create(:institution, zone: zone_1) }
+  let!(:institution_12) { create(:institution, zone: zone_1) }
+  let!(:institution_13) { create(:institution, zone: zone_1) }
+  let!(:institution_14) { create(:institution, zone: zone_1) }
+  let!(:institution_15) { create(:institution, zone: zone_1) }
+  let!(:institution_21) { create(:institution, zone: zone_2) }
+  let!(:institution_22) { create(:institution, zone: zone_2) }
+  let!(:institution_23) { create(:institution, zone: zone_2) }
+  let!(:institution_24) { create(:institution, zone: zone_2) }
+  let!(:institution_31) { create(:institution, zone: zone_3) }
+  let!(:institution_32) { create(:institution, zone: zone_3) }
+  let!(:institution_33) { create(:institution, zone: zone_3) }
+  let!(:institution_34) { create(:institution, zone: zone_3) }
+  let!(:institution_41) { create(:institution, zone: zone_4) }
+  let!(:institution_42) { create(:institution, zone: zone_4) }
   let(:user_1) { create(:user, :preventor, zone: zone_1) }
+  let(:user_11) { create(:user, :preventor, zone: zone_1) }
+  let(:user_12) { create(:user, :preventor, zone: zone_1) }
   let(:user_2) { create(:user, :preventor, zone: zone_2) }
+  let(:user_21) { create(:user, :preventor, zone: zone_2) }
+  let(:user_22) { create(:user, :preventor, zone: zone_2) }
+  let(:user_3) { create(:user, :preventor, zone: zone_3) }
+  let(:user_4) { create(:user, :preventor, zone: zone_4) }
   let!(:assigned_visit) do
     create(:visit, user: user_2, to_visit_on: Time.zone.today,
                    status: 'assigned', institution: institution_2)
   end
-  let!(:pending_visit) { create(:visit, status: 'pending', institution: institution_1) }
+  let!(:p_visit) { create(:visit, status: 'pending', priority: 0, institution: institution_1) }
+  let!(:p_visit_11) { create(:visit, status: 'pending', priority: 1, institution: institution_11) }
+  let!(:p_visit_12) { create(:visit, status: 'pending', priority: 2, institution: institution_12) }
+  let!(:p_visit_13) { create(:visit, status: 'pending', priority: 3, institution: institution_13) }
+  let!(:p_visit_14) { create(:visit, status: 'pending', priority: 4, institution: institution_14) }
+  let!(:p_visit_15) { create(:visit, status: 'pending', priority: 5, institution: institution_15) }
+  let!(:p_visit_21) { create(:visit, status: 'pending', institution: institution_21) }
+  let!(:p_visit_22) { create(:visit, status: 'pending', institution: institution_22) }
+  let!(:p_visit_23) { create(:visit, status: 'pending', institution: institution_23) }
+  let!(:p_visit_24) { create(:visit, status: 'pending', institution: institution_24) }
+  let!(:p_visit_31) { create(:visit, status: 'pending', institution: institution_31) }
+  let!(:p_visit_32) { create(:visit, status: 'pending', institution: institution_32) }
+  let!(:p_visit_33) { create(:visit, status: 'pending', institution: institution_33) }
+  let!(:p_visit_34) { create(:visit, status: 'pending', institution: institution_34) }
+  let!(:p_visit_41) { create(:visit, status: 'pending', institution: institution_41) }
+  let!(:p_visit_42) { create(:visit, status: 'pending', institution: institution_42) }
 
   before do
     request.headers['Accept'] = 'application/json'
@@ -30,7 +70,7 @@ describe VisitsController, type: :controller do
         expect(response).to have_http_status(:ok)
       end
       it 'returns all the visits' do
-        expect(response_body.size).to eq(3)
+        expect(response_body.size).to eq(18)
       end
     end
     context 'when user_id filter is sent' do
@@ -83,7 +123,7 @@ describe VisitsController, type: :controller do
       end
 
       it 'returns all the visits' do
-        expect(response_body.size).to eq(3)
+        expect(response_body.size).to eq(18)
       end
     end
 
@@ -231,7 +271,7 @@ describe VisitsController, type: :controller do
       end
       context 'and have not status assigned' do
         before do
-          post :remove_assignment, params: { visit_id: pending_visit.id }
+          post :remove_assignment, params: { visit_id: p_visit.id }
         end
         it 'responds found' do
           expect(response.response_code).to eq 302
@@ -442,6 +482,152 @@ describe VisitsController, type: :controller do
       end
       it 'The valid visit was created' do
         expect(!Visit.where(external_id: 201).present?)
+      end
+    end
+  end
+  describe 'POST #auto_assignments' do
+    before do
+      request.headers['Content-Type'] = 'text/html'
+    end
+    context 'when the user did not select visits to assign' do
+      before do
+        post :auto_assignments, params: { visits: [], users: [user_1.id] }
+      end
+      it 'responds found' do
+        expect(response.response_code).to eq 302
+      end
+      it 'responds with a alert' do
+        expect(response.flash.alert).to eq 'Se debe seleccionar al menos una visita'\
+        ' y un preventor'
+      end
+    end
+    context 'when the user did not select users to assign' do
+      before do
+        post :auto_assignments, params: { visits: [p_visit.id], users: [] }
+      end
+      it 'responds found' do
+        expect(response.response_code).to eq 302
+      end
+      it 'responds with a alert' do
+        expect(response.flash.alert).to eq 'Se debe seleccionar al menos una visita'\
+        ' y un preventor'
+      end
+    end
+    context 'the user selects 2 tasks for one zone and 1 user for a different zone' do
+      before do
+        post :auto_assignments, params: { visits: [p_visit_31.id, p_visit_21.id],
+                                          users: [user_4.id, user_1.id] }
+      end
+      it 'responds found' do
+        expect(response.response_code).to eq 302
+      end
+      it 'responds with a alert' do
+        expect(response.flash.alert).to eq 'No se pudo asignar ninguna visita '\
+      'automáticamente. Intente con otra lista de preventores.'
+      end
+      it 'the visits did not change status ' do
+        expect(p_visit_31.reload.status).to eq 'pending'
+        expect(p_visit_21.reload.status).to eq 'pending'
+      end
+    end
+    context 'the user selects 6 tasks for the same zone and 1 user for that zone' do
+      before do
+        post :auto_assignments, params: { visits: [p_visit.id, p_visit_11.id,
+                                                   p_visit_12.id, p_visit_13.id,
+                                                   p_visit_14.id, p_visit_15.id],
+                                          users: [user_3.id, user_1.id] }
+      end
+      it 'responds found' do
+        expect(response.response_code).to eq 302
+      end
+      it 'responds with a alert' do
+        expect(response.flash.alert).to eq 'Se asignaron exitosamente 5 visitas. '\
+      '1 visitas no fueron asignadas.'
+      end
+      it 'the visit whit less priority did not change ' do
+        expect(p_visit_15.reload.status).to eq 'pending'
+      end
+      it 'the 5 visits whit more priority were assigned' do
+        expect(p_visit.reload.status).to eq 'assigned'
+        expect(p_visit_11.reload.status).to eq 'assigned'
+        expect(p_visit_12.reload.status).to eq 'assigned'
+        expect(p_visit_13.reload.status).to eq 'assigned'
+        expect(p_visit_14.reload.status).to eq 'assigned'
+      end
+    end
+    context 'the user selects 6 tasks for the same zone and 3 users for that zone' do
+      before do
+        post :auto_assignments, params: { visits: [p_visit.id, p_visit_11.id,
+                                                   p_visit_12.id, p_visit_13.id,
+                                                   p_visit_14.id, p_visit_15.id],
+                                          users: [user_12.id, user_1.id, user_11.id, user_3.id] }
+      end
+      it 'responds found' do
+        expect(response.response_code).to eq 302
+      end
+      it 'responds with a alert' do
+        expect(response.flash.notice).to eq 'Se asignaron exitosamente 6 visitas.'
+      end
+      it 'the 6 visits  were assigned' do
+        expect(p_visit.reload.status).to eq 'assigned'
+        expect(p_visit_11.reload.status).to eq 'assigned'
+        expect(p_visit_12.reload.status).to eq 'assigned'
+        expect(p_visit_13.reload.status).to eq 'assigned'
+        expect(p_visit_14.reload.status).to eq 'assigned'
+        expect(p_visit_15.reload.status).to eq 'assigned'
+      end
+      it 'each user has 2 tasks assigned' do
+        expect(user_12.visits.size).to eq(2)
+        expect(user_1.visits.size).to eq(2)
+        expect(user_11.visits.size).to eq(2)
+      end
+    end
+    context 'the user selects 16 tasks and 5 users' do
+      before do
+        post :auto_assignments, params: { visits: [p_visit.id, p_visit_11.id,
+                                                   p_visit_12.id, p_visit_13.id,
+                                                   p_visit_14.id, p_visit_15.id,
+                                                   p_visit.id, p_visit_11.id,
+                                                   p_visit_21.id, p_visit_22.id,
+                                                   p_visit_23.id, p_visit_24.id,
+                                                   p_visit_31.id, p_visit_32.id,
+                                                   p_visit_33.id, p_visit_34.id,
+                                                   p_visit_41.id, p_visit_42.id],
+                                          users: [user_12.id, user_11.id, user_3.id, user_21.id,
+                                                  user_22.id] }
+      end
+      it 'responds found' do
+        expect(response.response_code).to eq 302
+      end
+      it 'responds with a alert' do
+        expect(response.flash.alert).to eq 'Se asignaron exitosamente 14 visitas. '\
+      '2 visitas no fueron asignadas.'
+      end
+      it 'the 6 visits  were assigned' do
+        expect(p_visit.reload.status).to eq 'assigned'
+        expect(p_visit_11.reload.status).to eq 'assigned'
+        expect(p_visit_12.reload.status).to eq 'assigned'
+        expect(p_visit_13.reload.status).to eq 'assigned'
+        expect(p_visit_14.reload.status).to eq 'assigned'
+        expect(p_visit_15.reload.status).to eq 'assigned'
+        expect(p_visit_21.reload.status).to eq 'assigned'
+        expect(p_visit_22.reload.status).to eq 'assigned'
+        expect(p_visit_23.reload.status).to eq 'assigned'
+        expect(p_visit_24.reload.status).to eq 'assigned'
+        expect(p_visit_31.reload.status).to eq 'assigned'
+        expect(p_visit_32.reload.status).to eq 'assigned'
+        expect(p_visit_33.reload.status).to eq 'assigned'
+        expect(p_visit_34.reload.status).to eq 'assigned'
+        expect(p_visit_41.reload.status).to eq 'pending'
+        expect(p_visit_42.reload.status).to eq 'pending'
+      end
+      it 'each user has X tasks assigned' do
+        expect(user_12.visits.size).to eq(3)
+        expect(user_11.visits.size).to eq(3)
+        expect(user_21.visits.size).to eq(2)
+        expect(user_22.visits.size).to eq(2)
+        expect(user_3.visits.size).to eq(4)
+        expect(user_4.visits.size).to eq(0)
       end
     end
   end
