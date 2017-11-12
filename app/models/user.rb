@@ -34,7 +34,7 @@ class User < ApplicationRecord
   end
 
   def assigned_visits_count_for_tomorrow
-    visits.for_tomorrow.count
+    visits.assigned_for_tomorrow.count
   end
 
   def assignable?

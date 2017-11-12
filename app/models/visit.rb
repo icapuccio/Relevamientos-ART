@@ -18,7 +18,6 @@ class Visit < ApplicationRecord
   scope :assigned_for_tomorrow, -> { where(to_visit_on: Date.tomorrow, status: :assigned) }
   scope :completed, -> { where status: :completed }
   scope :finished, -> { where(status: :completed).or(where(status: :sent)) }
-  scope :for_tomorrow, -> { where(status: :assigned).where(to_visit_on: Date.tomorrow) }
 
   def valid_for_assignment?(user)
     status_pending? && user.assignable?

@@ -5,8 +5,10 @@ class SessionsController < Devise::SessionsController
   def create
     respond_to do |format|
       format.html do
-        return redirect_to login_url, alert: 'El rol asociado a su usuario no tiene permisos' \
-          ' para acceder' if authenticated_user_preventor?
+        if authenticated_user_preventor?
+          return redirect_to login_url, alert: 'El rol asociado a su usuario no tiene permisos' \
+            ' para acceder'
+        end
         super
       end
       format.json do

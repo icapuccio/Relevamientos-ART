@@ -15,6 +15,7 @@
           <div class="clearfix"></div>
         </div>
         <div class="x_content">
+          <%= render 'no_results' %>
           <!--<p>Add class <code>bulk_action</code> to table for bulk actions options on row select</p>-->
           <div class="table-responsive">
             <table class="table table-striped jambo_table">
@@ -36,7 +37,6 @@
               </thead>
 
               <tbody>
-              <%= render 'no_results' %>
               <% @visits.each do |visit| %>
                   <!-- TODO: intercalar odd pointer / even pointer -->
                   <tr class="odd pointer">
@@ -90,7 +90,6 @@
               </thead>
 
               <tbody>
-              <%= render 'no_results' %>
               <% @preventors.each do |preventor| %>
                   <!-- TODO: intercalar odd pointer / even pointer -->
                   <tr class="odd pointer">
@@ -112,7 +111,7 @@
           <!--<div class="ln_solid"></div>-->
 
           <div class="col-md-12 col-sm-12 col-xs-12">
-            <%= button_to "Asignar automáticamente", auto_assignments_visits_path, method: :post, class: "btn btn-success pull-right" %>
+            <%= button_to "Asignar automáticamente", auto_assignments2_visits_path, method: :post, class: "btn btn-success pull-right" %>
           </div>
         </div>
       </div>
