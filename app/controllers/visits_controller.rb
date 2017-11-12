@@ -91,6 +91,8 @@ class VisitsController < ApplicationController
   def complete
     return render json: { error: 'Fecha de finalización requerida' }, status: :bad_request unless
       complete_date_present?
+    @msg = 'La visita ya se encuentra finalizada'
+    return render json: { error: @msg }, status: :unprocessable_entity if visit.finished?
     complete_response
   end
 
