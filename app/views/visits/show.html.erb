@@ -102,7 +102,7 @@
       <div class="col-md-12">
         <div class="x_panel">
           <div class="x_title">
-            <h2>Adjuntos <small> imágenes de visita </small></h2>
+            <h2>Adjuntos <small> imágenes y mediciones de ruido de visita </small></h2>
             <ul class="nav navbar-right panel_toolbox">
               <li> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </li>
               <li><a class="collapse-link"><i class="fa fa-chevron-down"></i></a>
@@ -114,33 +114,68 @@
 
             <div class="row">
 
-              <% if @visit.visit_images.empty? %>
-                <p>No existen adjuntos para la visita</p>
-              <% end %>
-
-              <% @visit.visit_images.each do |image| %>
-                <div class="col-md-55">
-                  <div class="thumbnail">
-                    <div class="image view view-first">
-                      <%= image_tag(image.url_image, alt: 'image', style: "width: 100%; display: block;") %>
-                      <!--<img style="width: 100%; display: block;" src="http://www.hotelroomsearch.net/im/hotels/gr/fabrica-11.jpg" alt="image" />-->
-                      <div class="mask">
-                        <p>Ver</p>
-                        <div class="tools tools-bottom">
-                          <!--<a href="http://www.hotelroomsearch.net/im/hotels/gr/fabrica-11.jpg" target="_blank"><i class="fa fa-link"></i></a>-->
-                          <%= link_to image.url_image, target: '_blank' do %>
-                            <i class="fa fa-link"></i>
-                          <% end %>
-                          <!--<a href="#"><i class="fa fa-pencil"></i></a>-->
-                          <!--<a href="#"><i class="fa fa-times"></i></a>-->
+              <% if @visit.without_attachments? %>
+                  <p>No existen adjuntos para la visita</p>
+              <% else %>
+                <% @visit.visit_images.each do |image| %>
+                  <div class="col-md-55">
+                    <div class="thumbnail">
+                      <div class="image view view-first">
+                        <%= image_tag(image.url_image, alt: 'image', style: "width: 100%; display: block;") %>
+                        <!--<img style="width: 100%; display: block;" src="http://www.hotelroomsearch.net/im/hotels/gr/fabrica-11.jpg" alt="image" />-->
+                        <div class="mask">
+                          <p>Ver</p>
+                          <div class="tools tools-bottom">
+                            <!--<a href="http://www.hotelroomsearch.net/im/hotels/gr/fabrica-11.jpg" target="_blank"><i class="fa fa-link"></i></a>-->
+                            <%= link_to image.url_image, target: '_blank' do %>
+                              <i class="fa fa-link"></i>
+                            <% end %>
+                            <!--<a href="#"><i class="fa fa-pencil"></i></a>-->
+                            <!--<a href="#"><i class="fa fa-times"></i></a>-->
+                          </div>
                         </div>
                       </div>
+                      <div class="caption">
+                        <p>
+                          Imagen Nº <%= image.id %><br/>
+                          &nbsp;
+                        </p>
+                      </div>
                     </div>
-                    <div class="caption">
-                      <p>
-                        Imagen Nº <%= image.id %><br/>
-                        &nbsp;
-                      </p>
+                  </div>
+                <% end %>
+
+                <div class="row">
+                  <div class="col-md-10 col-sm-10 col-xs-10 col-md-offset-1">
+                    <!--agregar a x_panel si es necesario fixed_height_320-->
+                    <div class="x_panel tile">
+                      <div class="x_title">
+                        <h2>Mediciones de ruido</h2>
+                        <div class="clearfix"></div>
+                      </div>
+                      <div class="x_content collapse">
+                        <h4>Observación</h4>
+
+                        <% @visit.visit_noises.each do |noise| %>
+                          <div class="widget_summary">
+                            <div class="w_left w_25">
+                              <span><%= noise.description %></span>
+                            </div>
+                            <div class="w_center w_55">
+                              <div class="progress">
+                                <!--style="width: 66%;"-->
+                                <div class="progress-bar bg-green" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: <%= noise.decibels_scaled %>%;">
+                                  <span class="sr-only">60% Complete</span>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="w_right w_20">
+                              <span><%= noise.decibels[0, 5] %> dB</span>
+                            </div>
+                            <div class="clearfix"></div>
+                          </div>
+                        <% end %>
+                      </div>
                     </div>
                   </div>
                 </div>

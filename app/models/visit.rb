@@ -86,6 +86,10 @@ class Visit < ApplicationRecord
     tasks.each { |task| Task.create!(task_type: task['type'], visit: self) }
   end
 
+  def without_attachments?
+    visit_images.count.zero? && visit_noises.count.zero?
+  end
+
   private
 
   def create_noises(noises)
