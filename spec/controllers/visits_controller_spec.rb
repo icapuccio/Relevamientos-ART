@@ -524,7 +524,7 @@ describe VisitsController, type: :controller do
       end
       it 'responds with a alert' do
         expect(response.flash.alert).to eq 'No se pudo asignar ninguna visita '\
-      'automáticamente. Intente con otra lista de preventores.'
+      'automáticamente. Intente realizar la asignación de forma manual.'
       end
       it 'the visits did not change status ' do
         expect(p_visit_31.reload.status).to eq 'pending'
@@ -543,7 +543,7 @@ describe VisitsController, type: :controller do
       end
       it 'responds with a alert' do
         expect(response.flash.alert).to eq 'Se asignaron exitosamente 5 visitas. '\
-      '1 visitas no fueron asignadas.'
+      '1 visitas no pudieron ser asignadas.'
       end
       it 'the visit whit less priority did not change ' do
         expect(p_visit_15.reload.status).to eq 'pending'
@@ -602,7 +602,7 @@ describe VisitsController, type: :controller do
       end
       it 'responds with a alert' do
         expect(response.flash.alert).to eq 'Se asignaron exitosamente 14 visitas. '\
-      '2 visitas no fueron asignadas.'
+      '2 visitas no pudieron ser asignadas.'
       end
       it 'the 6 visits  were assigned' do
         expect(p_visit.reload.status).to eq 'assigned'
