@@ -2,7 +2,8 @@ require 'rails_helper'
 
 describe SessionsController, type: :controller do
   describe 'POST create' do
-    let(:user) { create(:user, password: '12345678') }
+    let(:user) { create(:user, :preventor, password: '12345678') }
+    let(:another_user) { create(:user, password: '12345678') }
 
     before(:each) do
       request.env['devise.mapping'] = Devise.mappings[:user]
@@ -40,16 +41,34 @@ describe SessionsController, type: :controller do
     end
 
     context 'with valid email and password' do
-      let(:session_params) { { email: user.email, password: user.password } }
+      context 'when the user has preventor role' do
+        let(:session_params) { { email: user.email, password: user.password } }
 
-      before { subject }
+        before { subject }
 
-      it 'responds with ok' do
-        expect(response).to have_http_status(:ok)
+        it 'responds with ok' do
+          expect(response).to have_http_status(:ok)
+        end
+
+        it 'returns the id and email' do
+          expect(response_body.keys).to contain_exactly('id', 'email')
+        end
       end
 
-      it 'returns the id and email' do
-        expect(response_body.keys).to contain_exactly('id', 'email')
+      context 'when the user is not a preventor' do
+        let(:session_params) do
+          { email: another_user.email, password: another_user.password }
+        end
+
+        before { subject }
+
+        it 'responds with unauthorized' do
+          expect(response).to have_http_status(:unauthorized)
+        end
+
+        it 'responds a message pointing out that the credentials are incorrect' do
+          expect(response_body['error']).to eq('invalid-credentials')
+        end
       end
     end
   end

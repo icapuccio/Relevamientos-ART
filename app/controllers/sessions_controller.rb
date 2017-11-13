@@ -12,7 +12,7 @@ class SessionsController < Devise::SessionsController
         super
       end
       format.json do
-        if authenticated_user?
+        if authenticated_user_mobile_preventor?
           render json: { id: user.id, email: user.email }, status: :ok
         else
           render json: { error: 'invalid-credentials' }, status: :unauthorized
@@ -24,8 +24,8 @@ class SessionsController < Devise::SessionsController
 
   private
 
-  def authenticated_user?
-    user.present? && user.valid_password?(session_params[:password])
+  def authenticated_user_mobile_preventor?
+    user.present? && user.role_preventor? && user.valid_password?(session_params[:password])
   end
 
   def user
