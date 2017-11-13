@@ -150,6 +150,9 @@ es:
         visits: Visitas
         created_at: Fecha de Creación
         updated_at: Fecha de última actualización
+        institutions_count: Cantidad de Instituciones
+        contact: Persona de Contacto
+        afip_cod: Código AFIP
       admin_user:
         sign_in_count: Cantidad de ingresos
         current_sign_in_at: Ultimo ingreso
