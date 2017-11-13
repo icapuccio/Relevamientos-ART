@@ -35,6 +35,8 @@ Complete a Visit (with a body): `PUT /visits/:visit_id/completion`
 Assign Visits (with a body): `POST /visits/auto_assignments2`
 - Body: `{ "users":[1,2,3], "visits":[54,43,32] }`
 
+Mark visit as in process: `PUT /visits/:id/in_process`
+
 ### Tasks 
 
 Complete a task (with a body): `PUT /tasks/:task_id/completion`

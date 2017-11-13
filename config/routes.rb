@@ -16,6 +16,7 @@ Rails.application.routes.draw do
     post :assignment, to: 'visits#assign'
     put :remotion, to: 'visits#remove_assignment'
     put :completion, to: 'visits#complete'
+    put :in_process
     collection do
       get :assignment, to: 'visits#assignment_index'
       get :automatic_assignment, to: 'visits#automatic_assignment_index'
