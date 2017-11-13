@@ -632,4 +632,50 @@ describe VisitsController, type: :controller do
       end
     end
   end
+
+  describe 'PUT #in_process' do
+    before { put :in_process, params: { visit_id: visit.id } }
+
+    context 'when the visit is pending' do
+      let!(:visit) { create(:visit) }
+
+      it 'does not update the visit' do
+        expect(visit.reload.status).to eq 'pending'
+      end
+      it 'responds with unprocessable entity' do
+        expect(response).to have_http_status(:unprocessable_entity)
+      end
+      it 'returns the error message' do
+        expect(response_body['error']).to eq 'No se puede actualizar la visita'
+      end
+    end
+
+    context 'when the visit is assigned' do
+      let!(:visit) { create(:visit, :with_user, status: :assigned) }
+
+      it 'updates the visit to in process status' do
+        expect(visit.reload.status).to eq 'in_process'
+      end
+      it 'responds with ok' do
+        expect(response).to have_http_status(:ok)
+      end
+      it 'does not return a body' do
+        expect(response.body).to be_empty
+      end
+    end
+
+    context 'when the visit is in process' do
+      let!(:visit) { create(:visit, :with_user, status: :in_process) }
+
+      it 'does not update the visit' do
+        expect(visit.reload.status).to eq 'in_process'
+      end
+      it 'responds with unprocessable entity' do
+        expect(response).to have_http_status(:unprocessable_entity)
+      end
+      it 'returns the error message' do
+        expect(response_body['error']).to eq 'No se puede actualizar la visita'
+      end
+    end
+  end
 end

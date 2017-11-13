@@ -122,8 +122,8 @@ class VisitsController < ApplicationController
     create_visits(response)
   end
 
-  def in_progress
-    if visit.mark_as_in_progress
+  def in_process
+    if visit.mark_as_in_process
       head :ok
     else
       render_error('No se puede actualizar la visita', :unprocessable_entity)
