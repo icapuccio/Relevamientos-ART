@@ -15,7 +15,10 @@ class Visit < ApplicationRecord
   scope :status, ->(status) { where status: status }
   scope :user_id, ->(user) { where user_id: user }
   scope :assignable, -> { where(status: :pending).or(where(status: :assigned)) }
-  scope :assigned_for_tomorrow, -> { where(to_visit_on: Date.tomorrow, status: :assigned) }
+  scope :assigned_for_tomorrow, lambda {
+    where(to_visit_on: Date.tomorrow).assigned_or_in_process
+  }
+  scope :assigned_or_in_process, -> { where(status: :assigned).or(where(status: :in_process)) }
   scope :completed, -> { where status: :completed }
   scope :finished, -> { where(status: :completed).or(where(status: :sent)) }
 
@@ -88,6 +91,12 @@ class Visit < ApplicationRecord
 
   def without_attachments?
     visit_images.count.zero? && visit_noises.count.zero?
+  end
+
+  def mark_as_in_process
+    return false unless status_assigned?
+    update_attributes!(status: :in_process)
+    true
   end
 
   private
