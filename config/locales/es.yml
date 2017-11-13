@@ -128,7 +128,7 @@ es:
         updated_at: Fecha de última actualización
       zone:
         name: Nombre
-        institutions: Instituciones
+        institutions: Establecimientos
         created_at: Fecha de Creación
         updated_at: Ultima actualización
         users: Usuarios
@@ -141,17 +141,19 @@ es:
         postal_code: Código postal
         phone_number: Número de telefono
         street: Calle
-        contract: Tipo de Contrato
+        contract: Contrato
         surface: Superficie
         name: Nombre
         latitude: Latitud
         longitude: Longitud
-        address: Dirección
+        address: Domicilio completo
         visits: Visitas
         created_at: Fecha de Creación
         updated_at: Fecha de última actualización
-        institutions_count: Cantidad de Instituciones
+        institutions_count: Nro de establecimiento
         contact: Persona de Contacto
+        afip_cod: Código AFIP
+        ciiu: Código CIIU
         afip_cod: Código AFIP
       admin_user:
         sign_in_count: Cantidad de ingresos
