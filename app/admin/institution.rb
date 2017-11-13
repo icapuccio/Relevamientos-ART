@@ -64,7 +64,7 @@ ActiveAdmin.register Institution do
       f.input :province
       f.input :zone_id, as: :select, collection: Zone.all(&:name), include_blank: false
       f.input :postal_code
-      f.input :address, input_html: { readonly: true }
+      f.input :address
       f.input :latitude, as: :number, input_html: { readonly: true }
       f.input :longitude, as: :number, input_html: { readonly: true }
       f.input :surface
