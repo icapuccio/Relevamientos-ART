@@ -34,15 +34,7 @@ another_institution = Institution.create!(name: 'Shell', street: 'Neuquén', cit
                                           cuit: '30-12345678-4', phone_number: 45443212, zone: north_zone, address: 'Av del Libertador 6363, Buenos Aires', latitude:123.123, longitude: 123.12345)
 
 # Visits
-pending_visit = Visit.create!(institution: institution, status: :pending, priority: 1, external_id: 1)
-assigned_visit = Visit.create!(institution: institution, user: preventor_user, status: :assigned, priority: 9,
-                               to_visit_on: Date.today, external_id: 2)
-
-completed_visit_another_user = Visit.create!(institution: another_institution, user: another_preventor_user,
-                                             status: :completed, priority: 4, to_visit_on: Date.yesterday,
-                                             completed_at: Date.yesterday, observations: 'Se observa humedad en el area de trabajo', external_id: 3)
-
-# Visits and tasks CAP
+## Visits and tasks CAP
 assigned_visit_cap = Visit.create!(institution: institution, user: preventor_user, status: :assigned, priority: 9,
                                    to_visit_on: Date.today, external_id: 4)
 pending_visit_cap = Visit.create!(institution: institution, status: :pending, priority: 8 , external_id: 13)
@@ -61,7 +53,7 @@ completed_cap_task_2.complete(DateTime.yesterday)
 
 Task.create!(task_type: :cap, status: :pending, visit: pending_visit_cap )
 
-# Visits and tasks RAR
+## Visits and tasks RAR
 assigned_visit_rar = Visit.create!(institution: institution, user: preventor_user, status: :assigned, priority: 20,
                                    to_visit_on: Date.today, external_id: 6)
 pending_visit_rar = Visit.create!(institution: institution, status: :pending, priority: 8, external_id: 7)
@@ -82,7 +74,7 @@ Task.create!(task_type: :rar, status: :pending, visit: pending_visit_rar )
 
 pending_rar_task = Task.create!(task_type: :rar, status: :pending, visit: assigned_visit_rar_2 )
 
-# Visits and Tasks rgrl
+## Visits and Tasks rgrl
 assigned_visit_rgrl = Visit.create!(institution: institution, user: preventor_user, status: :assigned, priority: 20,
                                    to_visit_on: Date.today, external_id: 9)
 assigned_visit_rgrl_2 = Visit.create!(institution: institution, user: preventor_user, status: :assigned, priority: 9,
@@ -110,8 +102,8 @@ rgrl_result2 = RgrlResult.create!(task: completed_rgrl_task2, url_cloud: 'http:/
 Question.create!(description:'Quien soy', answer:'El Junior de la muelte', category: 'Maniiiel', rgrl_result: rgrl_result2)
 completed_rgrl_task2.complete(DateTime.yesterday)
 
-VisitNoise.create!(visit:completed_visit_rgrl, description: 'muestra 1', decibels: 16.123456)
-VisitNoise.create!(visit:completed_visit_rgrl, description: 'muestra 2', decibels: 116.123)
+VisitNoise.create!(visit:completed_visit_rgrl, description: 'Sala de máquinas', decibels: 95.123456)
+VisitNoise.create!(visit:completed_visit_rgrl, description: 'Comedor', decibels: 69.789)
 VisitImage.create!(visit:completed_visit_rgrl, url_image: 'http://www.hotelroomsearch.net/im/hotels/gr/fabrica-11.jpg')
 VisitImage.create!(visit:completed_visit_rgrl, url_image: 'https://upload.wikimedia.org/wikipedia/commons/7/71/Wolfsburg_VW-Werk.jpg')
 VisitImage.create!(visit:completed_visit_rgrl, url_image: 'https://upload.wikimedia.org/wikipedia/commons/9/97/Interior_de_una_F%C3%A1brica_de_Calzado_mecanizada.JPG')

@@ -24,7 +24,7 @@
       <div class="col-md-12 col-sm-12 col-xs-12">
         <div class="x_panel">
           <div class="x_title">
-            <h2>Detalle <small>Asignación de visita</small></h2>
+            <h2>Detalle <small>Datos de visita</small></h2>
             <div class="clearfix"></div>
           </div>
 
@@ -70,19 +70,19 @@
                     <% if !@visit.rar_task_related? || !@visit.tasks.rar.first.completed? %>
                         Relevamiento de Agentes de Riesgo<br />
                     <% else %>
-                        <a href= <%= @visit.tasks.rar.first.result.url_cloud %> target="_blank"><b> Relevamiento de Agentes de Riesgo</b></a><br />
+                        <a href= <%= @visit.tasks.rar.first.result.url_cloud %> target="_blank"><b> Relevamiento de Agentes de Riesgo <i class="fa fa-file-pdf-o"></i></b></a><br />
                     <% end %>
                     <%= f.check_box :rgrl_task_related?, class: "flat", disabled: "disabled" %>
                     <% if !@visit.rgrl_task_related? || !@visit.tasks.rgrl.first.completed? %>
                         Relevamiento General de Riegos Laborales<br />
                     <% else %>
-                        <a href= <%= @visit.tasks.rgrl.first.result.url_cloud %> target="_blank"><b> Relevamiento General de Riegos Laborales</b></a><br />
+                        <a href= <%= @visit.tasks.rgrl.first.result.url_cloud %> target="_blank"><b> Relevamiento General de Riegos Laborales <i class="fa fa-file-pdf-o"></i></b></a><br />
                     <% end %>
                     <%= f.check_box :cap_task_related?, class: "flat", disabled: "disabled" %>
                     <% if !@visit.cap_task_related? || !@visit.tasks.cap.first.completed? %>
                         Capacitación<br />
                     <% else %>
-                        <a href= <%= @visit.tasks.cap.first.result.url_cloud %> target="_blank"><b> Capacitación</b></a><br />
+                        <a href= <%= @visit.tasks.cap.first.result.url_cloud %> target="_blank"><b> Capacitación <i class="fa fa-file-pdf-o"></i></b></a><br />
                     <% end %>
                   </div>
                 </div>

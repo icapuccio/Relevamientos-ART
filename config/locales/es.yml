@@ -139,6 +139,7 @@ es:
         number: Altura
         activity: Actividad
         postal_code: Código postal
+        workers_count: Cantidad de empleados
         phone_number: Número de telefono
         street: Calle
         contract: Contrato

@@ -32,7 +32,7 @@ class ApplicationController < ActionController::Base
       authenticate_user!
     else
       respond_to do |format|
-        flash[:alert] = I18n.t('devise.failure.unauthenticated')
+        # flash[:alert] = I18n.t('devise.failure.unauthenticated')
         format.html { redirect_to login_path }
         ## if you want render 404 page
         ## render :file => File.join(Rails.root, 'public/404'), :formats => [:html],

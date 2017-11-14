@@ -13,7 +13,7 @@ class VisitsController < ApplicationController
   end
 
   def assignment_index
-    @visits = Visit.includes(:institution, :user)
+    @visits = Visit.includes({ institution: [:zone] }, :user)
                    .assignable.order(status: :asc, priority: :asc, id: :asc)
   end
 
