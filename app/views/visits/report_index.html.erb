@@ -15,45 +15,48 @@
         </div>
 
         <div class="x_content">
-          <div class="table-responsive">
-            <table id="datatable-buttons" class="table table-striped jambo_table bulk_action">
-              <thead>
-              <tr class="headings">
-                <th class="column-title">Visita </th>
-                <th class="column-title">Establecimiento </th>
-                <th class="column-title">Prioridad </th>
-                <th class="column-title">Estado </th>
-                <th class="column-title">Preventor </th>
-                <th class="column-title">Fecha de inspección </th>
-                <th class="column-title">Fecha de finalización </th>
-                <th class="column-title no-link last"><span class="nobr">Acciones</span>
-                <th class="bulk-actions" colspan="7">
-                  <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
-                </th>
-              </tr>
-              </thead>
+          <% if @visits.empty? %>
+              <p> No se han encontrado visitas disponibles para esta sección </p>
+          <% else %>
+            <div class="table-responsive">
+              <table id="datatable-buttons" class="table table-striped jambo_table bulk_action">
+                <thead>
+                <tr class="headings">
+                  <th class="column-title">Visita </th>
+                  <th class="column-title">Establecimiento </th>
+                  <th class="column-title">Prioridad </th>
+                  <th class="column-title">Estado </th>
+                  <th class="column-title">Preventor </th>
+                  <th class="column-title">Fecha de inspección </th>
+                  <th class="column-title">Fecha de finalización </th>
+                  <th class="column-title no-link last"><span class="nobr">Acciones</span>
+                  <th class="bulk-actions" colspan="7">
+                    <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
+                  </th>
+                </tr>
+                </thead>
 
-              <tbody>
-              <% @visits.each do |visit| %>
-                  <tr class="odd pointer">
-                    <td><%= visit.id %></td>
-                    <td><%= visit.institution.name %></td>
-                    <td><%= visit.priority %></td>
-                    <td><%= Visit.human_attribute_name("status.#{visit.status}") %></td>
-                    <td><%= visit.user.full_name if visit.user.present? %> </td>
-                    <td><%= l(visit.to_visit_on, format: :short_date) if visit.to_visit_on.present? %></td>
-                    <td><%= l(visit.completed_at, format: :short_date) if visit.finished? %></td>
-                    <td>
-                      <%=  link_to visit_path(id: visit.id), class: "btn btn-primary btn-xs" do %>
-                          <i class="fa fa-file-text"></i> Ver Detalle
-                      <% end %>
-                    </td>
-              <% end %>
-              </tbody>
-            </table>
-          </div>
+                <tbody>
+                <% @visits.each do |visit| %>
+                    <tr class="odd pointer">
+                      <td><%= visit.id %></td>
+                      <td><%= visit.institution.name %></td>
+                      <td><%= visit.priority %></td>
+                      <td><%= Visit.human_attribute_name("status.#{visit.status}") %></td>
+                      <td><%= visit.user.full_name if visit.user.present? %> </td>
+                      <td><%= l(visit.to_visit_on, format: :short_date) if visit.to_visit_on.present? %></td>
+                      <td><%= l(visit.completed_at, format: :short_date) if visit.finished? %></td>
+                      <td>
+                        <%=  link_to visit_path(id: visit.id), class: "btn btn-primary btn-xs" do %>
+                            <i class="fa fa-file-text"></i> Ver Detalle
+                        <% end %>
+                      </td>
+                <% end %>
+                </tbody>
+              </table>
+            </div>
+          <% end %>
         </div>
-        <div class="ln_solid"></div>
       </div>
     </div>
 
