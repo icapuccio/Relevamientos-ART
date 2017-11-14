@@ -30,6 +30,7 @@ class RarResult < ApplicationRecord
   end
 
   def date_format(date)
+    return date unless date.present?
     Time.zone.parse(date)
   end
 end

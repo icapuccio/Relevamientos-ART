@@ -89,7 +89,6 @@ describe TasksController, type: :controller do
                     sector: 'Sistemas' },
                   { checked_in_on: 'Oct 27, 2017 12:00:00 AM',
                     exposed_from_at: 'Oct 27, 2017 12:00:00 AM',
-                    exposed_until_at: 'Oct 27, 2017 12:00:00 AM',
                     risk_list: [
                       { code: '40002', description: 'Aceites minerales' },
                       { code: '40003', description: 'Derrumbe' }
