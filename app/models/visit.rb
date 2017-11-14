@@ -35,10 +35,14 @@ class Visit < ApplicationRecord
   end
 
   def complete(params)
-    create_noises(params[:noises])
-    create_images(params[:images])
-    update_attributes(status: 'completed', completed_at: date_format(params[:completed_at]),
-                      observations: params[:observations])
+    ActiveRecord::Base.transaction do
+      create_noises(params[:noises])
+      create_images(params[:images])
+      update_attributes(status: 'completed', completed_at: date_format(params[:completed_at]),
+                        observations: params[:observations])
+    end
+  rescue ActiveRecord::RecordInvalid
+    return false
   end
 
   def assign_to_better_user(users)
