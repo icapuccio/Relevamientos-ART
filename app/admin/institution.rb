@@ -61,7 +61,8 @@ ActiveAdmin.register Institution do
       f.input :street
       f.input :number, as: :number
       f.input :city
-      f.input :province
+      f.input :province, as: :select, collection: ['Capital Federal', 'Buenos Aires'],
+                         include_blank: false
       f.input :zone_id, as: :select, collection: Zone.all(&:name), include_blank: false
       f.input :postal_code
       # f.input :address
