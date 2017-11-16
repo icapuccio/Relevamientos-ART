@@ -23,7 +23,7 @@ class User < ApplicationRecord
 
   # before_validation :geocode, if: :address_changed?
   before_validation :generate_password, on: :create, unless: :password_given?
-  after_create :send_welcome_email, unless: :password_given?
+  after_create :send_welcome_email
   # after_validation :coordinates_changed?
   after_create :create_admin_user, if: :role_admin?
   before_destroy :check_user_with_visits
