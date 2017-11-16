@@ -12,6 +12,7 @@ class User < ApplicationRecord
 
   # Validations
   validates :email, uniqueness: true
+  validates :email, format: Devise.email_regexp
   validates :name, :last_name, :role, presence: true
   validate :complete_preventor_data
 
@@ -22,6 +23,7 @@ class User < ApplicationRecord
 
   # before_validation :geocode, if: :address_changed?
   before_validation :generate_password, on: :create, unless: :password_given?
+  after_create :send_welcome_email, unless: :password_given?
   # after_validation :coordinates_changed?
   after_create :create_admin_user, if: :role_admin?
   before_destroy :check_user_with_visits
@@ -66,11 +68,14 @@ class User < ApplicationRecord
   end
 
   def generate_password
-    generated_password = Devise.friendly_token.first(8)
-    self.password = generated_password
-    self.password_confirmation = generated_password
+    @generated_password = Devise.friendly_token.first(8)
+    self.password = @generated_password
+    self.password_confirmation = @generated_password
+  end
+
+  def send_welcome_email
     return if Rails.env.test?
-    WelcomeMailer.welcome_send(self, generated_password).deliver
+    WelcomeMailer.welcome_send(self, @generated_password).deliver
   end
 
   def check_user_with_visits

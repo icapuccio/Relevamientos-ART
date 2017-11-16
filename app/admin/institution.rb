@@ -44,8 +44,8 @@ ActiveAdmin.register Institution do
       row :province
       row :postal_code
       row :zone
-      row :latitude
-      row :longitude
+      # row :latitude
+      # row :longitude
       row :contact
       row :email
       row :ciiu
@@ -57,25 +57,26 @@ ActiveAdmin.register Institution do
     f.inputs 'Institution Details', allow_destroy: true do
       f.semantic_errors(*f.object.errors.keys)
       f.input :name
-      f.input :cuit
+      f.input :cuit, as: :number
       f.input :street
-      f.input :number
+      f.input :number, as: :number
       f.input :city
-      f.input :province
+      f.input :province, as: :select, collection: ['Capital Federal', 'Buenos Aires'],
+                         include_blank: false
       f.input :zone_id, as: :select, collection: Zone.all(&:name), include_blank: false
       f.input :postal_code
-      f.input :address
-      f.input :latitude, as: :number, input_html: { readonly: true }
-      f.input :longitude, as: :number, input_html: { readonly: true }
-      f.input :surface
-      f.input :workers_count
+      # f.input :address
+      # f.input :latitude, as: :number, input_html: { readonly: true }
+      # f.input :longitude, as: :number, input_html: { readonly: true }
+      f.input :surface, as: :number
+      f.input :workers_count, as: :number
       f.input :activity
-      f.input :institutions_count
-      f.input :contract
-      f.input :phone_number
+      f.input :institutions_count, as: :number
+      f.input :contract, as: :number
+      f.input :phone_number, as: :number
       f.input :contact
       f.input :email
-      f.input :ciiu
+      f.input :ciiu, as: :number
       f.input :afip_cod
     end
     f.actions
