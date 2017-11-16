@@ -6,6 +6,15 @@ class Institution < ApplicationRecord
             :institutions_count, :contract, :postal_code, :phone_number, :latitude, :longitude,
             :zone, presence: true
 
+  validates :cuit, length: { is: 11 }
+  validates :surface, numericality: { only_integer: true }
+  validates :workers_count, numericality: { only_integer: true }
+  validates :institutions_count, numericality: { only_integer: true }
+  validates :phone_number, numericality: { only_integer: true }
+  validates :ciiu, length: { is: 5 }
+
+  validates :email, format: Devise.email_regexp
+
   # Geocoder
   # geocoded_by :address
 

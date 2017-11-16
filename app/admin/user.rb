@@ -35,8 +35,8 @@ ActiveAdmin.register User do
       row :last_name
       row :role
       row :address
-      row :latitude
-      row :longitude
+      # row :latitude
+      # row :longitude
       row :zone
     end
   end
@@ -46,12 +46,12 @@ ActiveAdmin.register User do
       f.semantic_errors(*f.object.errors.keys)
       f.input :email, input_html: { readonly: true }, as: :string unless f.object.new_record?
       f.input :email, as: :string if f.object.new_record?
-      f.input :name
-      f.input :last_name
+      f.input :name, as: :string
+      f.input :last_name, as: :string
       f.input :role, as: :select, collection: User.roles.keys, include_blank: false
       f.input :address
-      f.input :latitude, as: :number, input_html: { readonly: true }
-      f.input :longitude, as: :number, input_html: { readonly: true }
+      # f.input :latitude, as: :number, input_html: { readonly: true }
+      # f.input :longitude, as: :number, input_html: { readonly: true }
       f.input :zone_id, as: :select, collection: Zone.all(&:name), include_blank: true
     end
     f.actions

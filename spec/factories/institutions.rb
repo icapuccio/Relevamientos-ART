@@ -1,7 +1,7 @@
 FactoryGirl.define do
   factory :institution do
     name { Faker::GameOfThrones.house }
-    cuit { Faker::GameOfThrones.character }
+    cuit { Faker::Number.number(11) }
     street { Faker::Address.street_address }
     city { Faker::GameOfThrones.city }
     province { Faker::Address.city }
@@ -10,7 +10,7 @@ FactoryGirl.define do
     surface { Faker::Number.number(4) }
     workers_count { Faker::Number.number(4) }
     institutions_count { Faker::Number.number(4) }
-    phone_number { Faker::PhoneNumber.phone_number }
+    phone_number { Faker::Number.number(4) }
     contract { Faker::StarWars.planet }
     postal_code { Faker::Number.number(4) }
     longitude { Faker::Address.longitude }
@@ -19,7 +19,7 @@ FactoryGirl.define do
     contact { Faker:: GameOfThrones.character }
     email { Faker:: Internet.email }
     afip_cod { Faker:: GameOfThrones.dragon }
-    ciiu { Faker:: GameOfThrones.city }
+    ciiu { Faker::Number.number(5) }
     zone
   end
 end
